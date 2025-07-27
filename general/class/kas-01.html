@@ -7,54 +7,60 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
     let connectedWallet = null;
+    let paymentData = [];
+    let kasChartData = [];
 
-    // Sample payment data - replace with actual Excel data
-    const paymentData = [
-      {
-        nama: "Budi Santoso",
-        metode: "Solana",
-        from: "V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS",
-        jumlah: "0.5 SOL (~$50)",
-        tanggal: "2025-07-20"
-      },
-      {
-        nama: "Siti Nurhaliza",
-        metode: "QRIS",
-        from: "I MADE SURATI",
-        jumlah: "Rp 50,000 (~$3.33)",
-        tanggal: "2025-07-21"
-      },
-      {
-        nama: "Ahmad Rifaldi",
-        metode: "Ethereum",
-        from: "0x8C940E048Df1040bcb3e1DEC5E3722432fd97757",
-        jumlah: "0.02 ETH (~$60)",
-        tanggal: "2025-07-22"
-      },
-      {
-        nama: "Maya Dewi",
-        metode: "Bitcoin",
-        from: "bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6",
-        jumlah: "0.0005 BTC (~$45)",
-        tanggal: "2025-07-23"
+    const FilePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx';
+    const SheetDoc = 'history'; // Ensure this matches the sheet name in your Google Sheet
+    const SheetData = 'doc'; // Ensure this matches the sheet name in your Google Sheet
+
+    async function loadSheetData() {
+      try {
+        const response = await fetch(FilePath);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+
+        // Load data from 'doc' sheet
+        const docSheet = workbook.Sheets[SheetDoc];
+        if (!docSheet) throw new Error(`Sheet "${SheetDoc}" not found`);
+        const loadedPaymentData = XLSX.utils.sheet_to_json(docSheet);
+        console.log("Payment Data Loaded:", loadedPaymentData);
+
+        // Load data from 'history' sheet
+        const historySheet = workbook.Sheets[SheetData];
+        if (!historySheet) throw new Error(`Sheet "${SheetData}" not found`);
+        const loadedKasChartData = XLSX.utils.sheet_to_json(historySheet);
+        console.log("Kas Chart Data Loaded:", loadedKasChartData);
+
+        // Return both datasets
+        return { paymentData: loadedPaymentData, kasChartData: loadedKasChartData };
+      } catch (error) {
+        console.error("Error loading sheet data:", error);
+        
+        // Return mock data if sheet loading fails
+        return {
+          paymentData: [
+            { nama: "Loading...", metode: "N/A", from: "N/A", jumlah: "$0", tanggal: "N/A" }
+          ],
+          kasChartData: [
+            { date: "2024-01-01", endValue: 0, daily: 0 }
+          ]
+        };
       }
-    ];
-
-    // Sample chart data for kas documentation
-    const kasChartData = [
-      { date: '2025-07-01', startValue: 0, endValue: 50, daily: 50 },
-      { date: '2025-07-02', startValue: 50, endValue: 100, daily: 50 },
-      { date: '2025-07-03', startValue: 100, endValue: 160, daily: 60 },
-      { date: '2025-07-04', startValue: 160, endValue: 205, daily: 45 },
-      { date: '2025-07-05', startValue: 205, endValue: 255, daily: 50 },
-      { date: '2025-07-06', startValue: 255, endValue: 315, daily: 60 },
-      { date: '2025-07-07', startValue: 315, endValue: 360, daily: 45 }
-    ];
+    }
 
     function copyText(id) {
-      const text = document.getElementById(id).textContent;
+      const element = document.getElementById(id);
+      if (!element) {
+        showToast("Element not found");
+        return;
+      }
+      
+      const text = element.textContent;
       navigator.clipboard.writeText(text).then(() => {
         showToast(`Copied: ${text.substring(0, 20)}...`);
       }).catch(() => {
@@ -70,7 +76,7 @@
     }
 
     async function connectPhantom() {
-      if (window.solana && window.solana.isPhantom) {
+      if (typeof window !== 'undefined' && window.solana && window.solana.isPhantom) {
         try {
           const resp = await window.solana.connect();
           connectedWallet = {
@@ -90,7 +96,7 @@
     }
 
     async function connectEVM() {
-      if (window.ethereum) {
+      if (typeof window !== 'undefined' && window.ethereum) {
         try {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
           connectedWallet = {
@@ -117,6 +123,8 @@
 
     function updateConnectedWallet() {
       const walletInfo = document.getElementById('connected-wallet');
+      if (!walletInfo) return;
+      
       if (connectedWallet) {
         walletInfo.innerHTML = `
           <div class="flex justify-between items-center">
@@ -136,8 +144,14 @@
 
     function generateQRCode(address, elementId, size = 100) {
       try {
+        const element = document.getElementById(elementId);
+        if (!element) {
+          console.error(`Element with ID ${elementId} not found`);
+          return;
+        }
+        
         new QRious({
-          element: document.getElementById(elementId),
+          element: element,
           value: address,
           size: size,
           background: '#1f2937',
@@ -164,15 +178,25 @@
       }, 3000);
     }
 
-    function loadPaymentTable() {
+    function loadPaymentTable(data = paymentData) {
       const tbody = document.getElementById('payment-tbody');
+      if (!tbody) return;
+      
       tbody.innerHTML = '';
-
-      paymentData.forEach((payment, index) => {
+      
+      if (!data || data.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="5" class="py-4 text-center text-gray-400">No payment data available</td>';
+        tbody.appendChild(row);
+        return;
+      }
+      
+      data.forEach((payment, index) => {
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
         
         const truncateAddress = (addr) => {
+          if (!addr || typeof addr !== 'string') return 'N/A';
           if (addr.length > 20) {
             return addr.substring(0, 10) + '...' + addr.substring(addr.length - 6);
           }
@@ -180,15 +204,15 @@
         };
 
         row.innerHTML = `
-          <td class="py-3 px-4 font-medium">${payment.nama}</td>
+          <td class="py-3 px-4 font-medium">${payment.nama || 'N/A'}</td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode}</span>
+            <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode || 'N/A'}</span>
           </td>
-          <td class="py-3 px-4 font-mono text-xs" title="${payment.from}">
+          <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
             ${truncateAddress(payment.from)}
           </td>
-          <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah}</td>
-          <td class="py-3 px-4 text-gray-400">${payment.tanggal}</td>
+          <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
+          <td class="py-3 px-4 text-gray-400">${payment.tanggal || 'N/A'}</td>
         `;
         tbody.appendChild(row);
       });
@@ -196,62 +220,56 @@
 
     function initChart() {
       const chartContainer = document.getElementById('kas-chart');
-      if (!chartContainer) return;
+      if (!chartContainer) {
+        console.error("Chart container not found");
+        return;
+      }
 
-      const chart = echarts.init(chartContainer);
-      
-      const dates = kasChartData.map(item => item.date);
-      const cumulativeValues = kasChartData.map(item => item.endValue);
-      const dailyValues = kasChartData.map(item => item.daily);
+      if (!kasChartData || kasChartData.length === 0) {
+        chartContainer.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">No chart data available</div>';
+        return;
+      }
 
-      const option = {
-        title: {
-          text: 'Dokumentasi Kas Kelas',
-          textStyle: {
-            color: '#ffffff',
-            fontSize: 18
+      try {
+        const chart = echarts.init(chartContainer);
+        
+        const dates = kasChartData.map(item => item.date || 'N/A');
+        const cumulativeValues = kasChartData.map(item => parseFloat(item.endValue) || 0);
+        const dailyValues = kasChartData.map(item => parseFloat(item.daily) || 0);
+
+        const option = {
+          title: {
+            text: 'Dokumentasi Kas Kelas',
+            textStyle: {
+              color: '#ffffff',
+              fontSize: 18
+            },
+            left: 'center'
           },
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'axis',
-          backgroundColor: '#374151',
-          borderColor: '#6b7280',
-          textStyle: {
-            color: '#ffffff'
-          }
-        },
-        legend: {
-          data: ['Total Kas', 'Pemasukan Harian'],
-          textStyle: {
-            color: '#d1d5db'
-          },
-          bottom: 10
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '15%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          data: dates,
-          axisLine: {
-            lineStyle: {
-              color: '#6b7280'
+          tooltip: {
+            trigger: 'axis',
+            backgroundColor: '#374151',
+            borderColor: '#6b7280',
+            textStyle: {
+              color: '#ffffff'
             }
           },
-          axisLabel: {
-            color: '#d1d5db',
-            rotate: 45
-          }
-        },
-        yAxis: [
-          {
-            type: 'value',
-            name: 'Total (USD)',
-            position: 'left',
+          legend: {
+            data: ['Total Kas', 'Pemasukan Harian'],
+            textStyle: {
+              color: '#d1d5db'
+            },
+            bottom: 10
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: dates,
             axisLine: {
               lineStyle: {
                 color: '#6b7280'
@@ -259,102 +277,168 @@
             },
             axisLabel: {
               color: '#d1d5db',
-              formatter: '${value}'
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#374151'
-              }
+              rotate: 45
             }
           },
-          {
-            type: 'value',
-            name: 'Harian (USD)',
-            position: 'right',
-            axisLine: {
+          yAxis: [
+            {
+              type: 'value',
+              name: 'Total (USD)',
+              position: 'left',
+              axisLine: {
+                lineStyle: {
+                  color: '#6b7280'
+                }
+              },
+              axisLabel: {
+                color: '#d1d5db',
+                formatter: '${value}'
+              },
+              splitLine: {
+                lineStyle: {
+                  color: '#374151'
+                }
+              }
+            },
+            {
+              type: 'value',
+              name: 'Harian (USD)',
+              position: 'right',
+              axisLine: {
+                lineStyle: {
+                  color: '#6b7280'
+                }
+              },
+              axisLabel: {
+                color: '#d1d5db',
+                formatter: '${value}'
+              }
+            }
+          ],
+          series: [
+            {
+              name: 'Total Kas',
+              type: 'line',
+              data: cumulativeValues,
+              smooth: true,
               lineStyle: {
-                color: '#6b7280'
+                color: '#3b82f6',
+                width: 3
+              },
+              itemStyle: {
+                color: '#3b82f6'
+              },
+              areaStyle: {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [{
+                    offset: 0, color: 'rgba(59, 130, 246, 0.3)'
+                  }, {
+                    offset: 1, color: 'rgba(59, 130, 246, 0.1)'
+                  }]
+                }
               }
             },
-            axisLabel: {
-              color: '#d1d5db',
-              formatter: '${value}'
-            }
-          }
-        ],
-        series: [
-          {
-            name: 'Total Kas',
-            type: 'line',
-            data: cumulativeValues,
-            smooth: true,
-            lineStyle: {
-              color: '#3b82f6',
-              width: 3
-            },
-            itemStyle: {
-              color: '#3b82f6'
-            },
-            areaStyle: {
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [{
-                  offset: 0, color: 'rgba(59, 130, 246, 0.3)'
-                }, {
-                  offset: 1, color: 'rgba(59, 130, 246, 0.1)'
-                }]
+            {
+              name: 'Pemasukan Harian',
+              type: 'bar',
+              yAxisIndex: 1,
+              data: dailyValues,
+              itemStyle: {
+                color: '#10b981'
               }
             }
-          },
-          {
-            name: 'Pemasukan Harian',
-            type: 'bar',
-            yAxisIndex: 1,
-            data: dailyValues,
-            itemStyle: {
-              color: '#10b981'
-            }
-          }
-        ]
-      };
+          ]
+        };
 
-      chart.setOption(option);
+        chart.setOption(option);
 
-      // Make chart responsive
-      window.addEventListener('resize', () => {
-        chart.resize();
-      });
+        // Make chart responsive
+        window.addEventListener('resize', () => {
+          chart.resize();
+        });
+      } catch (error) {
+        console.error("Error initializing chart:", error);
+        chartContainer.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Error loading chart</div>';
+      }
     }
 
     function updateStats() {
-      const totalAmount = kasChartData[kasChartData.length - 1]?.endValue || 0;
-      const totalMembers = paymentData.length;
-      const lastUpdate = kasChartData[kasChartData.length - 1]?.date || 'N/A';
+      const totalAmountElement = document.getElementById('total-amount');
+      const totalMembersElement = document.getElementById('total-members');
+      const lastUpdateElement = document.getElementById('last-update');
 
-      document.getElementById('total-amount').textContent = `$${totalAmount}`;
-      document.getElementById('total-members').textContent = totalMembers;
-      document.getElementById('last-update').textContent = lastUpdate;
+      if (totalAmountElement) {
+        const totalAmount = kasChartData && kasChartData.length > 0 
+          ? (kasChartData[kasChartData.length - 1]?.endValue || 0) 
+          : 0;
+        totalAmountElement.textContent = `$${totalAmount}`;
+      }
+
+      if (totalMembersElement) {
+        const totalMembers = paymentData ? paymentData.length : 0;
+        totalMembersElement.textContent = totalMembers;
+      }
+
+      if (lastUpdateElement) {
+        const lastUpdate = kasChartData && kasChartData.length > 0 
+          ? (kasChartData[kasChartData.length - 1]?.date || 'N/A') 
+          : 'N/A';
+        lastUpdateElement.textContent = lastUpdate;
+      }
+    }
+
+    // Initialize data loading
+    async function initializeApp() {
+      try {
+        showToast("Loading data...");
+        const { paymentData: loadedPaymentData, kasChartData: loadedKasChartData } = await loadSheetData();
+        
+        paymentData = loadedPaymentData;
+        kasChartData = loadedKasChartData;
+        
+        console.log("Payment Data:", paymentData);
+        console.log("Kas Chart Data:", kasChartData);
+        
+        // Initialize UI components
+        loadPaymentTable(paymentData);
+        updateStats();
+        initChart();
+        
+        showToast("Data loaded successfully!");
+      } catch (error) {
+        console.error("Failed to initialize app:", error);
+        showToast("Failed to load data. Using default values.");
+        
+        // Initialize with empty data
+        loadPaymentTable([]);
+        updateStats();
+        initChart();
+      }
     }
 
     window.onload = function() {
-      // Generate QR codes
-      generateQRCode("V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS", "qr-solana");
-      generateQRCode("0x8C940E048Df1040bcb3e1DEC5E3722432fd97757", "qr-eth");
-      generateQRCode("0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9", "qr-sui");
-      generateQRCode("bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6", "qr-btc-tap");
-      generateQRCode("bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6", "qr-btc-segwit");
-      
-      // Initialize components
-      updateConnectedWallet();
-      loadPaymentTable();
-      updateStats();
-      
-      // Initialize chart after a short delay to ensure DOM is ready
-      setTimeout(initChart, 100);
+      try {
+        // Generate QR codes
+        generateQRCode("V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS", "qr-solana");
+        generateQRCode("0x8C940E048Df1040bcb3e1DEC5E3722432fd97757", "qr-eth");
+        generateQRCode("0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9", "qr-sui");
+        generateQRCode("bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6", "qr-btc-tap");
+        generateQRCode("bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6", "qr-btc-segwit");
+        
+        // Initialize wallet connection display
+        updateConnectedWallet();
+        
+        // Initialize app data
+        initializeApp();
+      } catch (error) {
+        console.error("Error during initialization:", error);
+        showToast("Initialization error occurred");
+      }
     };
   </script>
   <style>
