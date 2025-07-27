@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Pelajaran XI PPLG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' },
+                            '100%': { boxShadow: '0 0 30px rgba(59, 130, 246, 0.8)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            scrollbar-width: none;     /* Firefox */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            overflow: auto;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+        }
+        .tech-grid {
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.1) 2px, transparent 0),
+                radial-gradient(circle at 75px 75px, rgba(147, 197, 253, 0.05) 1px, transparent 0);
+            background-size: 100px 100px;
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .subject-kk-pplg { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .subject-mp-pplg { background: linear-gradient(135deg, #1e40af, #1e3a8a); }
+        .subject-kik { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .subject-pp { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .subject-bindo { background: linear-gradient(135deg, #10b981, #059669); }
+        .subject-sej { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .subject-bb { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .subject-pabp { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .subject-pjok { background: linear-gradient(135deg, #ec4899, #db2777); }
+        .subject-bing { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .subject-mat { background: linear-gradient(135deg, #84cc16, #65a30d); }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body 
+    class="text-white tech-grid" 
+    style="background: linear-gradient(to right, #0f172a, #1e293b);"
+    >
+    <!-- Header Section -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="glass-effect rounded-3xl p-8 mb-8 animate-fade-in">
+            <div class="flex items-center justify-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 animate-float">
+                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-800 to-indigo-900 rounded-2xl flex items-center justify-center animate-float" style="animation-delay: 0.5s">
+                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <img 
+                        src="https://smkn2kutaselatan.sch.id/wp-content/uploads/2022/10/LOGO-SMK-2.png" 
+                        alt="png">
+                    </svg>
+                </div>
+                <div class="w-16 h-16 bg-gradient-to-br from-stone-100 to-zinc-200 rounded-2xl flex items-center justify-center ml-4 animate-float">
+                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <img 
+                        src="asset/img/PPLG-LOGO.svg" 
+                        alt="svg">
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-2">
+                JADWAL PELAJARAN
+            </h1>
+            <p class="text-xl text-center text-blue-300 mb-2">SEMESTER GANJIL</p>
+            <p class="text-lg text-center text-slate-300 mb-2">SMK NEGERI 2 KUTA SELATAN TA 2025/2026</p>
+            <div class="text-center">
+                <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-2 rounded-full text-lg font-semibold animate-glow">
+                    KELAS XI PPLG
+                </span>
+            </div>
+        </div>
+
+        <!-- Time Schedule Section -->
+        <div class="glass-effect rounded-3xl overflow-hidden mb-8 animate-on-scroll">
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-6">
+                <h2 class="text-2xl font-bold text-center bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    ⏰ ALOKASI JAM PELAJARAN
+                </h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-slate-700 to-slate-800">
+                            <th class="px-4 py-3 text-blue-300 font-bold">JAM KE-</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">SENIN</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">JAM KE-</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">SELASA</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">RABU</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">KAMIS</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">JAM KE-</th>
+                            <th class="px-4 py-3 text-blue-300 font-bold">JUMAT</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-200">
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">UP Bendera</td>
+                            <td class="px-4 py-3">07.15 - 08.10</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">Dwisaka Pagi</td>
+                            <td class="px-4 py-3">07.15 - 07.40</td>
+                            <td class="px-4 py-3">07.15 - 07.40</td>
+                            <td class="px-4 py-3">07.15 - 07.40</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">Dwisaka FiDay</td>
+                            <td class="px-4 py-3">07.15 - 08.10</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">1</td>
+                            <td class="px-4 py-3">08.10 - 08.50</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">1</td>
+                            <td class="px-4 py-3">07.40 - 08.20</td>
+                            <td class="px-4 py-3">07.40 - 08.20</td>
+                            <td class="px-4 py-3">07.40 - 08.20</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">1</td>
+                            <td class="px-4 py-3">08.10 - 08.50</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">2</td>
+                            <td class="px-4 py-3">08.50 - 09.30</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">2</td>
+                            <td class="px-4 py-3">08.20 - 09.00</td>
+                            <td class="px-4 py-3">08.20 - 09.00</td>
+                            <td class="px-4 py-3">08.20 - 09.00</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">2</td>
+                            <td class="px-4 py-3">08.50 - 09.30</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">3</td>
+                            <td class="px-4 py-3">09.30 - 10.10</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">3</td>
+                            <td class="px-4 py-3">09.00 - 09.40</td>
+                            <td class="px-4 py-3">09.00 - 09.40</td>
+                            <td class="px-4 py-3">09.00 - 09.40</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">3</td>
+                            <td class="px-4 py-3">09.30 - 10.10</td>
+                        </tr>
+                        <tr class="bg-gradient-to-r from-red-600 to-red-700 border-b border-red-500">
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">10.10 - 10.40</td>
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">09.40 - 10.10</td>
+                            <td class="px-4 py-3 font-bold">09.40 - 10.10</td>
+                            <td class="px-4 py-3 font-bold">09.40 - 10.10</td>
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">10.10 - 10.40</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">4</td>
+                            <td class="px-4 py-3">10.40 - 11.20</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">4</td>
+                            <td class="px-4 py-3">10.10 - 10.50</td>
+                            <td class="px-4 py-3">10.10 - 10.50</td>
+                            <td class="px-4 py-3">10.10 - 10.50</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">4</td>
+                            <td class="px-4 py-3">10.40 - 11.20</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">5</td>
+                            <td class="px-4 py-3">11.20 - 12.00</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">5</td>
+                            <td class="px-4 py-3">10.50 - 11.30</td>
+                            <td class="px-4 py-3">10.50 - 11.30</td>
+                            <td class="px-4 py-3">10.50 - 11.30</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">5</td>
+                            <td class="px-4 py-3">11.20 - 12.00</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">6</td>
+                            <td class="px-4 py-3">12.20 - 13.00</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">6</td>
+                            <td class="px-4 py-3">12.00 - 12.40</td>
+                            <td class="px-4 py-3">12.00 - 12.40</td>
+                            <td class="px-4 py-3">12.00 - 12.40</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">6</td>
+                            <td class="px-4 py-3">12.20 - 13.00</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">7</td>
+                            <td class="px-4 py-3">13.00 - 14.40</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">7</td>
+                            <td class="px-4 py-3">12.40 - 13.20</td>
+                            <td class="px-4 py-3">12.40 - 13.20</td>
+                            <td class="px-4 py-3">12.40 - 13.20</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">7</td>
+                            <td class="px-4 py-3">13.00 - 14.40</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">8</td>
+                            <td class="px-4 py-3">13.40 - 14.20</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">8</td>
+                            <td class="px-4 py-3">13.20 - 14.00</td>
+                            <td class="px-4 py-3">13.20 - 14.00</td>
+                            <td class="px-4 py-3">13.20 - 14.00</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">8</td>
+                            <td class="px-4 py-3">13.40 - 14.20</td>
+                        </tr>
+                        <tr class="bg-gradient-to-r from-red-600 to-red-700 border-b border-red-500">
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">14.20 - 14.50</td>
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">14.00 - 14.30</td>
+                            <td class="px-4 py-3 font-bold">14.00 - 14.30</td>
+                            <td class="px-4 py-3 font-bold">14.00 - 14.30</td>
+                            <td class="px-4 py-3 font-bold">BREAK</td>
+                            <td class="px-4 py-3 font-bold">14.20 - 14.50</td>
+                        </tr>
+                        <tr class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">9</td>
+                            <td class="px-4 py-3">14.50 - 15.30</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">9</td>
+                            <td class="px-4 py-3">14.30 - 15.10</td>
+                            <td class="px-4 py-3">14.30 - 15.10</td>
+                            <td class="px-4 py-3">14.30 - 15.10</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">9</td>
+                            <td class="px-4 py-3">14.50 - 15.30</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/50 transition-colors">
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">10</td>
+                            <td class="px-4 py-3">15.30 - 16.10</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">10</td>
+                            <td class="px-4 py-3">15.10 - 15.50</td>
+                            <td class="px-4 py-3">15.10 - 15.50</td>
+                            <td class="px-4 py-3">15.10 - 15.50</td>
+                            <td class="px-4 py-3 bg-slate-700 font-semibold">10</td>
+                            <td class="px-4 py-3">15.30 - 16.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Subject Schedule Section -->
+        <div class="glass-effect rounded-3xl overflow-hidden mb-8 animate-on-scroll">
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-6">
+                <h2 class="text-2xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    📚 JADWAL MATA PELAJARAN XI PPLG
+                </h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-slate-700 to-slate-800">
+                            <th class="px-4 py-3 text-purple-300 font-bold">HARI</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 1</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 2</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 3</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 4</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 5</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 6</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 7</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 8</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 9</th>
+                            <th class="px-4 py-3 text-purple-300 font-bold">JAM 10</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-700">
+                            <td class="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-center">SENIN</td>
+                            <td class="px-2 py-3 subject-kk-pplg text-white text-center font-semibold" colspan="3">
+                                <div>KK PPLG</div>
+                                <small class="text-blue-100">Bu Winda</small>
+                            </td>
+                            <td class="px-2 py-3 subject-kk-pplg text-white text-center font-semibold" colspan="3">
+                                <div>KK PPLG</div>
+                                <small class="text-blue-100">Bu Winda</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                        </tr>
+                        <tr class="border-b border-slate-700">
+                            <td class="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-center">SELASA</td>
+                            <td class="px-2 py-3 subject-mp-pplg text-white text-center font-semibold">
+                                <div>MP PPLG</div>
+                                <small class="text-blue-100">Bu Winda</small>
+                            </td>
+                            <td class="px-2 py-3 subject-kik text-slate-800 text-center font-semibold">
+                                <div>KIK</div>
+                                <small class="text-yellow-800">Pak Restu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-mp-pplg text-white text-center font-semibold">
+                                <div>MP PPLG</div>
+                                <small class="text-blue-100">Bu Winda</small>
+                            </td>
+                            <td class="px-2 py-3 subject-kik text-slate-800 text-center font-semibold">
+                                <div>KIK</div>
+                                <small class="text-yellow-800">Pak Restu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-pp text-white text-center font-semibold">
+                                <div>PP</div>
+                                <small class="text-red-100">Bu Happy</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                        </tr>
+                        <tr class="border-b border-slate-700">
+                            <td class="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-center">RABU</td>
+                            <td class="px-2 py-3 subject-bindo text-white text-center font-semibold">
+                                <div>B.INDO</div>
+                                <small class="text-green-100">Bu Mega</small>
+                            </td>
+                            <td class="px-2 py-3 subject-sej text-white text-center font-semibold">
+                                <div>SEJ</div>
+                                <small class="text-purple-100">Bu Sani</small>
+                            </td>
+                            <td class="px-2 py-3 subject-bb text-white text-center font-semibold">
+                                <div>BB</div>
+                                <small class="text-indigo-100">Bu Ayu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-pp text-white text-center font-semibold">
+                                <div>PP</div>
+                                <small class="text-red-100">Bu Happy</small>
+                            </td>
+                            <td class="px-2 py-3 subject-pabp text-white text-center font-semibold">
+                                <div>PABP</div>
+                                <small class="text-orange-100">Bu Chika</small>
+                            </td>
+                            <td class="px-2 py-3 subject-bindo text-white text-center font-semibold">
+                                <div>B.INDO</div>
+                                <small class="text-green-100">Bu Mega</small>
+                            </td>
+                            <td class="px-2 py-3 subject-bb text-white text-center font-semibold">
+                                <div>BB</div>
+                                <small class="text-indigo-100">Bu Ayu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-pabp text-white text-center font-semibold">
+                                <div>PABP</div>
+                                <small class="text-orange-100">Bu Chika</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                        </tr>
+                        <tr class="border-b border-slate-700">
+                            <td class="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-center">KAMIS</td>
+                            <td class="px-2 py-3 subject-pjok text-white text-center font-semibold">
+                                <div>PJOK</div>
+                                <small class="text-pink-100">Pak Widi</small>
+                            </td>
+                            <td class="px-2 py-3 subject-kk-pplg text-white text-center font-semibold" colspan="2">
+                                <div>KK PPLG</div>
+                                <small class="text-blue-100">Bu Winda</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                        </tr>
+                        <tr class="border-b border-slate-700">
+                            <td class="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-center">JUMAT</td>
+                            <td class="px-2 py-3 subject-bing text-white text-center font-semibold">
+                                <div>B.ING</div>
+                                <small class="text-cyan-100">Bu Ayu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-mat text-white text-center font-semibold">
+                                <div>MAT</div>
+                                <small class="text-green-100">Pak Restu</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-2 py-3 subject-bing text-white text-center font-semibold">
+                                <div>B.ING</div>
+                                <small class="text-cyan-100">Bu Ayu</small>
+                            </td>
+                            <td class="px-2 py-3 subject-sej text-white text-center font-semibold">
+                                <div>SEJ</div>
+                                <small class="text-purple-100">Bu Sani</small>
+                            </td>
+                            <td class="px-2 py-3 subject-mat text-white text-center font-semibold">
+                                <div>MAT</div>
+                                <small class="text-green-100">Pak Restu</small>
+                            </td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                            <td class="px-4 py-3 bg-slate-800"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Teacher List Section -->
+        <div class="glass-effect rounded-3xl p-8 animate-on-scroll">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                    👨‍🏫 DAFTAR MATA PELAJARAN DAN GURU PENGAJAR
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-blue-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-blue-300">KK PPLG</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Konsentrasi Keahlian PPLG</p>
+                    <p class="text-blue-200 font-semibold">👩‍🏫 Bu Winda</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6283870521087</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-indigo-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-indigo-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-indigo-300">MP PPLG</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Mata Pelajaran PPLG</p>
+                    <p class="text-indigo-200 font-semibold">👩‍🏫 Bu Winda</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6283870521087</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-yellow-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-yellow-300">KIK</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Kewirausahaan</p>
+                    <p class="text-yellow-200 font-semibold">👨‍🏫 Pak Restu</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6282145088354</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-red-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-red-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-red-300">PP</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Projek P5</p>
+                    <p class="text-red-200 font-semibold">👩‍🏫 Bu Happy</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6287761682482</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-green-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-green-300">B.INDO</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Bahasa Indonesia</p>
+                    <p class="text-green-200 font-semibold">👩‍🏫 Bu Mega</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 -</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-purple-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-purple-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-purple-300">SEJ</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Sejarah</p>
+                    <p class="text-purple-200 font-semibold">👩‍🏫 Bu Sani</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6281339393953</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-indigo-600 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-indigo-600 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-indigo-300">BB</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Bahasa Bali</p>
+                    <p class="text-indigo-200 font-semibold">👩‍🏫 Bu Ayu</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 -</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-orange-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-orange-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-orange-300">PABP</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Pendidikan Agama dan Budi Pekerti</p>
+                    <p class="text-orange-200 font-semibold">👩‍🏫 Bu Chika</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6282145846314</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-pink-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-pink-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-pink-300">PJOK</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Pendidikan Jasmani</p>
+                    <p class="text-pink-200 font-semibold">👨‍🏫 Pak Widi</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 -</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-cyan-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-cyan-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-cyan-300">B.ING</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Bahasa Inggris</p>
+                    <p class="text-cyan-200 font-semibold">👩‍🏫 Bu Ayu</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6281246267654</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border-l-4 border-lime-500 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center mb-3">
+                        <div class="w-3 h-3 bg-lime-500 rounded-full mr-3 animate-pulse"></div>
+                        <h3 class="text-lg font-bold text-lime-300">MAT</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-2">Matematika</p>
+                    <p class="text-lime-200 font-semibold">👨‍🏫 Pak Restu</p>
+                    <p class="text-xs text-slate-400 mt-2">📱 +6282145088354</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-6 glass-effect rounded-2xl border border-slate-600">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-blue-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                    <h4 class="text-lg font-bold text-blue-300">Catatan Penting</h4>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    <span class="text-blue-300 font-semibold">📅</span> Jadwal dibuat berdasarkan data tahun ajaran 2025/2026 semester ganjil. 
+                    <span class="text-yellow-300 font-semibold">⚠️</span> Jadwal dapat berubah sewaktu-waktu sesuai kebijakan sekolah. 
+                    <span class="text-green-300 font-semibold">📱</span> Untuk informasi lebih lanjut, hubungi guru mata pelajaran terkait.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 py-6">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-2 h-2 bg-blue-500 rounded-full mx-1 animate-bounce"></div>
+                <div class="w-2 h-2 bg-purple-500 rounded-full mx-1 animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="w-2 h-2 bg-pink-500 rounded-full mx-1 animate-bounce" style="animation-delay: 0.2s"></div>
+            </div>
+            <p class="text-slate-400 text-sm">
+                © 2025 SMK Negeri 2 Kuta Selatan - XI PPLG
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effects to table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'scale(1.02)';
+                row.style.transition = 'transform 0.2s ease';
+            });
+            
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add click effect to subject cells
+        document.querySelectorAll('[class*="subject-"]').forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.style.transform = 'scale(1.1)';
+                cell.style.transition = 'transform 0.1s ease';
+                setTimeout(() => {
+                    cell.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
