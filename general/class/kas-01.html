@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kas XI PPLG</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+  <script>
+    let connectedWallet = null;
+
+    // Sample payment data - replace with actual Excel data
+    const paymentData = [
+      {
+        nama: "Budi Santoso",
+        metode: "Solana",
+        from: "V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS",
+        jumlah: "0.5 SOL (~$50)",
+        tanggal: "2025-07-20"
+      },
+      {
+        nama: "Siti Nurhaliza",
+        metode: "QRIS",
+        from: "I MADE SURATI",
+        jumlah: "Rp 50,000 (~$3.33)",
+        tanggal: "2025-07-21"
+      },
+      {
+        nama: "Ahmad Rifaldi",
+        metode: "Ethereum",
+        from: "0x8C940E048Df1040bcb3e1DEC5E3722432fd97757",
+        jumlah: "0.02 ETH (~$60)",
+        tanggal: "2025-07-22"
+      },
+      {
+        nama: "Maya Dewi",
+        metode: "Bitcoin",
+        from: "bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6",
+        jumlah: "0.0005 BTC (~$45)",
+        tanggal: "2025-07-23"
+      }
+    ];
+
+    // Sample chart data for kas documentation
+    const kasChartData = [
+      { date: '2025-07-01', startValue: 0, endValue: 50, daily: 50 },
+      { date: '2025-07-02', startValue: 50, endValue: 100, daily: 50 },
+      { date: '2025-07-03', startValue: 100, endValue: 160, daily: 60 },
+      { date: '2025-07-04', startValue: 160, endValue: 205, daily: 45 },
+      { date: '2025-07-05', startValue: 205, endValue: 255, daily: 50 },
+      { date: '2025-07-06', startValue: 255, endValue: 315, daily: 60 },
+      { date: '2025-07-07', startValue: 315, endValue: 360, daily: 45 }
+    ];
+
+    function copyText(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied: ${text.substring(0, 20)}...`);
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast(`Copied: ${text.substring(0, 20)}...`);
+      });
+    }
+
+    async function connectPhantom() {
+      if (window.solana && window.solana.isPhantom) {
+        try {
+          const resp = await window.solana.connect();
+          connectedWallet = {
+            type: 'Phantom (Solana)',
+            address: resp.publicKey.toString()
+          };
+          updateConnectedWallet();
+          showToast(`Phantom connected: ${resp.publicKey.toString().substring(0, 10)}...`);
+        } catch (err) {
+          console.error("User rejected the connection", err);
+          showToast("Connection to Phantom wallet failed.");
+        }
+      } else {
+        showToast("Phantom wallet not found. Install from https://phantom.app");
+        window.open('https://phantom.app', '_blank');
+      }
+    }
+
+    async function connectEVM() {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          connectedWallet = {
+            type: 'EVM (Metamask/Trust)',
+            address: accounts[0]
+          };
+          updateConnectedWallet();
+          showToast(`Connected: ${accounts[0].substring(0, 10)}...`);
+        } catch (error) {
+          console.error(error);
+          showToast("Connection to EVM wallet failed.");
+        }
+      } else {
+        showToast("Ethereum wallet not found. Install Metamask or Trust Wallet.");
+        window.open('https://metamask.io', '_blank');
+      }
+    }
+
+    function disconnectWallet() {
+      connectedWallet = null;
+      updateConnectedWallet();
+      showToast("Wallet disconnected");
+    }
+
+    function updateConnectedWallet() {
+      const walletInfo = document.getElementById('connected-wallet');
+      if (connectedWallet) {
+        walletInfo.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-green-400">✅ Connected: ${connectedWallet.type}</p>
+              <p class="text-xs text-gray-400 break-all">${connectedWallet.address}</p>
+            </div>
+            <button onclick="disconnectWallet()" class="text-red-400 hover:text-red-300 text-sm">
+              Disconnect
+            </button>
+          </div>
+        `;
+      } else {
+        walletInfo.innerHTML = '<p class="text-sm text-gray-400">❌ No wallet connected</p>';
+      }
+    }
+
+    function generateQRCode(address, elementId, size = 100) {
+      try {
+        new QRious({
+          element: document.getElementById(elementId),
+          value: address,
+          size: size,
+          background: '#1f2937',
+          foreground: '#ffffff',
+          padding: 5
+        });
+      } catch (error) {
+        console.error(`Failed to generate QR code for ${elementId}:`, error);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in z-50';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('animate-fade-out');
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.remove();
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    function loadPaymentTable() {
+      const tbody = document.getElementById('payment-tbody');
+      tbody.innerHTML = '';
+
+      paymentData.forEach((payment, index) => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+        
+        const truncateAddress = (addr) => {
+          if (addr.length > 20) {
+            return addr.substring(0, 10) + '...' + addr.substring(addr.length - 6);
+          }
+          return addr;
+        };
+
+        row.innerHTML = `
+          <td class="py-3 px-4 font-medium">${payment.nama}</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode}</span>
+          </td>
+          <td class="py-3 px-4 font-mono text-xs" title="${payment.from}">
+            ${truncateAddress(payment.from)}
+          </td>
+          <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah}</td>
+          <td class="py-3 px-4 text-gray-400">${payment.tanggal}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function initChart() {
+      const chartContainer = document.getElementById('kas-chart');
+      if (!chartContainer) return;
+
+      const chart = echarts.init(chartContainer);
+      
+      const dates = kasChartData.map(item => item.date);
+      const cumulativeValues = kasChartData.map(item => item.endValue);
+      const dailyValues = kasChartData.map(item => item.daily);
+
+      const option = {
+        title: {
+          text: 'Dokumentasi Kas Kelas',
+          textStyle: {
+            color: '#ffffff',
+            fontSize: 18
+          },
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor: '#374151',
+          borderColor: '#6b7280',
+          textStyle: {
+            color: '#ffffff'
+          }
+        },
+        legend: {
+          data: ['Total Kas', 'Pemasukan Harian'],
+          textStyle: {
+            color: '#d1d5db'
+          },
+          bottom: 10
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '15%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: dates,
+          axisLine: {
+            lineStyle: {
+              color: '#6b7280'
+            }
+          },
+          axisLabel: {
+            color: '#d1d5db',
+            rotate: 45
+          }
+        },
+        yAxis: [
+          {
+            type: 'value',
+            name: 'Total (USD)',
+            position: 'left',
+            axisLine: {
+              lineStyle: {
+                color: '#6b7280'
+              }
+            },
+            axisLabel: {
+              color: '#d1d5db',
+              formatter: '${value}'
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#374151'
+              }
+            }
+          },
+          {
+            type: 'value',
+            name: 'Harian (USD)',
+            position: 'right',
+            axisLine: {
+              lineStyle: {
+                color: '#6b7280'
+              }
+            },
+            axisLabel: {
+              color: '#d1d5db',
+              formatter: '${value}'
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'Total Kas',
+            type: 'line',
+            data: cumulativeValues,
+            smooth: true,
+            lineStyle: {
+              color: '#3b82f6',
+              width: 3
+            },
+            itemStyle: {
+              color: '#3b82f6'
+            },
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(59, 130, 246, 0.3)'
+                }, {
+                  offset: 1, color: 'rgba(59, 130, 246, 0.1)'
+                }]
+              }
+            }
+          },
+          {
+            name: 'Pemasukan Harian',
+            type: 'bar',
+            yAxisIndex: 1,
+            data: dailyValues,
+            itemStyle: {
+              color: '#10b981'
+            }
+          }
+        ]
+      };
+
+      chart.setOption(option);
+
+      // Make chart responsive
+      window.addEventListener('resize', () => {
+        chart.resize();
+      });
+    }
+
+    function updateStats() {
+      const totalAmount = kasChartData[kasChartData.length - 1]?.endValue || 0;
+      const totalMembers = paymentData.length;
+      const lastUpdate = kasChartData[kasChartData.length - 1]?.date || 'N/A';
+
+      document.getElementById('total-amount').textContent = `$${totalAmount}`;
+      document.getElementById('total-members').textContent = totalMembers;
+      document.getElementById('last-update').textContent = lastUpdate;
+    }
+
+    window.onload = function() {
+      // Generate QR codes
+      generateQRCode("V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS", "qr-solana");
+      generateQRCode("0x8C940E048Df1040bcb3e1DEC5E3722432fd97757", "qr-eth");
+      generateQRCode("0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9", "qr-sui");
+      generateQRCode("bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6", "qr-btc-tap");
+      generateQRCode("bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6", "qr-btc-segwit");
+      
+      // Initialize components
+      updateConnectedWallet();
+      loadPaymentTable();
+      updateStats();
+      
+      // Initialize chart after a short delay to ensure DOM is ready
+      setTimeout(initChart, 100);
+    };
+  </script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade-out {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.3s ease-out;
+    }
+    .animate-fade-out {
+      animation: fade-out 0.3s ease-out;
+    }
+    .glass-effect {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-950 via-purple-950 to-black min-h-screen p-6 font-sans">
+  <div class="bg-gray-900 bg-opacity-95 rounded-2xl shadow-2xl p-8 w-full max-w-6xl mx-auto space-y-8 glass-effect">
+    
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-5xl font-extrabold text-white tracking-tight drop-shadow mb-2">
+        💰 KAS KELAS XI PPLG
+      </h1>
+      <p class="text-gray-400 text-lg">Transfer kas kelas melalui dompet crypto atau QRIS di bawah.</p>
+    </div>
+
+    <!-- Stats Dashboard -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 rounded-xl text-center">
+        <h3 class="text-white text-sm font-medium">Total Kas</h3>
+        <p id="total-amount" class="text-white text-3xl font-bold">$0</p>
+      </div>
+      <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 rounded-xl text-center">
+        <h3 class="text-white text-sm font-medium">Sudah Bayar</h3>
+        <p id="total-members" class="text-white text-3xl font-bold">0</p>
+      </div>
+      <div class="bg-gradient-to-r from-purple-600 to-purple-700 p-6 rounded-xl text-center">
+        <h3 class="text-white text-sm font-medium">Update Terakhir</h3>
+        <p id="last-update" class="text-white text-xl font-bold">N/A</p>
+      </div>
+    </div>
+
+    <!-- Connected Wallet Display -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-lg font-semibold text-white mb-4">🔗 Connected Wallet</h2>
+      <div id="connected-wallet" class="text-center">
+        <p class="text-sm text-gray-400">❌ No wallet connected</p>
+      </div>
+    </div>
+
+    <!-- Crypto Addresses -->
+    <div class="space-y-6">
+      <h2 class="text-2xl font-bold text-white text-center mb-6">🪙 Alamat Crypto</h2>
+      
+      <!-- Solana -->
+      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png" class="w-10 h-10 mr-4" alt="Solana" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-white">Solana</h3>
+          <p id="solana" class="text-sm text-gray-300 break-all font-mono">
+            V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <canvas id="qr-solana" class="bg-gray-800 rounded-lg p-2"></canvas>
+          <button onclick="copyText('solana')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Ethereum -->
+      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" class="w-10 h-10 mr-4" alt="Ethereum" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-white">Ethereum / Base / Polygon</h3>
+          <p id="eth" class="text-sm text-gray-300 break-all font-mono">
+            0x8C940E048Df1040bcb3e1DEC5E3722432fd97757
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <canvas id="qr-eth" class="bg-gray-800 rounded-lg p-2"></canvas>
+          <button onclick="copyText('eth')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- SUI -->
+      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/sui/info/logo.png" class="w-10 h-10 mr-4" alt="SUI" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-white">SUI</h3>
+          <p id="sui" class="text-sm text-gray-300 break-all font-mono">
+            0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <canvas id="qr-sui" class="bg-gray-800 rounded-lg p-2"></canvas>
+          <button onclick="copyText('sui')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Bitcoin Taproot -->
+      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png" class="w-10 h-10 mr-4" alt="BTC" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-white">Bitcoin (Taproot)</h3>
+          <p id="btc-tap" class="text-sm text-gray-300 break-all font-mono">
+            bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <canvas id="qr-btc-tap" class="bg-gray-800 rounded-lg p-2"></canvas>
+          <button onclick="copyText('btc-tap')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Bitcoin Segwit -->
+      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png" class="w-10 h-10 mr-4" alt="BTC" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-white">Bitcoin (Segwit)</h3>
+          <p id="btc-segwit" class="text-sm text-gray-300 break-all font-mono">
+            bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <canvas id="qr-btc-segwit" class="bg-gray-800 rounded-lg p-2"></canvas>
+          <button onclick="copyText('btc-segwit')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <div id="kas-chart" style="width: 100%; height: 400px;"></div>
+    </div>
+
+    <!-- Payment History Table -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-xl font-semibold text-white mb-6">📊 Riwayat Pembayaran Kas</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-gray-300">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="py-3 px-4 text-left font-semibold">Nama</th>
+              <th class="py-3 px-4 text-left font-semibold">Metode</th>
+              <th class="py-3 px-4 text-left font-semibold">From</th>
+              <th class="py-3 px-4 text-left font-semibold">Jumlah</th>
+              <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="payment-tbody">
+            <!-- Data will be loaded by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- QRIS Section -->
+    <div class="text-center bg-gray-800 bg-opacity-50 p-6 rounded-xl glass-effect">
+      <h3 class="text-2xl font-semibold text-white mb-4">🧾 Pembayaran via QRIS</h3>
+      <div class="flex justify-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/QRIS_logo.png" 
+             alt="QRIS" 
+             class="w-48 h-48 border border-gray-700 rounded-lg shadow-lg bg-white p-4" />
+      </div>
+      <p class="text-gray-400 mt-4">Scan dengan e-wallet atau m-banking untuk bayar kas kelas.</p>
+    </div>
+
+    <!-- Connect Wallet Section -->
+    <div class="text-center space-y-4 bg-gray-800 bg-opacity-50 p-6 rounded-xl glass-effect">
+      <h2 class="text-xl font-semibold text-white">🔗 Sambungkan Dompet</h2>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <button onclick="connectPhantom()" 
+                class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl hover:from-purple-500 hover:to-purple-600 transition-all duration-200 font-semibold">
+          🟣 Connect Phantom (Solana)
+        </button>
+        <button onclick="connectEVM()" 
+                class="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-orange-500 transition-all duration-200 font-semibold">
+          🦊 Connect Metamask (EVM)
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="text-center pt-6 border-t border-gray-700">
+      <p class="text-gray-400 mb-2">📞 Hubungi Bendahara:</p>
+      <a href="https://wa.me/6203999" target="_blank" 
+         class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-500 transition-colors font-semibold">
+        <span class="mr-2">📱</span>
+        WhatsApp: 03999..
+      </a>
+    </div>
+
+  </div>
+</body>
+</html>
