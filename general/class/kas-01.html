@@ -12,10 +12,12 @@
     let connectedWallet = null;
     let paymentData = [];
     let kasChartData = [];
+    let dataKas = [];
 
     const FilePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx';
     const SheetDoc = 'history'; // Ensure this matches the sheet name in your Google Sheet
     const SheetData = 'doc'; // Ensure this matches the sheet name in your Google Sheet
+    const DataKas = 'datakas'; // Ensure this matches the sheet name in your Google Sheet
 
     async function loadSheetData() {
       try {
@@ -26,29 +28,67 @@
 
         // Load data from 'doc' sheet
         const docSheet = workbook.Sheets[SheetDoc];
-        if (!docSheet) throw new Error(`Sheet "${SheetDoc}" not found`);
-        const loadedPaymentData = XLSX.utils.sheet_to_json(docSheet);
-        console.log("Payment Data Loaded:", loadedPaymentData);
+        let loadedPaymentData = [];
+        if (docSheet) {
+          loadedPaymentData = XLSX.utils.sheet_to_json(docSheet);
+          console.log("Payment Data Loaded:", loadedPaymentData);
+        }
 
         // Load data from 'history' sheet
         const historySheet = workbook.Sheets[SheetData];
-        if (!historySheet) throw new Error(`Sheet "${SheetData}" not found`);
-        const loadedKasChartData = XLSX.utils.sheet_to_json(historySheet);
-        console.log("Kas Chart Data Loaded:", loadedKasChartData);
+        let loadedKasChartData = [];
+        if (historySheet) {
+          loadedKasChartData = XLSX.utils.sheet_to_json(historySheet);
+          console.log("Kas Chart Data Loaded:", loadedKasChartData);
+        }
+
+        // Load data from 'datakas' sheet
+        const dataKasSheet = workbook.Sheets[DataKas];
+        let loadedDataKas = [];
+        if (dataKasSheet) {
+          loadedDataKas = XLSX.utils.sheet_to_json(dataKasSheet);
+          console.log("Data Kas Loaded:", loadedDataKas);
+        }
 
         // Return both datasets
-        return { paymentData: loadedPaymentData, kasChartData: loadedKasChartData };
+        return { 
+           paymentData: loadedPaymentData,
+           kasChartData: loadedKasChartData, 
+           dataKas: loadedDataKas 
+        };
       } catch (error) {
         console.error("Error loading sheet data:", error);
         
-        // Return mock data if sheet loading fails
+        // Return mock data if sheet loading fails - using the actual data from your paste
+        const mockDataKas = [
+          { 
+            Nama: 'Loading..',
+            Tanggal: true,
+            __EMPTY: true,
+            __EMPTY_1: false, 
+            __EMPTY_2: false, 
+            __EMPTY_3: false 
+          },
+        ];
+
         return {
           paymentData: [
-            { nama: "Loading...", metode: "N/A", from: "N/A", jumlah: "$0", tanggal: "N/A" }
+              { 
+              nama: "Loading...", 
+              metode: "N/A", 
+              from: "N/A", 
+              jumlah: "$0", 
+              tanggal: "N/A" 
+            }
           ],
           kasChartData: [
-            { date: "2024-01-01", endValue: 0, daily: 0 }
-          ]
+            { 
+              date: "2024-01-01", 
+              endValue: 0, 
+              daily: 0 
+            }
+          ],
+          dataKas: mockDataKas
         };
       }
     }
@@ -73,6 +113,56 @@
         document.body.removeChild(textArea);
         showToast(`Copied: ${text.substring(0, 20)}...`);
       });
+    }
+
+    function loadDataKasTable(data = dataKas) {
+      const tbody = document.getElementById('datakas-tbody');
+      if (!tbody) {
+        console.error("datakas-tbody element not found");
+        return;
+      }
+      
+      console.log("Loading data kas table with data:", data);
+      
+      tbody.innerHTML = '';
+      
+      if (!data || data.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="10" class="py-4 text-center text-gray-400">No data kas available</td>';
+        tbody.appendChild(row);
+        return;
+      }
+
+      // Filter out rows that don't have a valid name
+      const validData = data.filter(student => student.Nama && typeof student.Nama === 'string' && student.Nama.trim() !== '');
+      
+      validData.forEach((student, index) => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+        
+        // Create cells for name and each date column
+        let cellsHTML = `<td class="py-3 px-4 font-medium text-white sticky left-0 bg-gray-800">${student.Nama || 'N/A'}</td>`;
+        
+        // Define the expected date columns based on your table headers
+        const dateColumns = ['Tanggal', '__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6', '__EMPTY_7'];
+        
+        dateColumns.forEach(dateKey => {
+          const status = student[dateKey];
+          let emoji = '❌'; // default
+          
+          // Check for various true values
+          if (status === true || status === 'TRUE' || status === '1' || status === 1 || status === 'true') {
+            emoji = '✅';
+          }
+          
+          cellsHTML += `<td class="py-3 px-2 text-center text-lg">${emoji}</td>`;
+        });
+
+        row.innerHTML = cellsHTML;
+        tbody.appendChild(row);
+      });
+      
+      console.log(`Loaded ${validData.length} students to the table`);
     }
 
     async function connectPhantom() {
@@ -203,6 +293,13 @@
           return addr;
         };
 
+        const dateToJSDate = (date) => {
+          const excelEpoch = new Date(1899, 11, 30); // 
+          var date = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+          var date = date.toISOString().split("T")[0];
+          return date // Format YYYY-MM-DD
+        }
+
         row.innerHTML = `
           <td class="py-3 px-4 font-medium">${payment.nama || 'N/A'}</td>
           <td class="py-3 px-4">
@@ -212,7 +309,7 @@
             ${truncateAddress(payment.from)}
           </td>
           <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
-          <td class="py-3 px-4 text-gray-400">${payment.tanggal || 'N/A'}</td>
+          <td class="py-3 px-4 text-gray-400">${dateToJSDate(payment.tanggal) || 'N/A'}</td>
         `;
         tbody.appendChild(row);
       });
@@ -230,10 +327,17 @@
         return;
       }
 
+       const dateToJSDate = (date) => {
+          const excelEpoch = new Date(1899, 11, 30); // 
+          var date = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+          var date = date.toISOString().split("T")[0];
+          return date // Format YYYY-MM-DD
+        }
+
       try {
         const chart = echarts.init(chartContainer);
         
-        const dates = kasChartData.map(item => item.date || 'N/A');
+        const dates = kasChartData.map(item => dateToJSDate(item.date) || 'N/A');
         const cumulativeValues = kasChartData.map(item => parseFloat(item.endValue) || 0);
         const dailyValues = kasChartData.map(item => parseFloat(item.daily) || 0);
 
@@ -283,7 +387,7 @@
           yAxis: [
             {
               type: 'value',
-              name: 'Total (USD)',
+              name: 'Total (IDR)',
               position: 'left',
               axisLine: {
                 lineStyle: {
@@ -292,7 +396,7 @@
               },
               axisLabel: {
                 color: '#d1d5db',
-                formatter: '${value}'
+                formatter: '{value}'
               },
               splitLine: {
                 lineStyle: {
@@ -302,7 +406,7 @@
             },
             {
               type: 'value',
-              name: 'Harian (USD)',
+              name: 'Harian (IDR)',
               position: 'right',
               axisLine: {
                 lineStyle: {
@@ -311,7 +415,7 @@
               },
               axisLabel: {
                 color: '#d1d5db',
-                formatter: '${value}'
+                formatter: '{value}'
               }
             }
           ],
@@ -367,45 +471,28 @@
       }
     }
 
-    function updateStats() {
-      const totalAmountElement = document.getElementById('total-amount');
-      const totalMembersElement = document.getElementById('total-members');
-      const lastUpdateElement = document.getElementById('last-update');
-
-      if (totalAmountElement) {
-        const totalAmount = kasChartData && kasChartData.length > 0 
-          ? (kasChartData[kasChartData.length - 1]?.endValue || 0) 
-          : 0;
-        totalAmountElement.textContent = `$${totalAmount}`;
-      }
-
-      if (totalMembersElement) {
-        const totalMembers = paymentData ? paymentData.length : 0;
-        totalMembersElement.textContent = totalMembers;
-      }
-
-      if (lastUpdateElement) {
-        const lastUpdate = kasChartData && kasChartData.length > 0 
-          ? (kasChartData[kasChartData.length - 1]?.date || 'N/A') 
-          : 'N/A';
-        lastUpdateElement.textContent = lastUpdate;
-      }
-    }
-
     // Initialize data loading
     async function initializeApp() {
       try {
         showToast("Loading data...");
-        const { paymentData: loadedPaymentData, kasChartData: loadedKasChartData } = await loadSheetData();
+        const { 
+          paymentData: loadedPaymentData, 
+          kasChartData: loadedKasChartData, 
+          dataKas: loadedDataKas 
+        } = await loadSheetData();
         
+        // Update global variables
         paymentData = loadedPaymentData;
         kasChartData = loadedKasChartData;
+        dataKas = loadedDataKas;
         
         console.log("Payment Data:", paymentData);
         console.log("Kas Chart Data:", kasChartData);
+        console.log("Data Kas:", dataKas);
         
         // Initialize UI components
         loadPaymentTable(paymentData);
+        loadDataKasTable(dataKas); // Now properly load the dataKas table
         updateStats();
         initChart();
         
@@ -416,6 +503,7 @@
         
         // Initialize with empty data
         loadPaymentTable([]);
+        loadDataKasTable([]);
         updateStats();
         initChart();
       }
@@ -440,6 +528,31 @@
         showToast("Initialization error occurred");
       }
     };
+
+        function updateStats() {
+      const totalAmountElement = document.getElementById('total-amount');
+      const totalMembersElement = document.getElementById('total-members');
+      const lastUpdateElement = document.getElementById('last-update');
+
+      if (totalAmountElement) {
+        const totalAmount = kasChartData && kasChartData.length > 0 
+          ? (kasChartData[kasChartData.length - 1]?.endValue || 0) 
+          : 0;
+        totalAmountElement.textContent = `$${totalAmount}`;
+      }
+
+      if (totalMembersElement) {
+        const totalMembers = paymentData ? paymentData.length : 0;
+        totalMembersElement.textContent = totalMembers;
+      }
+
+      if (lastUpdateElement) {
+        const lastUpdate = kasChartData && kasChartData.length > 0 
+          ? (kasChartData[kasChartData.length - 1]?.date || 'N/A') 
+          : 'N/A';
+        lastUpdateElement.textContent = lastUpdate;
+      }
+    }
   </script>
   <style>
     @keyframes fade-in {
@@ -467,8 +580,11 @@
     
     <!-- Header -->
     <div class="text-center">
+      <div class="mb-4 flex justify-center size-56 mx-auto">
+        <img src="asset/img/PPLG-LOGO.svg" alt="svg">
+      </div>
       <h1 class="text-5xl font-extrabold text-white tracking-tight drop-shadow mb-2">
-        💰 KAS KELAS XI PPLG
+         KAS KELAS XI PPLG
       </h1>
       <p class="text-gray-400 text-lg">Transfer kas kelas melalui dompet crypto atau QRIS di bawah.</p>
     </div>
@@ -641,12 +757,41 @@
 
     <!-- Contact Section -->
     <div class="text-center pt-6 border-t border-gray-700">
-      <p class="text-gray-400 mb-2">📞 Hubungi Bendahara:</p>
+      <p class="text-gray-400 mb-2">📞 Hubungi Bendahara untuk bantuang dan konfirmasi:</p>
       <a href="https://wa.me/6285738292836" target="_blank" 
          class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-500 transition-colors font-semibold">
         <span class="mr-2">📱</span>
         WhatsApp
       </a>
+    </div>
+
+    <!-- Data Kas Table -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-xl font-semibold text-white mb-6">📋 Data Pembayaran Kas Siswa</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-gray-300">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="py-3 px-4 text-left font-semibold sticky left-0 bg-gray-800 z-10">Nama Siswa</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/08</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/09</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/10</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/11</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/12</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/01</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/02</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/03</th>
+              <th class="py-3 px-2 text-center font-semibold min-w-[80px]">01/04</th>
+            </tr>
+          </thead>
+          <tbody id="datakas-tbody">
+            <!-- Data will be loaded by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 text-sm text-gray-400">
+        <p>✅ = Sudah Bayar | ❌ = Belum Bayar</p>
+      </div>
     </div>
 
   </div>
