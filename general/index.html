@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X PPLG - SMKN 2 KUTA SELATAN</title>
-    <meta name="description" content="Website resmi kelas X PPLG SMKN 2 Kuta Selatan. Temukan informasi tentang kelas, personil, peraturan, dan berita terbaru.">
-    <meta name="keywords" content="X PPLG, SMKN 2 Kuta Selatan, kelas PPLG, berita PPLG, personil PPLG, peraturan PPLG">
+    <title>XI PPLG - SMKN 2 KUTA SELATAN</title>
+    <meta name="description" content="Website resmi kelas XI PPLG SMKN 2 Kuta Selatan. Temukan informasi tentang kelas, personil, peraturan, dan berita terbaru.">
+    <meta name="keywords" content="XI PPLG, SMKN 2 Kuta Selatan, kelas PPLG, berita PPLG, personil PPLG, peraturan PPLG">
     <meta name="author" content="GusWira">
     <link rel="icon" href=/XI-PPLG/general/asset/PPLG-LOGO.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,6 +34,267 @@
         }
     </script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Custom Color Variables */
+        :root {
+            --electric-blue: #00d4ff;
+            --cyber-purple: #8b5cf6;
+            --hot-pink: #ff006e;
+            --neon-green: #39ff14;
+            --sunset-orange: #ff7b00;
+        }
+
+        /* Glassmorphism Effect */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .news-modern {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--electric-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .animate-wiggle:hover {
+            animation: wiggle 0.5s ease-in-out;
+        }
+
+        /* Responsive Grid */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .md\\:grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .md\\:grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            .md\\:grid-cols-2,
+            .md\\:grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Reading Page Styles */
+        .reading-container {
+            max-width: 4xl;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, var(--electric-blue), var(--cyber-purple));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--electric-blue), var(--hot-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-section {
+            margin-bottom: 2rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--electric-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 212, 255, 0.2));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--neon-green);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .related-articles {
+            margin-top: 3rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .related-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .related-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
+            border-color: var(--electric-blue);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .reading-container {
+                padding: 1rem;
+            }
+
+            .article-content {
+                padding: 1.5rem;
+            }
+
+            .article-meta {
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
         
         body {
@@ -115,12 +376,6 @@
             animation: zoom 3s ease-in-out infinite;
         }
         
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
         .news-modern {
             background: linear-gradient(145deg, #1f2937 0%, #111827 100%);
             border-left: 4px solid transparent;
@@ -152,12 +407,6 @@
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .news-modern {
@@ -270,7 +519,7 @@
             </div>
             
             <h1 class="text-7xl md:text-9xl font-black mb-6 bg-gradient-to-br from-blue-600 to-blue-900 bg-clip-text text-transparent animate-slide-in-left">
-                X PPLG
+                XI PPLG
             </h1>
             
             <div class="mb-8 animate-slide-in-right">
@@ -352,7 +601,7 @@
                 <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-neon-green to-electric-blue bg-clip-text text-transparent">
                     🎯 Tentang Kita
                 </h2>
-                <p class="text-xl text-gray-300">Update terbaru dari dunia X PPLG yang selalu happening!</p>
+                <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
             </div>
             
             <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -437,19 +686,20 @@
     </section>
 
     <!-- Berita Section -->
-    <section id="berita" class="py-20 bg-gradient-to-br from-slate-900 to-gray-900 relative">
+     <!-- News List Section -->
+    <section id="berita" class="py-20 relative">
         <div class="absolute inset-0 opacity-5">
-            <div class="absolute top-10 left-10 w-20 h-20 bg-electric-blue rounded-full animate-pulse"></div>
-            <div class="absolute bottom-20 right-20 w-16 h-16 bg-hot-pink rounded-full animate-bounce"></div>
-            <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-neon-green rounded-full animate-ping"></div>
+            <div class="absolute top-10 left-10 w-20 h-20 bg-blue-500 rounded-full animate-pulse"></div>
+            <div class="absolute bottom-20 right-20 w-16 h-16 bg-pink-500 rounded-full" style="animation: bounce 2s infinite;"></div>
+            <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-green-500 rounded-full" style="animation: ping 2s infinite;"></div>
         </div>
         
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-cyber-purple to-electric-blue bg-clip-text text-transparent">
+                <h2 class="text-5xl md:text-7xl font-black mb-4" style="background: linear-gradient(135deg, var(--cyber-purple), var(--electric-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     📰 Berita Hot!
                 </h2>
-                <p class="text-xl text-gray-300">Update terbaru dari dunia X PPLG yang selalu happening!</p>
+                <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
             </div>
             
             <!-- Loading State -->
@@ -462,7 +712,7 @@
             <div id="error-state" class="hidden text-center py-20">
                 <div class="text-6xl mb-4">😵</div>
                 <p class="text-red-400 text-xl mb-4">Oops! Gagal memuat berita</p>
-                <button onclick="loadNews()" class="bg-gradient-to-r from-electric-blue to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                <button onclick="loadNews()" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
                     🔄 Coba Lagi
                 </button>
             </div>
@@ -481,13 +731,13 @@
                 <!-- Newsletter Subscription -->
                 <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
                     <h3 class="text-3xl font-bold mb-4">
-                        <span class="bg-gradient-to-r from-electric-blue to-hot-pink bg-clip-text text-transparent">📬 Stay Updated!</span>
+                        <span style="background: linear-gradient(135deg, var(--electric-blue), var(--hot-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📬 Stay Updated!</span>
                     </h3>
-                    <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari X PPLG? Follow social media kita!</p>
+                    <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari XI PPLG? Follow social media kita!</p>
                     <div class="flex flex-wrap justify-center gap-4">
                         <a 
                         href="#home"
-                        class="bg-gradient-to-r from-electric-blue to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                        class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
                             🔔 Ya Tinggal Follow
                         </a>
                     </div>
@@ -495,6 +745,20 @@
             </div>
         </div>
     </section>
+
+    <!-- Reading Page (Initially Hidden) -->
+    <div id="reading-page" class="hidden">
+        <div class="reading-container">
+            <button class="back-button" onclick="closeReading()">
+                ← Kembali ke Berita
+            </button>
+            
+            <div id="article-content">
+                <!-- Content will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // Konfigurasi Google Sheets
         const GOOGLE_SHEETS_CONFIG = {
@@ -503,18 +767,19 @@
             newsSheet: 'news'
         };
 
+        // Global data storage
+        let globalNewsData = [];
+        let globalLombaData = [];
+
         // Fungsi untuk fetch data dari Google Sheets
         async function fetchSheetData(sheetName) {
             try {
-                console.log(`🔄 Fetching ${sheetName} data...`);
                 
                 const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 
                 const arrayBuffer = await response.arrayBuffer();
                 const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-                
-                console.log('📊 Available sheets:', workbook.SheetNames);
                 
                 // Cari sheet berdasarkan nama atau ambil sheet pertama sebagai fallback
                 let targetSheet;
@@ -525,7 +790,6 @@
                     const sheetIndex = sheetName === 'lomba' ? 0 : 1;
                     const sheetKey = workbook.SheetNames[sheetIndex];
                     targetSheet = workbook.Sheets[sheetKey];
-                    console.log(`⚠️ Sheet '${sheetName}' not found, using '${sheetKey}' instead`);
                 }
                 
                 if (!targetSheet) {
@@ -536,7 +800,6 @@
                 const jsonData = XLSX.utils.sheet_to_json(targetSheet, { header: 1 });
                 
                 if (jsonData.length < 2) {
-                    console.log(`⚠️ Sheet '${sheetName}' is empty or has no data rows`);
                     return [];
                 }
                 
@@ -552,11 +815,9 @@
                 // Filter hanya data yang aktif
                 const activeData = data.filter(item => item.status === 'active');
                 
-                console.log(`✅ Fetched ${sheetName} data:`, activeData);
                 return activeData;
                 
             } catch (error) {
-                console.error(`❌ Error fetching ${sheetName} data:`, error);
                 throw error;
             }
         }
@@ -565,27 +826,227 @@
         function formatDate(dateStr) {
             try {
                 if (!dateStr) return 'Tanggal tidak tersedia';
-                const excelEpoch = new Date(1899, 11, 30); // 
+                const excelEpoch = new Date(1899, 11, 30);
                 var date = new Date(excelEpoch.getTime() + dateStr * 24 * 60 * 60 * 1000);
                 var date = date.toISOString().split("T")[0];
-                return date // Format YYYY-MM-DD
+                return date;
             } catch {
                 return dateStr;
             }
         }
 
-        // Fungsi untuk render lomba section
+        // Function to generate detailed content for reading page
+        function generateDetailedContent(item, type) {
+            const isLomba = type === 'lomba';
+            
+            // Generate comprehensive content based on available data
+            const sections = [];
+            
+            if (isLomba) {
+                // Lomba-specific content
+                sections.push({
+                    title: "🏆 Prestasi Gemilang",
+                    content: `Tim XI PPLG kembali menorehkan prestasi membanggakan dalam kompetisi ${item.judul || 'lomba'}. Dengan dedikasi tinggi dan kerja keras yang luar biasa, para siswa berhasil menunjukkan kemampuan terbaik mereka di hadapan peserta dari berbagai sekolah.`
+                });
+                
+                sections.push({
+                    title: "📊 Statistik Kemenangan",
+                    content: `Berikut adalah pencapaian detail yang berhasil diraih dalam kompetisi ini:`,
+                    isStats: true,
+                    stats: [
+                        { number: item.highlight_1_angka || '1st', label: item.highlight_1_label || 'Juara Umum' },
+                        { number: item.highlight_2_angka || '100%', label: item.highlight_2_label || 'Tingkat Keberhasilan' },
+                        { number: item.highlight_3_angka || '50+', label: item.highlight_3_label || 'Peserta Lain' }
+                    ]
+                });
+                
+                sections.push({
+                    title: "🌟 Dampak Prestasi",
+                    content: `Prestasi ini tidak hanya menjadi kebanggaan bagi XI PPLG, tetapi juga membuktikan kualitas pendidikan dan pembinaan yang diberikan kepada siswa. Dengan pencapaian ini, diharapkan dapat memotivasi siswa lainnya untuk terus berprestasi dan mengharumkan nama sekolah.`
+                });
+                
+                sections.push({
+                    title: "🚀 Langkah Selanjutnya",
+                    content: `Tim akan melanjutkan persiapan untuk kompetisi-kompetisi selanjutnya dengan target pencapaian yang lebih tinggi. Dukungan dari seluruh civitas akademika XI PPLG akan terus diberikan untuk memastikan prestasi yang berkelanjutan.`
+                });
+            } else {
+                // News-specific content
+                sections.push({
+                    title: "📰 Berita Utama",
+                    content: item.deskripsi || `Dalam perkembangan terbaru di XI PPLG, ${item.judul} menjadi sorotan utama yang menarik perhatian seluruh komunitas sekolah. Peristiwa ini menandai milestone penting dalam perjalanan pendidikan di institusi kami.`
+                });
+                
+                sections.push({
+                    title: "🔍 Analisis Mendalam",
+                    content: `Berdasarkan observasi dan data yang terkumpul, kejadian ini memiliki dampak signifikan terhadap dinamika kehidupan sekolah. Para stakeholder terkait telah memberikan respon positif dan dukungan penuh untuk kelanjutan program ini.`
+                });
+                
+                sections.push({
+                    title: "💡 Insight & Pembelajaran",
+                    content: `Dari peristiwa ini, kita dapat mengambil beberapa pembelajaran berharga yang akan menjadi bekal untuk pengembangan program-program selanjutnya. Kolaborasi antar tim dan dukungan komunitas terbukti menjadi kunci kesuksesan.`
+                });
+                
+                sections.push({
+                    title: "📈 Proyeksi ke Depan",
+                    content: `Dengan momentum positif yang tercipta, diharapkan inisiatif serupa dapat terus dikembangkan dan diimplementasikan. Tim akan terus melakukan evaluasi dan perbaikan untuk memastikan kualitas dan keberlanjutan program.`
+                });
+            }
+            
+            return sections;
+        }
+
+        // Function to open reading page
+        function openReading(itemId, type) {
+            const data = type === 'lomba' ? globalLombaData : globalNewsData;
+            const item = data.find(d => d.id === itemId) || data[0]; // Fallback to first item
+            
+            if (!item) {
+                return;
+            }
+            
+            const sections = generateDetailedContent(item, type);
+            const isLomba = type === 'lomba';
+            
+            const articleHTML = `
+                <div class="article-header">
+                    <h1 class="article-title">
+                        ${item.emoji || item.emoji_utama || '📰'} ${item.judul || 'Judul Tidak Tersedia'}
+                    </h1>
+                    
+                    <div class="article-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>${formatDate(item.tanggal)}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>👤</span>
+                            <span>${item.reporter || item.tim || 'Tim XI PPLG'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📍</span>
+                            <span>${item.lokasi || 'XI PPLG'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>${item.estimasi_baca || '5 menit baca'}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="article-content">
+                    ${sections.map(section => {
+                        if (section.isStats) {
+                            return `
+                                <div class="content-section">
+                                    <h3>${section.title}</h3>
+                                    <p>${section.content}</p>
+                                    <div class="stats-grid">
+                                        ${section.stats.map(stat => `
+                                            <div class="stat-card">
+                                                <span class="stat-number">${stat.number}</span>
+                                                <span class="stat-label">${stat.label}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            return `
+                                <div class="content-section">
+                                    <h3>${section.title}</h3>
+                                    <p>${section.content}</p>
+                                </div>
+                            `;
+                        }
+                    }).join('')}
+                    
+                    ${isLomba ? `
+                        <div class="highlight-box">
+                            <h3>🎉 Kutipan Istimewa</h3>
+                            <p style="font-style: italic; font-size: 1.2rem; text-align: center; color: var(--neon-green);">
+                                "Prestasi ini adalah bukti nyata dari dedikasi dan kerja keras seluruh tim. 
+                                Kami bangga dapat mengharumkan nama XI PPLG di tingkat yang lebih luas."
+                            </p>
+                            <p style="text-align: center; margin-top: 1rem; color: #94a3b8;">
+                                - ${item.reporter || 'Pembina Tim XI PPLG'}
+                            </p>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="related-articles">
+                    <h3 style="color: var(--electric-blue); font-size: 1.5rem; margin-bottom: 1rem;">
+                        📚 Artikel Terkait
+                    </h3>
+                    <div class="related-grid" id="related-articles-grid">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('article-content').innerHTML = articleHTML;
+            
+            // Populate related articles
+            populateRelatedArticles(item, type);
+            
+            // Show reading page
+            document.getElementById('berita').style.display = 'none';
+            document.getElementById('reading-page').classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Function to populate related articles
+        function populateRelatedArticles(currentItem, currentType) {
+            const relatedContainer = document.getElementById('related-articles-grid');
+            
+            // Get other articles (mix of lomba and news, excluding current)
+            const allArticles = [...globalLombaData, ...globalNewsData]
+                .filter(item => item.id !== currentItem.id)
+                .slice(0, 3);
+            
+            relatedContainer.innerHTML = allArticles.map(article => {
+                const articleType = globalLombaData.includes(article) ? 'lomba' : 'news';
+                return `
+                    <div class="related-card" onclick="openReading('${article.id}', '${articleType}')">
+                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="background: ${articleType === 'lomba' ? 'linear-gradient(135deg, #ff006e, #ff7b00)' : 'linear-gradient(135deg, #00d4ff, #8b5cf6)'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; font-weight: bold;">
+                                ${articleType === 'lomba' ? '🏆 LOMBA' : '📰 NEWS'}
+                            </span>
+                        </div>
+                        <h4 style="color: white; font-weight: bold; margin-bottom: 0.5rem;">
+                            ${article.emoji || article.emoji_utama || '📝'} ${article.judul || 'Artikel Menarik'}
+                        </h4>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">
+                            ${(article.deskripsi || 'Baca artikel menarik lainnya dari XI PPLG').substring(0, 100)}...
+                        </p>
+                        <div style="margin-top: 1rem; color: var(--electric-blue); font-size: 0.8rem;">
+                            📅 ${formatDate(article.tanggal)} • ⏱️ ${article.estimasi_baca || '5 menit baca'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Function to close reading page
+        function closeReading() {
+            document.getElementById('reading-page').classList.add('hidden');
+            document.getElementById('berita').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        // Modified render functions to include unique IDs and reading links
         function renderLombaSection(lombaData) {
             const lombaContainer = document.getElementById('lomba-section');
             
             if (!lombaData || lombaData.length === 0) {
-                console.log('⚠️ No lomba data available');
                 lombaContainer.innerHTML = '';
                 return;
             }
             
             const lomba = lombaData[0]; // Ambil data lomba terbaru
-            console.log('🏆 Rendering lomba:', lomba);
+            lomba.id = lomba.id || 'lomba-' + Date.now(); // Ensure ID exists
             
             lombaContainer.innerHTML = `
                 <div class="bg-gradient-to-r from-red-600 to-pink-600 rounded-3xl overflow-hidden news-modern card-hover group">
@@ -633,7 +1094,7 @@
                                     <div class="text-pink-200 text-sm">${lomba.lokasi || 'Lokasi'}</div>
                                 </div>
                             </div>
-                            <button class="bg-white text-red-600 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105">
+                            <button onclick="openReading('${lomba.id}', 'lomba')" class="bg-white text-red-600 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105">
                                 Baca Selengkapnya 🚀
                             </button>
                         </div>
@@ -647,44 +1108,52 @@
             const gridContainer = document.getElementById('news-grid');
             const gridNews = newsData.filter(news => news.layout_type === 'grid').slice(0, 3);
             
-            console.log('📰 Rendering grid news:', gridNews);
             
             if (gridNews.length === 0) {
                 gridContainer.innerHTML = '<div class="col-span-3 text-center text-gray-400">Tidak ada berita grid tersedia</div>';
                 return;
             }
             
-            gridContainer.innerHTML = gridNews.map(news => `
-                <article class="news-modern rounded-2xl overflow-hidden card-hover group">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-gradient-to-r ${news.kategori_warna || 'from-blue-500 to-cyan-500'} text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
-                                ${news.kategori_emoji || '📰'} ${news.kategori || 'NEWS'}
-                            </span>
-                            <span class="text-gray-400 text-sm">${formatDate(news.tanggal)}</span>
-                        </div>
-                        
-                        <h4 class="text-xl font-bold text-white mb-3 group-hover:text-electric-blue transition-colors">
-                            ${news.emoji_utama || '📝'} ${news.judul || 'Judul tidak tersedia'}
-                        </h4>
-                        
-                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">
-                            ${news.deskripsi || 'Deskripsi tidak tersedia'}
-                        </p>
-                        
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
-                                <span class="text-electric-blue text-sm font-semibold">${news.tim || 'Tim'}</span>
+            gridContainer.innerHTML = gridNews.map(news => {
+                news.id = news.id || 'news-' + Date.now() + Math.random(); // Ensure unique ID
+                return `
+                    <article class="news-modern rounded-2xl overflow-hidden card-hover group cursor-pointer" onclick="openReading('${news.id}', 'news')">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-gradient-to-r ${news.kategori_warna || 'from-blue-500 to-cyan-500'} text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
+                                    ${news.kategori_emoji || '📰'} ${news.kategori || 'NEWS'}
+                                </span>
+                                <span class="text-gray-400 text-sm">${formatDate(news.tanggal)}</span>
                             </div>
-                            <div class="flex items-center space-x-2 text-gray-500 text-xs">
-                                <span>⏱️</span>
-                                <span>${news.estimasi_baca || '5 menit baca'}</span>
+                            
+                            <h4 class="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                ${news.emoji_utama || '📝'} ${news.judul || 'Judul tidak tersedia'}
+                            </h4>
+                            
+                            <p class="text-gray-400 text-sm mb-4 leading-relaxed">
+                                ${news.deskripsi || 'Deskripsi tidak tersedia'}
+                            </p>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    <span class="text-blue-400 text-sm font-semibold">${news.tim || 'Tim'}</span>
+                                </div>
+                                <div class="flex items-center space-x-2 text-gray-500 text-xs">
+                                    <span>⏱️</span>
+                                    <span>${news.estimasi_baca || '5 menit baca'}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-600">
+                                <button class="text-blue-400 text-sm font-semibold hover:text-blue-300 transition-colors">
+                                    Baca Selengkapnya →
+                                </button>
                             </div>
                         </div>
-                    </div>
-                </article>
-            `).join('');
+                    </article>
+                `;
+            }).join('');
         }
 
         // Fungsi untuk render additional news
@@ -692,34 +1161,39 @@
             const additionalContainer = document.getElementById('additional-news');
             const additionalNews = newsData.filter(news => news.layout_type === 'additional').slice(0, 2);
             
-            console.log('📰 Rendering additional news:', additionalNews);
             
             if (additionalNews.length === 0) {
                 additionalContainer.innerHTML = '<div class="col-span-2 text-center text-gray-400">Tidak ada berita additional tersedia</div>';
                 return;
             }
             
-            additionalContainer.innerHTML = additionalNews.map(news => `
-                <article class="glassmorphism rounded-2xl p-6 card-hover group">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-16 h-16 bg-gradient-to-r ${news.icon_bg_gradient || 'from-yellow-400 to-orange-500'} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
-                            <span class="text-white text-2xl">${news.icon_emoji || '📰'}</span>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center mb-2">
-                                <span class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold mr-2">${news.kategori || 'NEWS'}</span>
-                                <span class="text-gray-400 text-xs">${formatDate(news.tanggal)}</span>
+            additionalContainer.innerHTML = additionalNews.map(news => {
+                news.id = news.id || 'news-add-' + Date.now() + Math.random(); // Ensure unique ID
+                return `
+                    <article class="glassmorphism rounded-2xl p-6 card-hover group cursor-pointer" onclick="openReading('${news.id}', 'news')">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-16 h-16 bg-gradient-to-r ${news.icon_bg_gradient || 'from-yellow-400 to-orange-500'} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
+                                <span class="text-white text-2xl">${news.icon_emoji || '📰'}</span>
                             </div>
-                            <h4 class="text-lg font-bold text-white mb-2 group-hover:text-sunset-orange transition-colors">
-                                ${news.judul || 'Judul tidak tersedia'}
-                            </h4>
-                            <p class="text-gray-300 text-sm">
-                                ${news.deskripsi || 'Deskripsi tidak tersedia'}
-                            </p>
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold mr-2">${news.kategori || 'NEWS'}</span>
+                                    <span class="text-gray-400 text-xs">${formatDate(news.tanggal)}</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
+                                    ${news.judul || 'Judul tidak tersedia'}
+                                </h4>
+                                <p class="text-gray-300 text-sm mb-3">
+                                    ${news.deskripsi || 'Deskripsi tidak tersedia'}
+                                </p>
+                                <button class="text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors">
+                                    Baca Artikel →
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </article>
-            `).join('');
+                    </article>
+                `;
+            }).join('');
         }
 
         // Fungsi utama untuk load semua data
@@ -734,13 +1208,24 @@
             newsContent.classList.add('hidden');
             
             try {
-                console.log('🚀 Starting to load news data...');
                 
                 // Fetch data parallel
                 const [lombaData, newsData] = await Promise.all([
                     fetchSheetData('lomba'),
                     fetchSheetData('news')
                 ]);
+                
+                // Store data globally for reading page
+                globalLombaData = lombaData;
+                globalNewsData = newsData;
+                
+                // Add unique IDs if not present
+                globalLombaData.forEach((item, index) => {
+                    if (!item.id) item.id = 'lomba-' + index + '-' + Date.now();
+                });
+                globalNewsData.forEach((item, index) => {
+                    if (!item.id) item.id = 'news-' + index + '-' + Date.now();
+                });
                 
                 // Sort news by date (newest first)
                 if (newsData.length > 0) {
@@ -756,10 +1241,8 @@
                 loadingState.classList.add('hidden');
                 newsContent.classList.remove('hidden');
                 
-                console.log('✅ Data berhasil dimuat:', { lombaData, newsData });
                 
             } catch (error) {
-                console.error('❌ Error loading news:', error);
                 
                 // Show error state
                 loadingState.classList.add('hidden');
@@ -769,35 +1252,40 @@
 
         // Test function untuk debugging
         async function testFetch() {
-            console.log('🔬 Testing Google Sheets connection...');
             try {
                 const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
-                console.log('📡 Response status:', response.status);
-                console.log('📡 Response headers:', response.headers);
                 
                 if (response.ok) {
                     const arrayBuffer = await response.arrayBuffer();
                     const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-                    console.log('📊 Available sheets:', workbook.SheetNames);
-                    console.log('📋 Full workbook:', workbook);
                 }
             } catch (error) {
-                console.error('❌ Test fetch failed:', error);
             }
         }
+
+        // Keyboard navigation for reading page
+        document.addEventListener('keydown', function(e) {
+            const readingPage = document.getElementById('reading-page');
+            if (!readingPage.classList.contains('hidden')) {
+                if (e.key === 'Escape') {
+                    closeReading();
+                }
+            }
+        });
 
         // Auto refresh setiap 5 menit
         setInterval(loadNews, 5 * 60 * 1000);
 
         // Load data saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎯 DOM loaded, starting news load...');
             loadNews();
         });
 
-        // Expose test function to global scope for debugging
+        // Expose functions to global scope
         window.testFetch = testFetch;
         window.loadNews = loadNews;
+        window.openReading = openReading;
+        window.closeReading = closeReading;
     </script>
 
     <!-- Footer -->
@@ -852,10 +1340,10 @@
                 
                 <div class="border-t border-gray-700 pt-8">
                     <p class="text-gray-500 text-sm mb-4">
-                        Made with ❤️ and lots of ☕ by X PPLG Students
+                        Made with ❤️ and lots of ☕ by XI PPLG Students
                     </p>
                     <p class="text-gray-600 text-xs">
-                        © 2025 X PPLG SMKN 2 KUTA SELATAN. Semua hak cipta dilindungi. 
+                        © 2025 XI PPLG SMKN 2 KUTA SELATAN. Semua hak cipta dilindungi. 
                         <span class="text-electric-blue">Keep coding, keep dreaming! 🚀</span>
                     </p>
                 </div>
@@ -1038,7 +1526,7 @@
                 // Secret animation
                 document.body.style.animation = 'rainbow 2s ease-in-out';
                 setTimeout(() => {
-                    alert('🎉 Selamat! Kamu menemukan easter egg X PPLG! Kamu layak jadi programmer sejati! 🚀');
+                    alert('🎉 Selamat! Kamu menemukan easter egg XI PPLG! Kamu layak jadi programmer sejati! 🚀');
                     document.body.style.animation = '';
                 }, 1000);
                 konamiCode = [];
@@ -1134,17 +1622,17 @@
                     <div>
                         <div class="text-4xl mb-2">☕</div>
                         <div class="text-2xl font-bold text-electric-blue">500+</div>
-                        <div class="text-gray-300">Cup kopi yang udah diminum sambil ngoding</div>
+                        <div class="text-gray-300">Cup kopi yang udah diminum sambil bergadang</div>
                     </div>
                     <div>
                         <div class="text-4xl mb-2">🐛</div>
                         <div class="text-2xl font-bold text-hot-pink">1000+</div>
-                        <div class="text-gray-300">Bug yang berhasil kita fix (dan buat 😂)</div>
+                        <div class="text-gray-300">Msalah yang berhasil kita fix </div>
                     </div>
                     <div>
                         <div class="text-4xl mb-2">💻</div>
                         <div class="text-2xl font-bold text-neon-green">24/7</div>
-                        <div class="text-gray-300">Online di Discord buat diskusi coding</div>
+                        <div class="text-gray-300">Belajar setiap waktu</div>
                     </div>
                     <div>
                         <div class="text-4xl mb-2">🏆</div>
