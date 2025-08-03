@@ -9,6 +9,7 @@
     <meta name="author" content="GusWira">
     <link rel="icon" href="/general/asset/PPLG-LOGO.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -103,6 +104,16 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
         }
+
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-zoom {
+            animation: zoom 3s ease-in-out infinite;
+        }
         
         .glassmorphism {
             background: rgba(255, 255, 255, 0.1);
@@ -118,6 +129,67 @@
         
         .news-modern:hover {
             border-left-color: #00D4FF;
+        }
+        
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        
+        .animate-wiggle {
+            animation: wiggle 2s ease-in-out infinite;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .news-modern {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Custom colors */
+        .bg-electric-blue { background-color: #00d4ff; }
+        .bg-hot-pink { background-color: #ff006e; }
+        .bg-neon-green { background-color: #39ff14; }
+        .bg-cyber-purple { background-color: #9d4edd; }
+        .bg-sunset-orange { background-color: #ff8500; }
+        .text-electric-blue { color: #00d4ff; }
+        .text-hot-pink { color: #ff006e; }
+        .text-neon-green { color: #39ff14; }
+        .text-cyber-purple { color: #9d4edd; }
+        .text-sunset-orange { color: #ff8500; }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00d4ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -280,7 +352,7 @@
                 <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-neon-green to-electric-blue bg-clip-text text-transparent">
                     🎯 Tentang Kita
                 </h2>
-                <p class="text-xl text-gray-300">Kenalan sama kelas X PPLG yang kece abis!</p>
+                <p class="text-xl text-gray-300">Update terbaru dari dunia X PPLG yang selalu happening!</p>
             </div>
             
             <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -300,7 +372,7 @@
                     
                     <div class="glassmorphism rounded-3xl p-8 card-hover">
                         <h3 class="text-3xl font-bold text-hot-pink mb-4 flex items-center">
-                            <span class="mr-3 text-4xl">💡</span>
+                            <span class="mr-3 text-4xl">�</span>
                             Kenapa PPLG?
                         </h3>
                         <p class="text-lg text-gray-200 leading-relaxed">
@@ -357,7 +429,7 @@
             <!-- Fun Rules Reminder -->
             <div class="mt-12 text-center">
                 <div class="inline-block glassmorphism rounded-2xl p-6 card-hover">
-                    <h4 class="text-2xl font-bold text-electric-blue mb-3">💡 Ingat Ya!</h4>
+                    <h4 class="text-2xl font-bold text-electric-blue mb-3">� Ingat Ya!</h4>
                     <p class="text-lg text-gray-200">Rules ini bukan buat bikin hidup susah, tapi buat bikin kita semua berkembang jadi programmer yang keren dan profesional! 🚀</p>
                 </div>
             </div>
@@ -374,45 +446,179 @@
         
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-cyber-puPPLGe to-electric-blue bg-clip-text text-transparent">
+                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-cyber-purple to-electric-blue bg-clip-text text-transparent">
                     📰 Berita Hot!
                 </h2>
                 <p class="text-xl text-gray-300">Update terbaru dari dunia X PPLG yang selalu happening!</p>
             </div>
             
-            <!-- Breaking News -->
-            <div class="mb-12">
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center py-20">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-400">Memuat berita terbaru...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="error-state" class="hidden text-center py-20">
+                <div class="text-6xl mb-4">😵</div>
+                <p class="text-red-400 text-xl mb-4">Oops! Gagal memuat berita</p>
+                <button onclick="loadNews()" class="bg-gradient-to-r from-electric-blue to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                    🔄 Coba Lagi
+                </button>
+            </div>
+            
+            <!-- Content Container -->
+            <div id="news-content" class="hidden">
+                <!-- Khusus Lomba -->
+                <div id="lomba-section" class="mb-12"></div>
+
+                <!-- News Grid -->
+                <div id="news-grid" class="grid md:grid-cols-3 gap-8 mb-12"></div>
+                
+                <!-- Additional News -->
+                <div id="additional-news" class="grid md:grid-cols-2 gap-8 mb-12"></div>
+
+                <!-- Newsletter Subscription -->
+                <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
+                    <h3 class="text-3xl font-bold mb-4">
+                        <span class="bg-gradient-to-r from-electric-blue to-hot-pink bg-clip-text text-transparent">📬 Stay Updated!</span>
+                    </h3>
+                    <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari X PPLG? Follow social media kita!</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a 
+                        href="#home"
+                        class="bg-gradient-to-r from-electric-blue to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                            🔔 Ya Tinggal Follow
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        // Konfigurasi Google Sheets
+        const GOOGLE_SHEETS_CONFIG = {
+            baseUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx',
+            lombaSheet: 'lomba',
+            newsSheet: 'news'
+        };
+
+        // Fungsi untuk fetch data dari Google Sheets
+        async function fetchSheetData(sheetName) {
+            try {
+                console.log(`🔄 Fetching ${sheetName} data...`);
+                
+                const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                
+                console.log('📊 Available sheets:', workbook.SheetNames);
+                
+                // Cari sheet berdasarkan nama atau ambil sheet pertama sebagai fallback
+                let targetSheet;
+                if (workbook.Sheets[sheetName]) {
+                    targetSheet = workbook.Sheets[sheetName];
+                } else {
+                    // Fallback: cari sheet berdasarkan index
+                    const sheetIndex = sheetName === 'lomba' ? 0 : 1;
+                    const sheetKey = workbook.SheetNames[sheetIndex];
+                    targetSheet = workbook.Sheets[sheetKey];
+                    console.log(`⚠️ Sheet '${sheetName}' not found, using '${sheetKey}' instead`);
+                }
+                
+                if (!targetSheet) {
+                    throw new Error(`Sheet '${sheetName}' not found in workbook`);
+                }
+                
+                // Convert sheet to JSON
+                const jsonData = XLSX.utils.sheet_to_json(targetSheet, { header: 1 });
+                
+                if (jsonData.length < 2) {
+                    console.log(`⚠️ Sheet '${sheetName}' is empty or has no data rows`);
+                    return [];
+                }
+                
+                const headers = jsonData[0];
+                const data = jsonData.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
+                
+                // Filter hanya data yang aktif
+                const activeData = data.filter(item => item.status === 'active');
+                
+                console.log(`✅ Fetched ${sheetName} data:`, activeData);
+                return activeData;
+                
+            } catch (error) {
+                console.error(`❌ Error fetching ${sheetName} data:`, error);
+                throw error;
+            }
+        }
+
+        // Fungsi untuk format tanggal
+        function formatDate(dateStr) {
+            try {
+                if (!dateStr) return 'Tanggal tidak tersedia';
+                const excelEpoch = new Date(1899, 11, 30); // 
+                var date = new Date(excelEpoch.getTime() + dateStr * 24 * 60 * 60 * 1000);
+                var date = date.toISOString().split("T")[0];
+                return date // Format YYYY-MM-DD
+            } catch {
+                return dateStr;
+            }
+        }
+
+        // Fungsi untuk render lomba section
+        function renderLombaSection(lombaData) {
+            const lombaContainer = document.getElementById('lomba-section');
+            
+            if (!lombaData || lombaData.length === 0) {
+                console.log('⚠️ No lomba data available');
+                lombaContainer.innerHTML = '';
+                return;
+            }
+            
+            const lomba = lombaData[0]; // Ambil data lomba terbaru
+            console.log('🏆 Rendering lomba:', lomba);
+            
+            lombaContainer.innerHTML = `
                 <div class="bg-gradient-to-r from-red-600 to-pink-600 rounded-3xl overflow-hidden news-modern card-hover group">
                     <div class="p-8">
                         <div class="flex items-center mb-6">
                             <span class="bg-white text-red-600 px-4 py-2 rounded-full text-sm font-black mr-4 animate-pulse">
                                 🔥 BREAKING NEWS
                             </span>
-                            <span class="text-pink-100 text-sm bg-white bg-opacity-20 px-3 py-1 rounded-full">2 Agustus 2025</span>
+                            <span class="text-pink-100 text-sm bg-white bg-opacity-20 px-3 py-1 rounded-full">${formatDate(lomba.tanggal)}</span>
                         </div>
                         
                         <h3 class="text-4xl md:text-5xl font-black text-white mb-6 group-hover:text-yellow-200 transition-colors">
-                            🏆 X PPLG Juara 1 Coding Competition Regional!
+                            ${lomba.emoji || '🏆'} ${lomba.judul || 'Judul tidak tersedia'}
                         </h3>
                         
                         <p class="text-xl text-pink-50 leading-relaxed mb-6">
-                            OMG guys! Tim coding kita baru aja menang juara 1 di kompetisi programming se-Sumatra Selatan! 🎉 Kompetisi yang super sengit dengan 50 tim terbaik dari seluruh Sumsel, dan guess what? KITA YANG MENANG! 
+                            ${lomba.deskripsi || 'Deskripsi tidak tersedia'}
                         </p>
                         
                         <div class="bg-white bg-opacity-20 rounded-2xl p-6 mb-6">
                             <h4 class="text-lg font-bold text-white mb-3">💫 Highlight Kemenangan:</h4>
                             <div class="grid md:grid-cols-3 gap-4 text-center">
                                 <div>
-                                    <div class="text-2xl font-bold text-yellow-300">50</div>
-                                    <div class="text-pink-100 text-sm">Tim Pesaing</div>
+                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_1_angka || '0'}</div>
+                                    <div class="text-pink-100 text-sm">${lomba.highlight_1_label || 'Label 1'}</div>
                                 </div>
                                 <div>
-                                    <div class="text-2xl font-bold text-yellow-300">8 Jam</div>
-                                    <div class="text-pink-100 text-sm">Durasi Coding</div>
+                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_2_angka || '0'}</div>
+                                    <div class="text-pink-100 text-sm">${lomba.highlight_2_label || 'Label 2'}</div>
                                 </div>
                                 <div>
-                                    <div class="text-2xl font-bold text-yellow-300">100%</div>
-                                    <div class="text-pink-100 text-sm">Test Case Passed</div>
+                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_3_angka || '0'}</div>
+                                    <div class="text-pink-100 text-sm">${lomba.highlight_3_label || 'Label 3'}</div>
                                 </div>
                             </div>
                         </div>
@@ -423,8 +629,8 @@
                                     <span class="text-red-600 font-black text-lg">📝</span>
                                 </div>
                                 <div>
-                                    <div class="text-white font-bold">Reporter Kelas X PPLG</div>
-                                    <div class="text-pink-200 text-sm">Live dari Palembang</div>
+                                    <div class="text-white font-bold">${lomba.reporter || 'Reporter'}</div>
+                                    <div class="text-pink-200 text-sm">${lomba.lokasi || 'Lokasi'}</div>
                                 </div>
                             </div>
                             <button class="bg-white text-red-600 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105">
@@ -433,161 +639,166 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            `;
+        }
 
-            <!-- News Grid -->
-            <div class="grid md:grid-cols-3 gap-8 mb-12">
+        // Fungsi untuk render news grid
+        function renderNewsGrid(newsData) {
+            const gridContainer = document.getElementById('news-grid');
+            const gridNews = newsData.filter(news => news.layout_type === 'grid').slice(0, 3);
+            
+            console.log('📰 Rendering grid news:', gridNews);
+            
+            if (gridNews.length === 0) {
+                gridContainer.innerHTML = '<div class="col-span-3 text-center text-gray-400">Tidak ada berita grid tersedia</div>';
+                return;
+            }
+            
+            gridContainer.innerHTML = gridNews.map(news => `
                 <article class="news-modern rounded-2xl overflow-hidden card-hover group">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <span class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
-                                💻 TECH
+                            <span class="bg-gradient-to-r ${news.kategori_warna || 'from-blue-500 to-cyan-500'} text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
+                                ${news.kategori_emoji || '📰'} ${news.kategori || 'NEWS'}
                             </span>
-                            <span class="text-gray-400 text-sm">1 Agustus 2025</span>
+                            <span class="text-gray-400 text-sm">${formatDate(news.tanggal)}</span>
                         </div>
                         
                         <h4 class="text-xl font-bold text-white mb-3 group-hover:text-electric-blue transition-colors">
-                            🚀 Launch Aplikasi Mobile Pertama Kita!
+                            ${news.emoji_utama || '📝'} ${news.judul || 'Judul tidak tersedia'}
                         </h4>
                         
                         <p class="text-gray-400 text-sm mb-4 leading-relaxed">
-                            Finally! Setelah 3 bulan development, aplikasi "StudyBuddy" untuk manajemen tugas sekolah udah live di Play Store. React Native + Firebase = perfect combo! 🔥
+                            ${news.deskripsi || 'Deskripsi tidak tersedia'}
                         </p>
                         
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-2">
                                 <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
-                                <span class="text-electric-blue text-sm font-semibold">Mobile Dev Team</span>
+                                <span class="text-electric-blue text-sm font-semibold">${news.tim || 'Tim'}</span>
                             </div>
                             <div class="flex items-center space-x-2 text-gray-500 text-xs">
                                 <span>⏱️</span>
-                                <span>5 menit baca</span>
+                                <span>${news.estimasi_baca || '5 menit baca'}</span>
                             </div>
                         </div>
                     </div>
                 </article>
+            `).join('');
+        }
 
-                <article class="news-modern rounded-2xl overflow-hidden card-hover group">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
-                                🏆 PRESTASI
-                            </span>
-                            <span class="text-gray-400 text-sm">30 Juli 2025</span>
-                        </div>
-                        
-                        <h4 class="text-xl font-bold text-white mb-3 group-hover:text-neon-green transition-colors">
-                            🎨 Juara UI/UX Design Hackathon!
-                        </h4>
-                        
-                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">
-                            Tim design kita berhasil memenangkan hackathon UI/UX dengan konsep aplikasi e-learning yang super user-friendly. Figma skills level up! 🎯
-                        </p>
-                        
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 bg-hot-pink rounded-full animate-pulse"></span>
-                                <span class="text-neon-green text-sm font-semibold">Creative Team</span>
-                            </div>
-                            <div class="flex items-center space-x-2 text-gray-500 text-xs">
-                                <span>⏱️</span>
-                                <span>3 menit baca</span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="news-modern rounded-2xl overflow-hidden card-hover group">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-gradient-to-r from-puPPLGe-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
-                                🎓 WORKSHOP
-                            </span>
-                            <span class="text-gray-400 text-sm">28 Juli 2025</span>
-                        </div>
-                        
-                        <h4 class="text-xl font-bold text-white mb-3 group-hover:text-cyber-puPPLGe transition-colors">
-                            🤖 AI Workshop: From Zero to Hero
-                        </h4>
-                        
-                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">
-                            Workshop internal tentang AI dan Machine Learning. Dari teori sampai praktek bikin chatbot sederhana. Mind = blown! 🤯
-                        </p>
-                        
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-2 h-2 bg-sunset-orange rounded-full animate-pulse"></span>
-                                <span class="text-cyber-puPPLGe text-sm font-semibold">AI Study Group</span>
-                            </div>
-                            <div class="flex items-center space-x-2 text-gray-500 text-xs">
-                                <span>⏱️</span>
-                                <span>7 menit baca</span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
+        // Fungsi untuk render additional news
+        function renderAdditionalNews(newsData) {
+            const additionalContainer = document.getElementById('additional-news');
+            const additionalNews = newsData.filter(news => news.layout_type === 'additional').slice(0, 2);
             
-            <!-- Additional News -->
-            <div class="grid md:grid-cols-2 gap-8 mb-12">
+            console.log('📰 Rendering additional news:', additionalNews);
+            
+            if (additionalNews.length === 0) {
+                additionalContainer.innerHTML = '<div class="col-span-2 text-center text-gray-400">Tidak ada berita additional tersedia</div>';
+                return;
+            }
+            
+            additionalContainer.innerHTML = additionalNews.map(news => `
                 <article class="glassmorphism rounded-2xl p-6 card-hover group">
                     <div class="flex items-start space-x-4">
-                        <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
-                            <span class="text-white text-2xl">🎮</span>
+                        <div class="w-16 h-16 bg-gradient-to-r ${news.icon_bg_gradient || 'from-yellow-400 to-orange-500'} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
+                            <span class="text-white text-2xl">${news.icon_emoji || '📰'}</span>
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center mb-2">
-                                <span class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold mr-2">TRENDING</span>
-                                <span class="text-gray-400 text-xs">25 Juli 2025</span>
+                                <span class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold mr-2">${news.kategori || 'NEWS'}</span>
+                                <span class="text-gray-400 text-xs">${formatDate(news.tanggal)}</span>
                             </div>
                             <h4 class="text-lg font-bold text-white mb-2 group-hover:text-sunset-orange transition-colors">
-                                Game Development Club Terbentuk!
+                                ${news.judul || 'Judul tidak tersedia'}
                             </h4>
                             <p class="text-gray-300 text-sm">
-                                Akhirnya ada club khusus buat yang suka bikin game! Unity, Godot, semua dipelajari. Who's ready to be the next indie game developer? 🎯
+                                ${news.deskripsi || 'Deskripsi tidak tersedia'}
                             </p>
                         </div>
                     </div>
                 </article>
-                
-                <article class="glassmorphism rounded-2xl p-6 card-hover group">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-16 h-16 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
-                            <span class="text-white text-2xl">💡</span>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center mb-2">
-                                <span class="bg-emerald-500 text-white px-2 py-1 rounded text-xs font-bold mr-2">INSPIRATION</span>
-                                <span class="text-gray-400 text-xs">23 Juli 2025</span>
-                            </div>
-                            <h4 class="text-lg font-bold text-white mb-2 group-hover:text-neon-green transition-colors">
-                                Startup Idea Pitch Day Success!
-                            </h4>
-                            <p class="text-gray-300 text-sm">
-                                Acara pitch ide startup internal kelas sukses banget! Ada yang usul bikin platform freelancer untuk pelajar, ada yang mau bikin AI tutor. Future entrepreneurs! 💪
-                            </p>
-                        </div>
-                    </div>
-                </article>
-            </div>
+            `).join('');
+        }
 
-            <!-- Newsletter Subscription -->
-            <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
-                <h3 class="text-3xl font-bold mb-4">
-                    <span class="bg-gradient-to-r from-electric-blue to-hot-pink bg-clip-text text-transparent">📬 Stay Updated!</span>
-                </h3>
-                <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari X PPLG? Follow social media kita!</p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <button class="bg-gradient-to-r from-electric-blue to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                        🔔 Notifikasi On
-                    </button>
-                    <button class="bg-gradient-to-r from-hot-pink to-puPPLGe-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                        📱 Join WhatsApp Group
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
+        // Fungsi utama untuk load semua data
+        async function loadNews() {
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            const newsContent = document.getElementById('news-content');
+            
+            // Show loading
+            loadingState.classList.remove('hidden');
+            errorState.classList.add('hidden');
+            newsContent.classList.add('hidden');
+            
+            try {
+                console.log('🚀 Starting to load news data...');
+                
+                // Fetch data parallel
+                const [lombaData, newsData] = await Promise.all([
+                    fetchSheetData('lomba'),
+                    fetchSheetData('news')
+                ]);
+                
+                // Sort news by date (newest first)
+                if (newsData.length > 0) {
+                    newsData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                }
+                
+                // Render semua section
+                renderLombaSection(lombaData);
+                renderNewsGrid(newsData);
+                renderAdditionalNews(newsData);
+                
+                // Show content
+                loadingState.classList.add('hidden');
+                newsContent.classList.remove('hidden');
+                
+                console.log('✅ Data berhasil dimuat:', { lombaData, newsData });
+                
+            } catch (error) {
+                console.error('❌ Error loading news:', error);
+                
+                // Show error state
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+            }
+        }
+
+        // Test function untuk debugging
+        async function testFetch() {
+            console.log('🔬 Testing Google Sheets connection...');
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
+                console.log('📡 Response status:', response.status);
+                console.log('📡 Response headers:', response.headers);
+                
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                    console.log('📊 Available sheets:', workbook.SheetNames);
+                    console.log('📋 Full workbook:', workbook);
+                }
+            } catch (error) {
+                console.error('❌ Test fetch failed:', error);
+            }
+        }
+
+        // Auto refresh setiap 5 menit
+        setInterval(loadNews, 5 * 60 * 1000);
+
+        // Load data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎯 DOM loaded, starting news load...');
+            loadNews();
+        });
+
+        // Expose test function to global scope for debugging
+        window.testFetch = testFetch;
+        window.loadNews = loadNews;
+    </script>
 
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-gray-900 via-slate-900 to-black py-16 relative">
@@ -598,11 +809,13 @@
         <div class="max-w-6xl mx-auto px-4 relative z-10">
             <div class="text-center">
                 <div class="flex items-center justify-center space-x-4 mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-r from-electric-blue via-cyber-puPPLGe to-hot-pink rounded-2xl flex items-center justify-center shadow-2xl animate-pulse-glow">
-                        <span class="text-white font-black text-2xl">X</span>
+                    <div class="w-16 h-16 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse-glow">
+                        <div class="text-white font-black text-7xl neon-text">
+                            <img src="/general/asset/PPLG-LOGO.ico" alt="ico" class="">
+                        </div>
                     </div>
                     <div class="text-left">
-                        <span class="text-4xl font-black bg-gradient-to-r from-electric-blue to-hot-pink bg-clip-text text-transparent">PPLG</span>
+                        <span class="text-4xl font-black bg-gradient-to-br from-blue-600 bg-clip-text text-transparent">PPLG</span>
                         <div class="text-gray-400 text-sm">Coding • Creating • Connecting</div>
                     </div>
                 </div>
@@ -610,30 +823,30 @@
                 <p class="text-xl text-gray-300 mb-2 font-semibold">🏫 SMKN 2 KUTA SELATAN</p>
                 <p class="text-gray-400 mb-8">Kelas X Rekayasa Perangkat Lunak - Where Dreams Meet Code 💻✨</p>
                 
-                <!-- Social Media Icons -->
+                <!-- More Feature -->
                 <div class="flex justify-center space-x-8 mb-8">
-                    <a href="https://www.instagram.com/xPPLG.dwisaka" target="_blank" 
+                    <a href="/general/class/kas-01.html" target="_blank" 
                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
                         <div class="w-12 h-12 bg-gradient-to-r from-puPPLGe-500 to-pink-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <span class="text-white text-xl">📸</span>
+                            <span class="text-white text-xl">💸</span>
                         </div>
-                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Instagram</span>
+                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Donatur </span>
                     </a>
                     
-                    <a href="http://tiktok.com/@x_PPLGdwisaka" target="_blank"
+                    <a href="/general/class/schedule-01.html" target="_blank"
                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
                         <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <span class="text-white text-xl">📱</span>
+                            <span class="text-white text-xl">📚</span>
                         </div>
-                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">TikTok</span>
+                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Jadwal Sekolah </span>
                     </a>
                     
-                    <a href="https://open.spotify.com/playlist/0uC9w4nbELhR5KUXGZ6FsF?si=46devFeuSGuqP88X40xp0g" target="_blank"
+                    <a href="/general/class/fotbar-01.html" target="_blank"
                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
                         <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <span class="text-white text-xl">🎵</span>
+                            <span class="text-white text-xl">👨‍👨‍👧‍👧</span>
                         </div>
-                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Spotify</span>
+                        <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Foto Bareng </span>
                     </a>
                 </div>
                 
@@ -887,7 +1100,9 @@
             <div class="grid md:grid-cols-3 gap-8 mb-12">
                 <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl p-8 text-center card-hover group">
                     <div class="w-28 h-28 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-xl group-hover:animate-wiggle">
-                        <span class="text-orange-600 font-black text-4xl">👨‍🏫</span>
+                        <div class="text-orange-600 font-black text-4xl">
+                            <img src="/general/asset/FOTO-WALI-KELAS.svg" alt="svhg" class="">
+                        </div>
                     </div>
                     <h3 class="text-2xl font-bold text-white mb-2">Pak/Bu Guru</h3>
                     <p class="text-orange-100 font-semibold mb-3">🎓 Wali Kelas Kita</p>
@@ -998,3 +1213,48 @@
                 </div>
                 
                 <div class="space-y-6 animate-slide-in-right">
+                    <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl p-8 card-hover group">
+                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                            <span class="mr-4 text-4xl group-hover:animate-wiggle">🤝</span>
+                            Etika & Kerjasama
+                        </h3>
+                        <div class="space-y-3 text-blue-50">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🤗</span>
+                                <span>Hargai pendapat teman (setiap orang punya perspektif unik)</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🤗</span>
+                                <span>Jangan bully atau merendahkan (kita semua belajar bareng)</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🤗</span>
+                                <span>Support satu sama lain (kita tim, bukan kompetitor!)</span>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="bg-gradient-to-br from-purple-500 to-puPPLGe-600 rounded-3xl p-8 card-hover group">
+                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                            <span class="mr-4 text-4xl group-hover:animate-wiggle">🎉</span>
+                            Kegiatan & Event
+                        </h3>
+                        <div class="space-y-3 text-purple-50">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🎊</span>
+                                <span>Ikut semua event kelas (dari coding competition sampai fun games)</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🎊</span>
+                                <span>Jangan lupa bawa snack (karena ngoding itu bikin lapar!)</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-xl">🎊</span>
+                                <span>Share momen seru di social media (biar semua tau betapa kerennya kita!)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+</html>

@@ -555,7 +555,15 @@
         const lastUpdate = kasChartData && kasChartData.length > 0 
           ? (kasChartData[kasChartData.length - 1]?.date || 'N/A') 
           : 'N/A';
-        lastUpdateElement.textContent = lastUpdate;
+        
+        const dateToJSDate = (lastUpdate) => {
+          const excelEpoch = new Date(1899, 11, 30); // 
+          var date = new Date(excelEpoch.getTime() + lastUpdate * 24 * 60 * 60 * 1000);
+          var date = date.toISOString().split("T")[0];
+          return date // Format YYYY-MM-DD
+        }
+
+        lastUpdateElement.textContent = dateToJSDate(lastUpdate) || 'N/A';
       }
     }
   </script>
@@ -762,7 +770,7 @@
 
     <!-- Contact Section -->
     <div class="text-center pt-6 border-t border-gray-700">
-      <p class="text-gray-400 mb-2">📞 Hubungi Bendahara untuk bantuang dan konfirmasi:</p>
+      <p class="text-gray-400 mb-2">📞 Hubungi Bendahara untuk bantuan dan konfirmasi:</p>
       <a href="https://wa.me/6285738292836" target="_blank" 
          class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-500 transition-colors font-semibold">
         <span class="mr-2">📱</span>
