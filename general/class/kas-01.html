@@ -289,14 +289,6 @@
       data.forEach((payment, index) => {
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
-        
-        const truncateAddress = (addr) => {
-          if (!addr || typeof addr !== 'string') return 'N/A';
-          if (addr.length > 20) {
-            return addr.substring(0, 10) + '...' + addr.substring(addr.length - 6);
-          }
-          return addr;
-        };
 
         const dateToJSDate = (date) => {
           const excelEpoch = new Date(1899, 11, 30); // 
@@ -311,7 +303,7 @@
             <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode || 'N/A'}</span>
           </td>
           <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
-            ${truncateAddress(payment.from)}
+            ${payment.from}
           </td>
           <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
           <td class="py-3 px-4 text-gray-400">${dateToJSDate(payment.tanggal) || 'N/A'}</td>
@@ -534,7 +526,7 @@
       }
     };
 
-        function updateStats() {
+      function updateStats() {
       const totalAmountElement = document.getElementById('total-amount');
       const totalMembersElement = document.getElementById('total-members');
       const lastUpdateElement = document.getElementById('last-update');
@@ -543,7 +535,7 @@
         const totalAmount = kasChartData && kasChartData.length > 0 
           ? (kasChartData[kasChartData.length - 1]?.endValue || 0) 
           : 0;
-        totalAmountElement.textContent = `$${totalAmount}`;
+        totalAmountElement.textContent = `Rp${totalAmount}`;
       }
 
       if (totalMembersElement) {
@@ -606,7 +598,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 rounded-xl text-center">
         <h3 class="text-white text-sm font-medium">Total Kas</h3>
-        <p id="total-amount" class="text-white text-3xl font-bold">$0</p>
+        <p id="total-amount" class="text-white text-3xl font-bold">Rp0</p>
       </div>
       <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 rounded-xl text-center">
         <h3 class="text-white text-sm font-medium">Sudah Bayar</h3>
