@@ -18,11 +18,15 @@
     let paymentData = [];
     let kasChartData = [];
     let dataKas = [];
+    let dendaData = [];
+    let pengeluarData = [];
 
     const FilePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx';
     const SheetDoc = 'history'; // Ensure this matches the sheet name in your Google Sheet
     const SheetData = 'doc'; // Ensure this matches the sheet name in your Google Sheet
     const DataKas = 'datakas'; // Ensure this matches the sheet name in your Google Sheet
+    const Denda = 'denda'; // Ensure this matches the sheet name in your Google Sheet
+    const SheetPengeluarData = 'pengeluaran'; // Ensure this matches the sheet name in your Google Sheet 
 
     async function loadSheetData() {
       try {
@@ -55,11 +59,19 @@
           console.log("Data Kas Loaded:", loadedDataKas);
         }
 
+        const pengeluarDataSheet = workbook.Sheets[SheetPengeluarData];
+        let LoadedPengeluarData = [];
+        if (pengeluarDataSheet) {
+          LoadedPengeluarData = XLSX.utils.sheet_to_json(pengeluarDataSheet);
+          console.log("Pengeluaran Data Loaded:", LoadedPengeluarData);
+        }
+
         // Return both datasets
         return { 
            paymentData: loadedPaymentData,
            kasChartData: loadedKasChartData, 
-           dataKas: loadedDataKas 
+           dataKas: loadedDataKas,
+           pengeluarData: LoadedPengeluarData
         };
       } catch (error) {
         console.error("Error loading sheet data:", error);
@@ -273,40 +285,204 @@
       }, 3000);
     }
 
-    function loadPaymentTable(data = paymentData) {
+    // Fungsi untuk sort berdasarkan tanggal terbaru
+    function sortPaymentByDate(data) {
+      if (!data || data.length === 0) return [];
+      
+      return [...data].sort((a, b) => {
+        if (!a.tanggal && !b.tanggal) return 0;
+        if (!a.tanggal) return 1;
+        if (!b.tanggal) return -1;
+        
+        const dateA = parseFloat(a.tanggal);
+        const dateB = parseFloat(b.tanggal);
+        
+        // Sort descending (terbaru di atas)
+        return dateB - dateA;
+      });
+    }
+
+    function sortPengeluaranByDate(data) {
+      if (!data || data.length === 0) return [];
+      
+      return [...data].sort((a, b) => {
+        if (!a.tanggal && !b.tanggal) return 0;
+        if (!a.tanggal) return 1;
+        if (!b.tanggal) return -1;
+        
+        const dateA = parseFloat(a.tanggal);
+        const dateB = parseFloat(b.tanggal);
+        
+        // Sort descending (terbaru di atas)
+        return dateB - dateA;
+      });
+    }
+
+    function loadPaymentTable(data = paymentData, sortByDate = true) {
+      // Sort data jika diperlukan
+      const sortedData = sortByDate ? sortPaymentByDate(data) : data;
+      
+      const scrollContainer = document.querySelector('.overflow-x-auto');
+      if (!scrollContainer) return;
+      
       const tbody = document.getElementById('payment-tbody');
       if (!tbody) return;
       
-      tbody.innerHTML = '';
+      const ITEM_HEIGHT = 60;
+      const VISIBLE_ITEMS = 10;
+      const CONTAINER_HEIGHT = VISIBLE_ITEMS * ITEM_HEIGHT;
       
-      if (!data || data.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="5" class="py-4 text-center text-gray-400">No payment data available</td>';
-        tbody.appendChild(row);
+      scrollContainer.style.maxHeight = `${CONTAINER_HEIGHT}px`;
+      scrollContainer.style.overflowY = 'auto';
+      scrollContainer.style.position = 'relative';
+      
+      let startIndex = 0;
+      let isScrolling = false;
+      
+      function renderVisibleItems() {
+        if (!sortedData || sortedData.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">No payment data available</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = '';
+        
+        // Top spacer
+        if (startIndex > 0) {
+          const topSpacer = document.createElement('tr');
+          topSpacer.style.height = `${startIndex * ITEM_HEIGHT}px`;
+          topSpacer.innerHTML = '<td colspan="5"></td>';
+          tbody.appendChild(topSpacer);
+        }
+        
+        const endIndex = Math.min(startIndex + VISIBLE_ITEMS + 5, sortedData.length);
+        
+        for (let i = startIndex; i < endIndex; i++) {
+          const payment = sortedData[i];
+          const row = document.createElement('tr');
+          row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+          row.style.height = `${ITEM_HEIGHT}px`;
+
+          const dateToJSDate = (date) => {
+            if (!date) return 'N/A';
+            const excelEpoch = new Date(1899, 11, 30);
+            const convertedDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+            return convertedDate.toISOString().split("T")[0];
+          }
+
+          // Add indicator for latest entries (optional)
+          const isRecent = i < 2; 
+          const nameClass = isRecent ? 'font-medium text-green-300' : 'font-medium';
+
+          row.innerHTML = `
+            <td class="py-3 px-4 ${nameClass}">
+              ${isRecent ? '🆕 ' : ''}${payment.nama || 'N/A'}
+            </td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode || 'N/A'}</span>
+            </td>
+            <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
+              ${payment.from || 'N/A'}
+            </td>
+            <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
+            <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+              ${dateToJSDate(payment.tanggal)}
+            </td>
+          `;
+          tbody.appendChild(row);
+        }
+        
+        // Bottom spacer
+        const remainingItems = sortedData.length - endIndex;
+        if (remainingItems > 0) {
+          const bottomSpacer = document.createElement('tr');
+          bottomSpacer.style.height = `${remainingItems * ITEM_HEIGHT}px`;
+          bottomSpacer.innerHTML = '<td colspan="5"></td>';
+          tbody.appendChild(bottomSpacer);
+        }
+      }
+      
+      function handleScroll() {
+        if (isScrolling) return;
+        
+        isScrolling = true;
+        requestAnimationFrame(() => {
+          const scrollTop = scrollContainer.scrollTop;
+          const newStartIndex = Math.floor(scrollTop / ITEM_HEIGHT);
+          
+          if (Math.abs(newStartIndex - startIndex) > 2) {
+            startIndex = Math.max(0, newStartIndex - 2);
+            renderVisibleItems();
+          }
+          
+          isScrolling = false;
+        });
+      }
+      
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+      
+      renderVisibleItems();
+    }
+
+    function LoadedPengeluarData(data = pengeluarData, sortByDate = true) {
+      const sortedData = sortByDate ? sortPengeluaranByDate(data) : data;
+      const tbody = document.getElementById('loss-tbody');
+      
+      if (!tbody) {
+        console.error('loss-tbody tidak ditemukan');
         return;
       }
       
-      data.forEach((payment, index) => {
+      // Set scroll untuk parent container
+      const scrollContainer = tbody.closest('.overflow-x-auto');
+      if (scrollContainer) {
+        scrollContainer.style.maxHeight = '600px';
+        scrollContainer.style.overflowY = 'auto';
+      }
+      
+      tbody.innerHTML = '';
+      
+      console.log('Loading pengeluaran data:', sortedData); // Debug log
+      
+      if (!sortedData || sortedData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">No pengeluaran data available</td></tr>';
+        return;
+      }
+      
+      sortedData.forEach((loss, index) => {
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
 
         const dateToJSDate = (date) => {
-          const excelEpoch = new Date(1899, 11, 30); // 
-          var date = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
-          var date = date.toISOString().split("T")[0];
-          return date // Format YYYY-MM-DD
+          if (!date) return 'N/A';
+          const excelEpoch = new Date(1899, 11, 30);
+          const convertedDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+          return convertedDate.toISOString().split("T")[0];
         }
 
+        const formatCurrency = (amount) => {
+          if (!amount) return 'Rp 0';
+          return `Rp ${parseInt(amount).toLocaleString('id-ID')}`;
+        }
+
+        const isRecent = index < 2;
+        const nameClass = isRecent ? 'font-medium text-red-300' : 'font-medium';
+
         row.innerHTML = `
-          <td class="py-3 px-4 font-medium">${payment.nama || 'N/A'}</td>
+          <td class="py-3 px-4 ${nameClass}">
+            ${isRecent ? '🆕 ' : ''}${loss.barang || 'N/A'}
+          </td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode || 'N/A'}</span>
+            <span class="px-2 py-1 bg-orange-600 rounded-full text-xs">${loss.jumlah || '0'}</span>
           </td>
-          <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
-            ${payment.from}
+          <td class="py-3 px-4 font-mono text-xs">
+            ${formatCurrency(loss.harga_satuan)}
           </td>
-          <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
-          <td class="py-3 px-4 text-gray-400">${dateToJSDate(payment.tanggal) || 'N/A'}</td>
+          <td class="py-3 px-4 text-red-400 font-semibold">${formatCurrency(loss.harga_akhir)}</td>
+          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+            ${dateToJSDate(loss.tanggal)}
+          </td>
         `;
         tbody.appendChild(row);
       });
@@ -475,21 +651,25 @@
         const { 
           paymentData: loadedPaymentData, 
           kasChartData: loadedKasChartData, 
-          dataKas: loadedDataKas 
+          dataKas: loadedDataKas,
+          pengeluarData: loadedPengeluarData 
         } = await loadSheetData();
         
         // Update global variables
         paymentData = loadedPaymentData;
         kasChartData = loadedKasChartData;
         dataKas = loadedDataKas;
+        pengeluarData = loadedPengeluarData;
         
         console.log("Payment Data:", paymentData);
         console.log("Kas Chart Data:", kasChartData);
         console.log("Data Kas:", dataKas);
+        console.log("Pengeluaran Data:", pengeluarData);
         
         // Initialize UI components
         loadPaymentTable(paymentData);
         loadDataKasTable(dataKas); // Now properly load the dataKas table
+        LoadedPengeluarData(pengeluarData);
         updateStats();
         initChart();
         
@@ -501,6 +681,7 @@
         // Initialize with empty data
         loadPaymentTable([]);
         loadDataKasTable([]);
+        LoadedPengeluarData([]);
         updateStats();
         initChart();
       }
@@ -532,10 +713,16 @@
       const lastUpdateElement = document.getElementById('last-update');
 
       if (totalAmountElement) {
-        const totalAmount = kasChartData && kasChartData.length > 0 
+        const kasTotal = kasChartData && kasChartData.length > 0 
           ? (kasChartData[kasChartData.length - 1]?.endValue || 0) 
           : 0;
-        totalAmountElement.textContent = `Rp${totalAmount}`;
+
+        const PengeluaranTotal = pengeluarData && pengeluarData.length > 0 
+          ? pengeluarData.reduce((sum, item) => sum + (parseFloat(item.harga_akhir) || 0), 0) 
+          : 0;
+
+        const netTotal = kasTotal - PengeluaranTotal;
+        totalAmountElement.textContent = `Rp${netTotal.toLocaleString('id-ID')}`;
       }
 
       if (totalMembersElement) {
@@ -577,6 +764,11 @@
     .glass-effect {
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #4b5563 transparent;
     }
   </style>
 </head>
@@ -734,6 +926,30 @@
       </div>
     </div>
 
+        <!-- Pengeluaran Table -->
+    <div id="pengeluaran-section" class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-xl font-semibold text-white mb-6">💸 Riwayat Pengeluaran Kas</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-gray-300">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="py-3 px-4 text-left font-semibold">Barang</th>
+              <th class="py-3 px-4 text-left font-semibold">Jumlah</th>
+              <th class="py-3 px-4 text-left font-semibold">Harga Satuan</th>
+              <th class="py-3 px-4 text-left font-semibold">Total Harga</th>
+              <th class="py-3 px-4 text-left font-semibold">
+                Tanggal 
+                <span class="text-xs text-red-400">↓</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="loss-tbody">
+            <!-- Data will be loaded by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- QRIS Section -->
     <div class="text-center bg-gray-800 bg-opacity-50 p-6 rounded-xl glass-effect">
       <h3 class="text-2xl font-semibold text-white mb-4">🧾 Pembayaran via QRIS</h3>
@@ -798,6 +1014,8 @@
         <p>✅ = Sudah Bayar | ❌ = Belum Bayar</p>
       </div>
     </div>
+
+
 
   </div>
 </body>
