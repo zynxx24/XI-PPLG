@@ -20,13 +20,15 @@
     let dataKas = [];
     let dendaData = [];
     let pengeluarData = [];
+    let donaturData = [];
 
     const FilePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx';
     const SheetDoc = 'history'; // Ensure this matches the sheet name in your Google Sheet
     const SheetData = 'doc'; // Ensure this matches the sheet name in your Google Sheet
     const DataKas = 'datakas'; // Ensure this matches the sheet name in your Google Sheet
-    const Denda = 'denda'; // Ensure this matches the sheet name in your Google Sheet
+    const SheetDendaData = 'denda'; // Ensure this matches the sheet name in your Google Sheet
     const SheetPengeluarData = 'pengeluaran'; // Ensure this matches the sheet name in your Google Sheet 
+    const SheetDonaturData = 'donatur'; // Ensure this matches the sheet name in your Google Sheet
 
     async function loadSheetData() {
       try {
@@ -40,7 +42,6 @@
         let loadedPaymentData = [];
         if (docSheet) {
           loadedPaymentData = XLSX.utils.sheet_to_json(docSheet);
-          console.log("Payment Data Loaded:", loadedPaymentData);
         }
 
         // Load data from 'history' sheet
@@ -48,7 +49,6 @@
         let loadedKasChartData = [];
         if (historySheet) {
           loadedKasChartData = XLSX.utils.sheet_to_json(historySheet);
-          console.log("Kas Chart Data Loaded:", loadedKasChartData);
         }
 
         // Load data from 'datakas' sheet
@@ -56,14 +56,27 @@
         let loadedDataKas = [];
         if (dataKasSheet) {
           loadedDataKas = XLSX.utils.sheet_to_json(dataKasSheet);
-          console.log("Data Kas Loaded:", loadedDataKas);
         }
 
+        // Load data from 'pengeluaran' sheet
         const pengeluarDataSheet = workbook.Sheets[SheetPengeluarData];
         let LoadedPengeluarData = [];
         if (pengeluarDataSheet) {
           LoadedPengeluarData = XLSX.utils.sheet_to_json(pengeluarDataSheet);
-          console.log("Pengeluaran Data Loaded:", LoadedPengeluarData);
+        }
+
+        // Load data from 'denda' sheet
+        const dendaDataSheet = workbook.Sheets[SheetDendaData];
+        let loadedDendaData = [];
+        if (dendaDataSheet) {
+          loadedDendaData = XLSX.utils.sheet_to_json(dendaDataSheet);
+        }
+
+        // Load data from 'donatur' sheet
+        const donaturDataSheet = workbook.Sheets[SheetDonaturData];
+        let loadedDonaturData = [];
+        if (donaturDataSheet) {
+          loadedDonaturData = XLSX.utils.sheet_to_json(donaturDataSheet);
         }
 
         // Return both datasets
@@ -71,7 +84,9 @@
            paymentData: loadedPaymentData,
            kasChartData: loadedKasChartData, 
            dataKas: loadedDataKas,
-           pengeluarData: LoadedPengeluarData
+           pengeluarData: LoadedPengeluarData,
+           dendaData: loadedDendaData,
+           donaturData: loadedDonaturData
         };
       } catch (error) {
         console.error("Error loading sheet data:", error);
@@ -139,8 +154,6 @@
         return;
       }
       
-      console.log("Loading data kas table with data:", data);
-      
       tbody.innerHTML = '';
       
       if (!data || data.length === 0) {
@@ -178,8 +191,6 @@
         row.innerHTML = cellsHTML;
         tbody.appendChild(row);
       });
-      
-      console.log(`Loaded ${validData.length} students to the table`);
     }
 
     async function connectPhantom() {
@@ -370,6 +381,11 @@
             return convertedDate.toISOString().split("T")[0];
           }
 
+          const formatCurrency = (amount) => {
+            if (!amount) return 'Rp 0';
+            return `Rp ${parseInt(amount).toLocaleString('id-ID')}`;
+          }
+
           // Add indicator for latest entries (optional)
           const isRecent = i < 2; 
           const nameClass = isRecent ? 'font-medium text-green-300' : 'font-medium';
@@ -384,7 +400,7 @@
             <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
               ${payment.from || 'N/A'}
             </td>
-            <td class="py-3 px-4 text-green-400 font-semibold">${payment.jumlah || '$0'}</td>
+            <td class="py-3 px-4 text-green-400 font-semibold">${formatCurrency(payment.jumlah) || 'Rp. 0'}</td>
             <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
               ${dateToJSDate(payment.tanggal)}
             </td>
@@ -443,8 +459,6 @@
       
       tbody.innerHTML = '';
       
-      console.log('Loading pengeluaran data:', sortedData); // Debug log
-      
       if (!sortedData || sortedData.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">No pengeluaran data available</td></tr>';
         return;
@@ -488,6 +502,124 @@
       });
     }
 
+    function LoadedDenda(data = dendaData, sortByDate = true) {
+      const sortedData = sortByDate ? sortPengeluaranByDate(data) : data;
+      const tbody = document.getElementById('denda-tbody');
+      
+      if (!tbody) {
+        console.error('denda-tbody tidak ditemukan');
+        return;
+      }
+      
+      // Set scroll untuk parent container
+      const scrollContainer = tbody.closest('.overflow-x-auto');
+      if (scrollContainer) {
+        scrollContainer.style.maxHeight = '600px';
+        scrollContainer.style.overflowY = 'auto';
+      }
+      
+      tbody.innerHTML = '';
+      
+      if (!sortedData || sortedData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">No denda data available</td></tr>';
+        return;
+      }
+      
+      sortedData.forEach((denda, index) => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+
+        const dateToJSDate = (date) => {
+          if (!date) return 'N/A';
+          const excelEpoch = new Date(1899, 11, 30);
+          const convertedDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+          return convertedDate.toISOString().split("T")[0];
+        }
+
+        const formatCurrency = (amount) => {
+          if (!amount) return 'Rp 0';
+          return `Rp ${parseInt(amount).toLocaleString('id-ID')}`;
+        }
+
+        const isRecent = index < 2;
+        const nameClass = isRecent ? 'font-medium text-red-300' : 'font-medium';
+
+        row.innerHTML = `
+          <td class="py-3 px-4 ${nameClass}">
+            ${isRecent ? '🆕 ' : ''}${denda.nama || 'N/A'}
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 bg-orange-600 rounded-full text-xs">${denda.deskripsi || 'N/A'}</span>
+          </td>
+          <td class="py-3 px-4 font-mono text-xs"> ${formatCurrency(denda.nominal)}
+          </td>
+          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+            ${dateToJSDate(denda.tanggal)}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function LoadedDonatur(data = donaturData, sortByDate = true) {
+      const sortedData = sortByDate ? sortPengeluaranByDate(data) : data;
+      const tbody = document.getElementById('donatur-tbody');
+      
+      if (!tbody) {
+        console.error('denda-tbody tidak ditemukan');
+        return;
+      }
+      
+      // Set scroll untuk parent container
+      const scrollContainer = tbody.closest('.overflow-x-auto');
+      if (scrollContainer) {
+        scrollContainer.style.maxHeight = '600px';
+        scrollContainer.style.overflowY = 'auto';
+      }
+      
+      tbody.innerHTML = '';
+      
+      if (!sortedData || sortedData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">No Donatur data available</td></tr>';
+        return;
+      }
+      
+      sortedData.forEach((donatur, index) => {
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+
+        const dateToJSDate = (date) => {
+          if (!date) return 'N/A';
+          const excelEpoch = new Date(1899, 11, 30);
+          const convertedDate = new Date(excelEpoch.getTime() + date * 24 * 60 * 60 * 1000);
+          return convertedDate.toISOString().split("T")[0];
+        }
+
+        const formatCurrency = (amount) => {
+          if (!amount) return 'Rp 0';
+          return `Rp ${parseInt(amount).toLocaleString('id-ID')}`;
+        }
+
+        const isRecent = index < 2;
+        const nameClass = isRecent ? 'font-medium text-green-300' : 'font-medium';
+
+        row.innerHTML = `
+          <td class="py-3 px-4 ${nameClass}">
+            ${isRecent ? '🆕 ' : ''}${donatur.nama || 'N/A'}
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-1 bg-green-600 rounded-full text-xs">${donatur.deskripsi || 'N/A'}</span>
+          </td>
+          <td class="py-3 px-4 font-mono text-xs"> ${formatCurrency(donatur.nominal)}
+          </td>
+          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+            ${dateToJSDate(donatur.tanggal)}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
     function initChart() {
       const chartContainer = document.getElementById('kas-chart');
       if (!chartContainer) {
@@ -516,7 +648,7 @@
 
         const option = {
           title: {
-            text: 'Dokumentasi Kas Kelas',
+            text: 'Dokumentasi Kas Kelas(Penarikan Bulanan)',
             textStyle: {
               color: '#ffffff',
               fontSize: 18
@@ -648,11 +780,13 @@
     async function initializeApp() {
       try {
         showToast("Loading data...");
-        const { 
+        const {
           paymentData: loadedPaymentData, 
           kasChartData: loadedKasChartData, 
           dataKas: loadedDataKas,
-          pengeluarData: loadedPengeluarData 
+          pengeluarData: loadedPengeluarData,
+          dendaData: loadedDendaData,
+          donaturData: loadedDonaturData
         } = await loadSheetData();
         
         // Update global variables
@@ -660,16 +794,22 @@
         kasChartData = loadedKasChartData;
         dataKas = loadedDataKas;
         pengeluarData = loadedPengeluarData;
+        dendaData = loadedDendaData;
+        donaturData = loadedDonaturData;
         
-        console.log("Payment Data:", paymentData);
-        console.log("Kas Chart Data:", kasChartData);
-        console.log("Data Kas:", dataKas);
-        console.log("Pengeluaran Data:", pengeluarData);
+        console.log("Payment Data: Successfully loaded");
+        console.log("Kas Chart Data: Successfully loaded");
+        console.log("Data Kas: Successfully loaded");
+        console.log("Pengeluaran Data: Successfully loaded");
+        console.log("Denda Data: Successfully loaded")
+        console.log("Donatur Data: Successfully loaded");
         
         // Initialize UI components
         loadPaymentTable(paymentData);
-        loadDataKasTable(dataKas); // Now properly load the dataKas table
+        loadDataKasTable(dataKas);
         LoadedPengeluarData(pengeluarData);
+        LoadedDenda(dendaData);
+        LoadedDonatur(donaturData);
         updateStats();
         initChart();
         
@@ -682,6 +822,8 @@
         loadPaymentTable([]);
         loadDataKasTable([]);
         LoadedPengeluarData([]);
+        LoadedDenda([]);
+        LoadedDonatur([]);
         updateStats();
         initChart();
       }
@@ -721,7 +863,15 @@
           ? pengeluarData.reduce((sum, item) => sum + (parseFloat(item.harga_akhir) || 0), 0) 
           : 0;
 
-        const netTotal = kasTotal - PengeluaranTotal;
+        const DendaTotal = dendaData && dendaData.length > 0 
+          ? dendaData.reduce((sum, item) => sum + (parseFloat(item.nominal) || 0), 0) 
+          : 0;
+
+        const DonaturTotal = donaturData && donaturData.length > 0 
+          ? donaturData.reduce((sum, item) => sum + (parseFloat(item.nominal) || 0), 0) 
+          : 0;
+
+        const netTotal = kasTotal - PengeluaranTotal + DendaTotal + DonaturTotal;
         totalAmountElement.textContent = `Rp${netTotal.toLocaleString('id-ID')}`;
       }
 
@@ -747,6 +897,10 @@
     }
   </script>
   <style>
+
+    .emoji {
+      color: initial !important; 
+    }
     @keyframes fade-in {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -912,7 +1066,7 @@
         <table class="w-full text-sm text-gray-300">
           <thead>
             <tr class="border-b border-gray-700">
-              <th class="py-3 px-4 text-left font-semibold">Nama</th>
+              <th class="py-3 px-4 text-left font-semibold">Tipe</th>
               <th class="py-3 px-4 text-left font-semibold">Metode</th>
               <th class="py-3 px-4 text-left font-semibold">From</th>
               <th class="py-3 px-4 text-left font-semibold">Jumlah</th>
@@ -926,9 +1080,49 @@
       </div>
     </div>
 
-        <!-- Pengeluaran Table -->
+    <!-- Denda Table -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-xl font-semibold text-white mb-6">📊 Riwayat Denda</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-gray-300">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="py-3 px-4 text-left font-semibold">Nama</th>
+              <th class="py-3 px-4 text-left font-semibold">Deskripsi</th>
+              <th class="py-3 px-4 text-left font-semibold">Nominal</th>
+              <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="denda-tbody">
+            <!-- Data will be loaded by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Donatur Table -->
+    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
+      <h2 class="text-xl font-semibold text-white mb-6">💸 Riwayat Donatur</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-gray-300">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="py-3 px-4 text-left font-semibold">Nama</th>
+              <th class="py-3 px-4 text-left font-semibold">Deskripsi</th>
+              <th class="py-3 px-4 text-left font-semibold">Nominal</th>
+              <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="donatur-tbody">
+            <!-- Data will be loaded by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pengeluaran Table -->
     <div id="pengeluaran-section" class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
-      <h2 class="text-xl font-semibold text-white mb-6">💸 Riwayat Pengeluaran Kas</h2>
+      <h2 class="text-xl font-semibold text-white mb-6">📊 Riwayat Pengeluaran Kas</h2>
       <div class="overflow-x-auto">
         <table class="w-full text-sm text-gray-300">
           <thead>
@@ -937,8 +1131,7 @@
               <th class="py-3 px-4 text-left font-semibold">Jumlah</th>
               <th class="py-3 px-4 text-left font-semibold">Harga Satuan</th>
               <th class="py-3 px-4 text-left font-semibold">Total Harga</th>
-              <th class="py-3 px-4 text-left font-semibold">
-                Tanggal 
+              <th class="py-3 px-4 text-left font-semibold">Tanggal 
                 <span class="text-xs text-red-400">↓</span>
               </th>
             </tr>
@@ -1014,8 +1207,6 @@
         <p>✅ = Sudah Bayar | ❌ = Belum Bayar</p>
       </div>
     </div>
-
-
 
   </div>
 </body>

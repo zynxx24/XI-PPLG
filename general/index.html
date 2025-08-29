@@ -34,6 +34,10 @@
         }
     </script>
     <style>
+        .emoji {
+            color: initial !important; /* reset warna ke default sistem */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -601,7 +605,7 @@
         <div class="max-w-6xl mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-neon-green to-electric-blue bg-clip-text text-transparent">
-                    🎯 Tentang Kita
+                    <span class="emoji">🎯</span> Tentang Kita
                 </h2>
                 <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
             </div>
@@ -688,7 +692,6 @@
     </section>
 
     <!-- Berita Section -->
-     <!-- News List Section -->
     <section id="berita" class="py-20 relative">
         <div class="absolute inset-0 opacity-5">
             <div class="absolute top-10 left-10 w-20 h-20 bg-blue-500 rounded-full animate-pulse"></div>
@@ -698,8 +701,8 @@
         
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4" style="background: linear-gradient(135deg, var(--cyber-purple), var(--electric-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    📰 Berita Hot!
+                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-br from-[var(--cyber-purple)] to-[var(--electric-blue)] bg-clip-text text-transparent">
+                    <span class="emoji">📰</span>  Berita Hot!
                 </h2>
                 <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
             </div>
@@ -733,7 +736,9 @@
                 <!-- Newsletter Subscription -->
                 <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
                     <h3 class="text-3xl font-bold mb-4">
-                        <span style="background: linear-gradient(135deg, var(--electric-blue), var(--hot-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📬 Stay Updated!</span>
+                        <p class="bg-gradient-to-br from-[var(--electric-blue)] to-[var(--hot-pink)] bg-clip-text text-transparent">
+                            <span class="emoji">📬</span> Stay Updated!
+                        </p>
                     </h3>
                     <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari XI PPLG? Follow social media kita!</p>
                     <div class="flex flex-wrap justify-center gap-4">
@@ -910,7 +915,7 @@
             const isLomba = type === 'lomba';
             
             const articleHTML = `
-                <div class="article-header">
+                <div class="article-header card-hover">
                     <h1 class="article-title">
                         ${item.emoji || item.emoji_utama || '📰'} ${item.judul || 'Judul Tidak Tersedia'}
                     </h1>
@@ -935,7 +940,7 @@
                     </div>
                 </div>
                 
-                <div class="article-content">
+                <div class="article-content card-hover">
                     ${sections.map(section => {
                         if (section.isStats) {
                             return `
@@ -963,7 +968,7 @@
                     }).join('')}
                     
                     ${isLomba ? `
-                        <div class="highlight-box">
+                        <div class="highlight-box card-hover">
                             <h3>🎉 Kutipan Istimewa</h3>
                             <p style="font-style: italic; font-size: 1.2rem; text-align: center; color: var(--neon-green);">
                                 "Prestasi ini adalah bukti nyata dari dedikasi dan kerja keras seluruh tim. 
@@ -1011,7 +1016,7 @@
             relatedContainer.innerHTML = allArticles.map(article => {
                 const articleType = globalLombaData.includes(article) ? 'lomba' : 'news';
                 return `
-                    <div class="related-card" onclick="openReading('${article.id}', '${articleType}')">
+                    <div class="related-card card-hover" onclick="openReading('${article.id}', '${articleType}')">
                         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
                             <span style="background: ${articleType === 'lomba' ? 'linear-gradient(135deg, #ff006e, #ff7b00)' : 'linear-gradient(135deg, #00d4ff, #8b5cf6)'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; font-weight: bold;">
                                 ${articleType === 'lomba' ? '🏆 LOMBA' : '📰 NEWS'}
@@ -1339,16 +1344,6 @@
                         <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Foto Bareng </span>
                     </a>
                 </div>
-                
-                <div class="border-t border-gray-700 pt-8">
-                    <p class="text-gray-500 text-sm mb-4">
-                        Made with ❤️ and lots of ☕ by XI PPLG Students
-                    </p>
-                    <p class="text-gray-600 text-xs">
-                        © 2025 XI PPLG SMKN 2 KUTA SELATAN. Semua hak cipta dilindungi. 
-                        <span class="text-electric-blue">Keep coding, keep dreaming! 🚀</span>
-                    </p>
-                </div>
             </div>
         </div>
     </footer>
@@ -1581,12 +1576,12 @@
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-sunset-orange to-hot-pink bg-clip-text text-transparent">
-                    👥 Tim Kece Kita
+                    <span class="emoji">👥</span> Tim Kece Kita
                 </h2>
                 <p class="text-xl text-gray-300">Meet the squad yang bikin kelas makin seru!</p>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl p-8 text-center card-hover group">
                     <div class="w-28 h-28 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-xl group-hover:animate-wiggle">
                         <div class="text-orange-600 font-black text-4xl">
@@ -1605,15 +1600,6 @@
                     <h3 class="text-2xl font-bold text-white mb-2">Ketua Kelas</h3>
                     <p class="text-blue-100 font-semibold mb-3">⚡ Leader Squad</p>
                     <p class="text-sm text-blue-50">Yang ngatur semua kegiatan kelas, dari rapat sampai event seru. Pemimpin yang cool dan tegas! 💪</p>
-                </div>
-                
-                <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl p-8 text-center card-hover group">
-                    <div class="w-28 h-28 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-xl group-hover:animate-wiggle">
-                        <span class="text-green-600 font-black text-4xl">📝</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2">Sekretaris</h3>
-                    <p class="text-green-100 font-semibold mb-3">📋 Note Taker</p>
-                    <p class="text-sm text-green-50">Yang rajin catat semua kegiatan dan bikin dokumentasi kelas. Tanpa dia, kita bisa lupa semuanya! 😅</p>
                 </div>
             </div>
             
@@ -1651,7 +1637,7 @@
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-hot-pink to-cyber-puPPLGe bg-clip-text text-transparent">
-                    📋 Aturan Main
+                    <span class="emoji">📋</span> Aturan Main
                 </h2>
                 <p class="text-xl text-gray-300">Rules yang bikin kita tetap solid dan sukses bareng!</p>
             </div>
@@ -1745,5 +1731,16 @@
                 </div>
             </div>
         </div>
-    </section> 
+    </section>
+    <div class="flex justify-center space-x-8 mb-8">
+        <div class="border-t border-gray-700 pt-8 w-full max-w-3xl mx-auto">
+            <p class="text-gray-500 text-center mb-4">
+                Made with ❤️ and lots of ☕ by XI PPLG Students
+            </p>
+            <p class="text-gray-600 text-center">
+                © 2025 XI PPLG SMKN 2 KUTA SELATAN. Semua hak cipta dilindungi. 
+                <span class="text-electric-blue">Keep coding, keep dreaming! 🚀</span>
+            </p>
+        </div>
+    </div>
 </html>
