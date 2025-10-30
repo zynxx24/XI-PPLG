@@ -956,103 +956,63 @@
       </div>
     </div>
 
-    <!-- Connected Wallet Display -->
-    <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
-      <h2 class="text-lg font-semibold text-white mb-4">🔗 Connected Wallet</h2>
-      <div id="connected-wallet" class="text-center">
-        <p class="text-sm text-gray-400">❌ No wallet connected</p>
-      </div>
-    </div>
-
     <!-- Crypto Addresses -->
-    <div class="space-y-6">
+    <div class="space-y-6 mt-8">
       <h2 class="text-2xl font-bold text-white text-center mb-6">🪙 Alamat Crypto</h2>
-      
+
       <!-- Solana -->
       <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
         <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png" class="w-10 h-10 mr-4" alt="Solana" />
         <div class="flex-1">
           <h3 class="text-lg font-semibold text-white">Solana</h3>
           <p id="solana" class="text-sm text-gray-300 break-all font-mono">
-            V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS
+            JDhD6pgTZxSEahkzSjzyGCNj9XRVk1xN3wepVHfSGQNe
           </p>
         </div>
-        <div class="flex items-center space-x-4">
-          <canvas id="qr-solana" class="bg-gray-800 rounded-lg p-2"></canvas>
-          <button onclick="copyText('solana')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Copy
-          </button>
-        </div>
+        <button onclick="copyText('solana')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          Copy
+        </button>
       </div>
 
-      <!-- Ethereum -->
+      <!-- Ethereum / Base / Polygon -->
       <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
         <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" class="w-10 h-10 mr-4" alt="Ethereum" />
         <div class="flex-1">
           <h3 class="text-lg font-semibold text-white">Ethereum / Base / Polygon</h3>
           <p id="eth" class="text-sm text-gray-300 break-all font-mono">
-            0x8C940E048Df1040bcb3e1DEC5E3722432fd97757
+            0x5986f3A47b3740C6Be89c114a617a2A72b355a66
           </p>
         </div>
-        <div class="flex items-center space-x-4">
-          <canvas id="qr-eth" class="bg-gray-800 rounded-lg p-2"></canvas>
-          <button onclick="copyText('eth')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Copy
-          </button>
-        </div>
+        <button onclick="copyText('eth')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          Copy
+        </button>
       </div>
 
-      <!-- SUI -->
+      <!-- Bitcoin -->
       <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
-        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/sui/info/logo.png" class="w-10 h-10 mr-4" alt="SUI" />
+        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png" class="w-10 h-10 mr-4" alt="Bitcoin" />
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-white">SUI</h3>
-          <p id="sui" class="text-sm text-gray-300 break-all font-mono">
-            0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9
+          <h3 class="text-lg font-semibold text-white">Bitcoin</h3>
+          <p id="btc" class="text-sm text-gray-300 break-all font-mono">
+            bc1q9ny3w6e8lsfrxsazvtrp76tvsk9utud7svhdv2
           </p>
         </div>
-        <div class="flex items-center space-x-4">
-          <canvas id="qr-sui" class="bg-gray-800 rounded-lg p-2"></canvas>
-          <button onclick="copyText('sui')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Copy
-          </button>
-        </div>
-      </div>
-
-      <!-- Bitcoin Taproot -->
-      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
-        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png" class="w-10 h-10 mr-4" alt="BTC" />
-        <div class="flex-1">
-          <h3 class="text-lg font-semibold text-white">Bitcoin (Taproot)</h3>
-          <p id="btc-tap" class="text-sm text-gray-300 break-all font-mono">
-            bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6
-          </p>
-        </div>
-        <div class="flex items-center space-x-4">
-          <canvas id="qr-btc-tap" class="bg-gray-800 rounded-lg p-2"></canvas>
-          <button onclick="copyText('btc-tap')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Copy
-          </button>
-        </div>
-      </div>
-
-      <!-- Bitcoin Segwit -->
-      <div class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
-        <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png" class="w-10 h-10 mr-4" alt="BTC" />
-        <div class="flex-1">
-          <h3 class="text-lg font-semibold text-white">Bitcoin (Segwit)</h3>
-          <p id="btc-segwit" class="text-sm text-gray-300 break-all font-mono">
-            bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6
-          </p>
-        </div>
-        <div class="flex items-center space-x-4">
-          <canvas id="qr-btc-segwit" class="bg-gray-800 rounded-lg p-2"></canvas>
-          <button onclick="copyText('btc-segwit')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Copy
-          </button>
-        </div>
+        <button onclick="copyText('btc')" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          Copy
+        </button>
       </div>
     </div>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+    function copyText(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Address copied: " + text);
+      });
+    }
+    </script>
+
 
     <!-- Chart Section -->
     <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
@@ -1144,35 +1104,39 @@
     </div>
 
     <!-- QRIS Section -->
-    <div class="text-center bg-gray-800 bg-opacity-50 p-6 rounded-xl glass-effect">
-      <h3 class="text-2xl font-semibold text-white mb-4">🧾 Pembayaran via QRIS</h3>
-      <div class="flex justify-center">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/QRIS_logo.png" 
-             alt="QRIS" 
-             class="w-48 h-48 border border-gray-700 rounded-lg shadow-lg bg-white p-4" />
+    <div class="relative text-center bg-gradient-to-br from-gray-800/80 to-gray-900/60 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl max-w-md mx-auto mt-10 transition-transform hover:scale-[1.02] duration-300">
+      <h3 class="text-3xl font-bold text-white mb-3 tracking-wide">
+        🧾 Pembayaran via <span class="text-emerald-400">QRIS</span>
+      </h3>
+      <p class="text-gray-300 mb-6 text-sm">
+        Scan kode di bawah dengan e-wallet atau m-banking untuk bayar kas kelas.<br>
+        Jangan lupa isi <span class="text-emerald-400 font-medium">form konfirmasi</span> dan sertakan bukti pembayaran!
+      </p>
+
+      <div class="flex justify-center mb-5">
+        <div class="bg-white p-3 rounded-xl shadow-lg hover:shadow-emerald-400/40 transition-shadow duration-300">
+          <img src="asset/img/QRIS.jpeg" 
+              alt="QRIS" 
+              class="rounded-lg w-60 h-auto object-contain" />
+        </div>
       </div>
-      <p class="text-gray-400 mt-4">Scan dengan e-wallet atau m-banking untuk bayar kas kelas.(blm ada untuk sementara)</p>
+
+      <a href="https://forms.gle/PwSDFv4oq8rbq88A9" 
+        target="_blank"
+        class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-all duration-300 hover:shadow-emerald-400/30">
+        Isi Form Konfirmasi 💬
+      </a>
+
+      <div class="absolute -top-3 -right-3 bg-emerald-500 text-white text-xs font-bold py-1 px-3 rounded-full shadow-lg">
+        QRIS Ready
+      </div>
     </div>
 
-    <!-- Connect Wallet Section -->
-    <div class="text-center space-y-4 bg-gray-800 bg-opacity-50 p-6 rounded-xl glass-effect">
-      <h2 class="text-xl font-semibold text-white">🔗 Sambungkan Dompet</h2>
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <button onclick="connectPhantom()" 
-                class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl hover:from-purple-500 hover:to-purple-600 transition-all duration-200 font-semibold">
-          🟣 Connect Phantom (Solana)
-        </button>
-        <button onclick="connectEVM()" 
-                class="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-orange-500 transition-all duration-200 font-semibold">
-          🦊 Connect Metamask (EVM)
-        </button>
-      </div>
-    </div>
 
     <!-- Contact Section -->
     <div class="text-center pt-6 border-t border-gray-700">
       <p class="text-gray-400 mb-2">📞 Hubungi Bendahara untuk bantuan dan konfirmasi:</p>
-      <a href="https://wa.me/6285738292836" target="_blank" 
+      <a href="https://wa.me/6285600487433" target="_blank" 
          class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-500 transition-colors font-semibold">
         <span class="mr-2">📱</span>
         WhatsApp
