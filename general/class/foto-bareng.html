@@ -62,23 +62,23 @@
     <!-- Filter Buttons -->
     <div class="pb-8 px-4">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-center gap-3">
-            <button onclick="filterPhotos('all')"
+            <button onclick="window.photoGallery.filterPhotos('all', event)"
                 class="filter-btn active px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg hover:shadow-xl hover:scale-105">
                 🌟 Semua
             </button>
-            <button onclick="filterPhotos('kegiatan')"
+            <button onclick="window.photoGallery.filterPhotos('kegiatan', event)"
                 class="filter-btn px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-slate-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-xl hover:scale-105">
                 🎉 Kegiatan
             </button>
-            <button onclick="filterPhotos('lomba')"
+            <button onclick="window.photoGallery.filterPhotos('lomba', event)"
                 class="filter-btn px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-slate-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-xl hover:scale-105">
                 🏆 Lomba
             </button>
-            <button onclick="filterPhotos('kelas')"
+            <button onclick="window.photoGallery.filterPhotos('kelas', event)"
                 class="filter-btn px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-slate-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-xl hover:scale-105">
                 📚 Kelas
             </button>
-            <button onclick="filterPhotos('event')"
+            <button onclick="window.photoGallery.filterPhotos('event', event)"
                 class="filter-btn px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-slate-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-xl hover:scale-105">
                 🎊 Event
             </button>
@@ -130,7 +130,7 @@
     <div id="photoModal" class="modal fixed inset-0 bg-black/90 backdrop-blur-md z-50 items-center justify-center p-4">
         <div
             class="relative max-w-5xl w-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700">
-            <button onclick="closeModal()"
+            <button onclick="window.photoGallery.closeModal()"
                 class="absolute top-4 right-4 z-10 w-12 h-12 bg-red-600 hover:bg-red-500 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300 hover:scale-110 shadow-lg">
                 ×
             </button>
