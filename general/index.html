@@ -1,1344 +1,719 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XI PPLG - SMKN 2 KUTA SELATAN</title>
-    <meta name="description" content="Website resmi kelas XI PPLG SMKN 2 Kuta Selatan. Temukan informasi tentang kelas, personil, peraturan, dan berita terbaru.">
-    <meta name="keywords" content="XI PPLG, SMKN 2 Kuta Selatan, kelas PPLG, berita PPLG, personil PPLG, peraturan PPLG">
-    <meta name="author" content="GusWira">
-    <link rel="icon" href=/XI-PPLG/general/asset/PPLG-LOGO.ico" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'electric-blue': '#00D4FF',
-                        'cyber-puPPLGe': '#8B5CF6',
-                        'neon-green': '#10B981',
-                        'sunset-orange': '#F59E0B',
-                        'hot-pink': '#EC4899',
-                    },
-                    animation: {
-                        'bounce-slow': 'bounce 2s infinite',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite alternate',
-                        'slide-in-left': 'slideInLeft 0.8s ease-out',
-                        'slide-in-right': 'slideInRight 0.8s ease-out',
-                        'rotate-slow': 'rotateSlow 20s linear infinite',
-                        'wiggle': 'wiggle 1s ease-in-out infinite',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .emoji {
-            color: initial !important; /* reset warna ke default sistem */
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scrollbar-width: thin;
-            scrollbar-color: #4b5563 transparent;
-        }
+    <head>
+        <!-- Meta Tags -->
+        <meta http-equiv="X-UA-Compatible" content="IE=7">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Selamat datang di halaman resmi kelas XI PPLG SMKN 2 Kuta Selatan! Temukan informasi terbaru, personil keren, peraturan seru, dan berita hangat seputar dunia pemrograman dan teknologi. Bergabunglah dengan kami untuk menjelajahi dunia digital yang penuh inovasi dan kreativitas!">
+        <meta name="keywords" content="XI PPLG, SMKN 2 Kuta Selatan, Pemrograman, Teknologi, Kelas XI, Berita Teknologi, Personil Keren, Peraturan Kelas, Inovasi Digital">
+        <meta name="author" content="Guswira, Student of XI PPLG SMKN 2 Kuta Selatan">
+        <title>XI PPLG SMKN 2 Kuta Selatan - Beranda</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: white;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="XI PPLG SMKN 2 Kuta Selatan - Beranda">
+        <meta property="og:description" content="Selamat datang di halaman resmi kelas XI PPLG SMKN 2 Kuta Selatan! Temukan informasi terbaru, personil keren, peraturan seru, dan berita hangat seputar dunia pemrograman dan teknologi. Bergabunglah dengan kami untuk menjelajahi dunia digital yang penuh inovasi dan kreativitas!">
+        <meta property="og:image" content="/XI-PPLG/general/asset/PPLG-LOGO.ico">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://zynxx24.github.io/XI-PPLG/general/">
 
-        /* Custom Color Variables */
-        :root {
-            --electric-blue: #00d4ff;
-            --cyber-purple: #8b5cf6;
-            --hot-pink: #ff006e;
-            --neon-green: #39ff14;
-            --sunset-orange: #ff7b00;
-        }
-
-        /* Glassmorphism Effect */
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .news-modern {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.6));
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
-        }
-
-        /* Loading Animation */
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--electric-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        .animate-wiggle:hover {
-            animation: wiggle 0.5s ease-in-out;
-        }
-
-        /* Responsive Grid */
-        .grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .md\\:grid-cols-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .md\\:grid-cols-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        @media (max-width: 768px) {
-            .md\\:grid-cols-2,
-            .md\\:grid-cols-3 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Reading Page Styles */
-        .reading-container {
-            max-width: 4xl;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .back-button {
-            background: linear-gradient(135deg, var(--electric-blue), var(--cyber-purple));
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 2rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .back-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
-        }
-
-        .article-header {
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .article-title {
-            font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--electric-blue), var(--hot-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .article-meta {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .meta-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .article-content {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        .content-section {
-            margin-bottom: 2rem;
-        }
-
-        .content-section h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--electric-blue);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .content-section p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #e2e8f0;
-            margin-bottom: 1rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 212, 255, 0.2));
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--neon-green);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-
-        .related-articles {
-            margin-top: 3rem;
-        }
-
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .related-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .related-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
-            border-color: var(--electric-blue);
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .reading-container {
-                padding: 1rem;
-            }
-
-            .article-content {
-                padding: 1.5rem;
-            }
-
-            .article-meta {
-                gap: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            }
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="XI PPLG SMKN 2 Kuta Selatan - Beranda">
+        <meta name="twitter:description" content="Selamat datang di halaman resmi kelas XI PPLG SMKN 2 Kuta Selatan! Temukan informasi terbaru, personil keren, peraturan seru, dan berita hangat seputar dunia pemrograman dan teknologi. Bergabunglah dengan kami untuk menjelajahi dunia digital yang penuh inovasi dan kreativitas!">   
+        <meta name="twitter:image" content="/XI-PPLG/general/asset/PPLG-LOGO.ico">
+        <meta name="twitter:creator" content="@zynxx24">
+        <meta name="twitter:domain" content="zynxx24.github.io/XI-PPLG">
+        <meta name="twitter:url" content="https://zynxx24.github.io/XI-PPLG/general/">
         
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
-            100% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 60px rgba(139, 92, 246, 0.3); }
-        }
-        
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes rotateSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .neon-text {
-            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-        
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .shape:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .shape:nth-child(2) { top: 60%; right: 10%; animation-delay: 2s; }
-        .shape:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
+        <!-- Favicon -->
+        <link rel="icon" href="/XI-PPLG/general/asset/PPLG-LOGO.ico" type="image/x-icon">
 
-        @keyframes zoom {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+        <!-- Tailwind CSS & JS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="/XI-PPLG/general/js/tailwind-config.js"></script>
+        <link rel="stylesheet" href="/XI-PPLG/general/style/home-general.css">
+        <script src="/XI-PPLG/general/js/main.js" defer></script>
+    </head>
 
-        .animate-zoom {
-            animation: zoom 3s ease-in-out infinite;
-        }
-        
-        .news-modern {
-            background: linear-gradient(145deg, #1f2937 0%, #111827 100%);
-            border-left: 4px solid transparent;
-            background-clip: padding-box;
-        }
-        
-        .news-modern:hover {
-            border-left-color: #00D4FF;
-        }
-        
-        @keyframes wiggle {
-            0%, 7% { transform: rotateZ(0); }
-            15% { transform: rotateZ(-15deg); }
-            20% { transform: rotateZ(10deg); }
-            25% { transform: rotateZ(-10deg); }
-            30% { transform: rotateZ(6deg); }
-            35% { transform: rotateZ(-4deg); }
-            40%, 100% { transform: rotateZ(0); }
-        }
-        
-        .animate-wiggle {
-            animation: wiggle 2s ease-in-out infinite;
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .news-modern {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Custom colors */
-        .bg-electric-blue { background-color: #00d4ff; }
-        .bg-hot-pink { background-color: #ff006e; }
-        .bg-neon-green { background-color: #39ff14; }
-        .bg-cyber-purple { background-color: #9d4edd; }
-        .bg-sunset-orange { background-color: #ff8500; }
-        .text-electric-blue { color: #00d4ff; }
-        .text-hot-pink { color: #ff006e; }
-        .text-neon-green { color: #39ff14; }
-        .text-cyber-purple { color: #9d4edd; }
-        .text-sunset-orange { color: #ff8500; }
-        
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #00d4ff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-slate-900 via-puPPLGe-900 to-slate-900 text-white overflow-x-hidden">
-    
-    <!-- Floating Background Shapes -->
-    <div class="floating-shapes fixed inset-0 pointer-events-none">
-        <div class="shape w-32 h-32 bg-electric-blue rounded-full"></div>
-        <div class="shape w-24 h-24 bg-hot-pink rounded-full"></div>
-        <div class="shape w-40 h-40 bg-neon-green rounded-full"></div>
-    </div>
+    <body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glassmorphism">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center animate-pulse-glow">
-                        <img src="/XI-PPLG/general/class/asset/img/PPLG-LOGO.svg" alt="svg">
-                    </div>
-                    <div>
-                        <span class="text-2xl font-bold bg-blue-500 bg-clip-text text-transparent">PPLG </span>
-                        <div class="text-xs text-gray-400">SMKN 2 KUTA SELATAN</div>
-                    </div>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="nav-link relative group">
-                        <span class="text-gray-300 group-hover:text-electric-blue transition-all duration-300">🏠 Home</span>
-                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-electric-blue group-hover:w-full transition-all duration-300"></div>
-                    </a>
-                    <a href="#tentang" class="nav-link relative group">
-                        <span class="text-gray-300 group-hover:text-neon-green transition-all duration-300">ℹ️ Tentang</span>
-                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></div>
-                    </a>
-                    <a href="#personil" class="nav-link relative group">
-                        <span class="text-gray-300 group-hover:text-sunset-orange transition-all duration-300">👥 Personil</span>
-                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-sunset-orange group-hover:w-full transition-all duration-300"></div>
-                    </a>
-                    <a href="#peraturan" class="nav-link relative group">
-                        <span class="text-gray-300 group-hover:text-hot-pink transition-all duration-300">📋 Peraturan</span>
-                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300"></div>
-                    </a>
-                    <a href="#berita" class="nav-link relative group">
-                        <span class="text-gray-300 group-hover:text-cyber-puPPLGe transition-all duration-300">📰 Berita</span>
-                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyber-puPPLGe group-hover:w-full transition-all duration-300"></div>
-                    </a>
-                </div>
-                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-electric-blue transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
+        <!-- Navigation -->
+
+        <!-- Floating Background Shapes -->
+        <div class="floating-shapes fixed inset-0 pointer-events-none">
+            <div class="shape w-32 h-32 bg-electric-blue rounded-full"></div>
+            <div class="shape w-24 h-24 bg-hot-pink rounded-full"></div>
+            <div class="shape w-40 h-40 bg-neon-green rounded-full"></div>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden glassmorphism">
-            <div class="px-4 pt-2 pb-4 space-y-2">
-                <a href="#home" class="block px-3 py-2 rounded-lg text-gray-300 hover:text-electric-blue hover:bg-white hover:bg-opacity-10">🏠 Home</a>
-                <a href="#tentang" class="block px-3 py-2 rounded-lg text-gray-300 hover:text-neon-green hover:bg-white hover:bg-opacity-10">ℹ️ Tentang</a>
-                <a href="#personil" class="block px-3 py-2 rounded-lg text-gray-300 hover:text-sunset-orange hover:bg-white hover:bg-opacity-10">👥 Personil</a>
-                <a href="#peraturan" class="block px-3 py-2 rounded-lg text-gray-300 hover:text-hot-pink hover:bg-white hover:bg-opacity-10">📋 Peraturan</a>
-                <a href="#berita" class="block px-3 py-2 rounded-lg text-gray-300 hover:text-cyber-puPPLGe hover:bg-white hover:bg-opacity-10">📰 Berita</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative">
-        <div class="text-center z-10 px-4 max-w-4xl mx-auto">
-            <div class="mb-8 relative">
-                <div class="w-40 h-40 mx-auto bg-gradient-to-r from-slate-800 to-slate-900 rounded-full flex items-center justify-center shadow-2xl animate-pulse-glow animate-bounce-slow">
-                    <div class="text-white font-black text-7xl neon-text">
-                         <img src="/XI-PPLG/general/asset/PPLG-LOGO.ico" alt="ico" class="">
-                    </div>
-                </div>
-                <div class="absolute -top-4 -right-4 w-8 h-8 bg-neon-green rounded-full animate-ping"></div>
-                <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-sunset-orange rounded-full animate-pulse"></div>
-            </div>
-            
-            <h1 class="text-7xl md:text-9xl font-black mb-6 bg-gradient-to-br from-blue-600 to-blue-900 bg-clip-text text-transparent animate-slide-in-left">
-                XI PPLG
-            </h1>
-            
-            <div class="mb-8 animate-slide-in-right">
-                <p class="text-2xl md:text-3xl font-semibold text-gray-200 mb-2">
-                    Kelas Pengembangan Perangkat Lunak dan Gim
-                </p>
-                <p class="text-lg text-gray-400">
-                    🏫 SMKN 2 KUTA SELATAN | 💻 Future Programmers | 🚀 Innovation Hub
-                </p>
-            </div>
-            
-            <!-- Enhanced Social Links -->
-            <div class="grid md:grid-cols-3 gap-6 mt-12 animate-slide-in-left">
-                <a href="https://open.spotify.com/playlist/0uC9w4nbELhR5KUXGZ6FsF?si=46devFeuSGuqP88X40xp0g" 
-                   target="_blank" 
-                   class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
-                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                    <div class="relative flex items-center justify-center space-x-3">
-                        <div class="text-3xl animate-wiggle">
-                         <img src="/XI-PPLG/general/asset/SPOTIFY-LOGO.png" alt="png" class="w-8 h-8">
+        <!-- Navbar -->
+        <nav class="fixed top-0 w-full z-50 glassmorphism">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center animate-pulse-glow">
+                            <img src="/XI-PPLG/general/class/asset/img/PPLG-LOGO.svg" alt="svg">
                         </div>
                         <div>
-                            <div class="font-black">Spotify</div>
-                            <div class="text-sm opacity-90">Playlist Kelas</div>
+                            <span class="text-2xl font-bold bg-blue-500 bg-clip-text text-transparent">PPLG </span>
+                            <div class="text-xs text-gray-400">SMKN 2 KUTA SELATAN</div>
                         </div>
                     </div>
-                </a>
-                
-                <a href="https://www.tiktok.com/@x_rpldwisaka" 
-                   target="_blank" 
-                   class="group relative overflow-hidden bg-gradient-to-r from-puPPLGe-500 to-pink-500 hover:from-puPPLGe-400 hover:to-pink-400 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
-                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                    <div class="relative flex items-center justify-center space-x-3">
-                        <div class="text-3xl animate-bounce">
-                              <img src="/XI-PPLG/general/asset/TIKTOK-LOGO.png" alt="png" class="w-8 h-8">
-                        </div>
-                        <div>
-                            <div class="font-black">TikTok</div>
-                            <div class="text-sm opacity-90">Video Seru</div>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="https://www.instagram.com/vivaceclass" 
-                   target="_blank" 
-                   class="group relative overflow-hidden bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
-                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                    <div class="relative flex items-center justify-center space-x-3">
-                        <div class="text-3xl animate-pulse">
-                               <img src="/XI-PPLG/general/asset/INSTAGRAM--LOGO.png" alt="png" class="w-8 h-8">
-                        </div>
-                        <div>
-                            <div class="font-black">Instagram</div>
-                            <div class="text-sm opacity-90">Foto & Story</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            
-            <!-- Scroll Indicator -->
-            <div class="mt-16 animate-bounce">
-                <div class="w-6 h-10 border-2 border-electric-blue rounded-full flex justify-center">
-                    <div class="w-1 h-3 bg-electric-blue rounded-full mt-2 animate-pulse"></div>
-                </div>
-                <p class="text-sm text-gray-400 mt-2">Scroll untuk lebih banyak</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tentang Section -->
-    <section id="tentang" class="py-20 bg-gradient-to-br from-slate-800 to-slate-900 relative">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-electric-blue rounded-full animate-rotate-slow"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-24 h-24 bg-hot-pink rounded-full animate-pulse"></div>
-        </div>
-        
-        <div class="max-w-6xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-neon-green to-electric-blue bg-clip-text text-transparent">
-                    <span class="emoji">🎯</span> Tentang Kita
-                </h2>
-                <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
-            </div>
-            
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8 animate-slide-in-left">
-                    <div class="glassmorphism rounded-3xl p-8 card-hover">
-                        <h3 class="text-3xl font-bold text-electric-blue mb-4 flex items-center">
-                            <span class="mr-3 text-4xl">🚀</span>
-                            Siapa Sih Kita?
-                        </h3>
-                        <p class="text-lg text-gray-200 leading-relaxed mb-4">
-                            Halo! Kita adalah geng programmer masa depan dari SMK Negeri 2 Kuta Selatan. Di sini kita belajar coding, bikin aplikasi keren, dan jadi tech-savvy yang siap menghadapi dunia digital!
-                        </p>
-                        <p class="text-lg text-gray-200 leading-relaxed">
-                            Gak cuma ngoding doang lho, kita juga asik banget orangnya. Buktinya ada playlist Spotify sama konten TikTok yang viral! 😎
-                        </p>
-                    </div>
-                    
-                    <div class="glassmorphism rounded-3xl p-8 card-hover">
-                        <h3 class="text-3xl font-bold text-hot-pink mb-4 flex items-center">
-                            <span class="mr-3 text-4xl">�</span>
-                            Kenapa PPLG?
-                        </h3>
-                        <p class="text-lg text-gray-200 leading-relaxed">
-                            Karena programming itu masa depan! Di PPLG, kita belajar bikin website, aplikasi mobile, game, dan semua hal cool tentang teknologi. Plus, prospek kerjanya mantap banget di era digital ini!
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="space-y-6 animate-slide-in-right">
-                    <div class="bg-gradient-to-br from-puPPLGe-500 to-indigo-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">💻</span>
-                            Digital & Teknologi
-                        </h3>
-                        <div class="space-y-3 text-puPPLGe-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🌐</span>
-                                <span>Pakai internet untuk hal positif (YouTube tutorial coding oke, tapi jangan streaming game terus 😜)</span>
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#home" class="nav-link relative group">
+                            <span class="text-gray-300 group-hover:text-electric-blue transition-all duration-300">🏠
+                                Home</span>
+                            <div
+                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-electric-blue group-hover:w-full transition-all duration-300">
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🌐</span>
-                                <span>Jangan hack sistem sekolah (meskipun kita udah jago coding)</span>
+                        </a>
+                        <a href="#tentang" class="nav-link relative group">
+                            <span class="text-gray-300 group-hover:text-neon-green transition-all duration-300">ℹ️
+                                Tentang</span>
+                            <div
+                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300">
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🌐</span>
-                                <span>Social media yang positif (konten yang edukatif dan inspiring)</span>
+                        </a>
+                        <a href="#personil" class="nav-link relative group">
+                            <span class="text-gray-300 group-hover:text-sunset-orange transition-all duration-300">👥
+                                Personil</span>
+                            <div
+                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-sunset-orange group-hover:w-full transition-all duration-300">
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">🤝</span>
-                            Teamwork & Attitude
-                        </h3>
-                        <div class="space-y-3 text-orange-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">❤️</span>
-                                <span>Respect sama semua orang (guru, teman, cleaning service, semua!)</span>
+                        </a>
+                        <a href="#peraturan" class="nav-link relative group">
+                            <span class="text-gray-300 group-hover:text-hot-pink transition-all duration-300">📋
+                                Peraturan</span>
+                            <div
+                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300">
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">❤️</span>
-                                <span>Kerja tim yang solid (pair programming lebih seru daripada solo)</span>
+                        </a>
+                        <a href="#berita" class="nav-link relative group">
+                            <span class="text-gray-300 group-hover:text-cyber-purple transition-all duration-300">📰
+                                Berita</span>
+                            <div
+                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyber-purple group-hover:w-full transition-all duration-300">
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">❤️</span>
-                                <span>Help teman yang stuck (sharing is caring, debug bareng lebih cepet)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Fun Rules Reminder -->
-            <div class="mt-12 text-center">
-                <div class="inline-block glassmorphism rounded-2xl p-6 card-hover">
-                    <h4 class="text-2xl font-bold text-electric-blue mb-3">� Ingat Ya!</h4>
-                    <p class="text-lg text-gray-200">Rules ini bukan buat bikin hidup susah, tapi buat bikin kita semua berkembang jadi programmer yang keren dan profesional! 🚀</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Berita Section -->
-    <section id="berita" class="py-20 relative">
-        <div class="absolute inset-0 opacity-5">
-            <div class="absolute top-10 left-10 w-20 h-20 bg-blue-500 rounded-full animate-pulse"></div>
-            <div class="absolute bottom-20 right-20 w-16 h-16 bg-pink-500 rounded-full" style="animation: bounce 2s infinite;"></div>
-            <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-green-500 rounded-full" style="animation: ping 2s infinite;"></div>
-        </div>
-        
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-br from-[var(--cyber-purple)] to-[var(--electric-blue)] bg-clip-text text-transparent">
-                    <span class="emoji">📰</span>  Berita Hot!
-                </h2>
-                <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
-            </div>
-            
-            <!-- Loading State -->
-            <div id="loading-state" class="text-center py-20">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p class="text-gray-400">Memuat berita terbaru...</p>
-            </div>
-            
-            <!-- Error State -->
-            <div id="error-state" class="hidden text-center py-20">
-                <div class="text-6xl mb-4">😵</div>
-                <p class="text-red-400 text-xl mb-4">Oops! Gagal memuat berita</p>
-                <button onclick="loadNews()" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                    🔄 Coba Lagi
-                </button>
-            </div>
-            
-            <!-- Content Container -->
-            <div id="news-content" class="hidden">
-                <!-- Khusus Lomba -->
-                <div id="lomba-section" class="mb-12"></div>
-
-                <!-- News Grid -->
-                <div id="news-grid" class="grid md:grid-cols-3 gap-8 mb-12"></div>
-                
-                <!-- Additional News -->
-                <div id="additional-news" class="grid md:grid-cols-2 gap-8 mb-12"></div>
-
-                <!-- Newsletter Subscription -->
-                <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
-                    <h3 class="text-3xl font-bold mb-4">
-                        <p class="bg-gradient-to-br from-[var(--electric-blue)] to-[var(--hot-pink)] bg-clip-text text-transparent">
-                            <span class="emoji">📬</span> Stay Updated!
-                        </p>
-                    </h3>
-                    <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari XI PPLG? Follow social media kita!</p>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a 
-                        href="#home"
-                        class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                            🔔 Ya Tinggal Follow
                         </a>
                     </div>
+                    <button id="mobile-menu-btn" class="md:hidden text-white hover:text-electric-blue transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Reading Page (Initially Hidden) -->
-    <div id="reading-page" class="hidden">
-        <div class="reading-container">
-            <button class="back-button" onclick="closeReading()">
-                ← Kembali ke Berita
-            </button>
             
-            <div id="article-content">
-                <!-- Content will be dynamically generated -->
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden glassmorphism">
+                <div class="px-4 pt-2 pb-4 space-y-2">
+                    <a href="#home"
+                        class="block px-3 py-2 rounded-lg text-gray-300 hover:text-electric-blue hover:bg-white hover:bg-opacity-10">🏠
+                        Home</a>
+                    <a href="#tentang"
+                        class="block px-3 py-2 rounded-lg text-gray-300 hover:text-neon-green hover:bg-white hover:bg-opacity-10">ℹ️
+                        Tentang</a>
+                    <a href="#personil"
+                        class="block px-3 py-2 rounded-lg text-gray-300 hover:text-sunset-orange hover:bg-white hover:bg-opacity-10">👥
+                        Personil</a>
+                    <a href="#peraturan"
+                        class="block px-3 py-2 rounded-lg text-gray-300 hover:text-hot-pink hover:bg-white hover:bg-opacity-10">📋
+                        Peraturan</a>
+                    <a href="#berita"
+                        class="block px-3 py-2 rounded-lg text-gray-300 hover:text-cyber-purple hover:bg-white hover:bg-opacity-10">📰
+                        Berita</a>
+                </div>
             </div>
-        </div>
-    </div>
+        </nav>
 
-    <script>
-        // Konfigurasi Google Sheets
-        const GOOGLE_SHEETS_CONFIG = {
-            baseUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx',
-            lombaSheet: 'lomba',
-            newsSheet: 'news'
-        };
+        <main>
+            <!-- Hero Section -->
+            <section id="home" class="min-h-screen flex items-center justify-center relative">
+                <div class="text-center z-10 px-4 max-w-4xl mx-auto">
+                    <div class="mb-8 relative">
+                        <div
+                            class="w-40 h-40 mx-auto bg-gradient-to-r from-slate-800 to-slate-900 rounded-full flex items-center justify-center shadow-2xl animate-pulse-glow animate-bounce-slow">
+                            <div class="text-white font-black text-7xl neon-text">
+                                <img src="/XI-PPLG/general/asset/PPLG-LOGO.ico" alt="ico" class="">
+                            </div>
+                        </div>
+                        <div class="absolute -top-4 -right-4 w-8 h-8 bg-neon-green rounded-full animate-ping"></div>
+                        <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-sunset-orange rounded-full animate-pulse"></div>
+                    </div>
 
-        // Global data storage
-        let globalNewsData = [];
-        let globalLombaData = [];
-
-        // Fungsi untuk fetch data dari Google Sheets
-        async function fetchSheetData(sheetName) {
-            try {
-                
-                const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-                
-                // Cari sheet berdasarkan nama atau ambil sheet pertama sebagai fallback
-                let targetSheet;
-                if (workbook.Sheets[sheetName]) {
-                    targetSheet = workbook.Sheets[sheetName];
-                } else {
-                    // Fallback: cari sheet berdasarkan index
-                    const sheetIndex = sheetName === 'lomba' ? 0 : 1;
-                    const sheetKey = workbook.SheetNames[sheetIndex];
-                    targetSheet = workbook.Sheets[sheetKey];
-                }
-                
-                if (!targetSheet) {
-                    throw new Error(`Sheet '${sheetName}' not found in workbook`);
-                }
-                
-                // Convert sheet to JSON
-                const jsonData = XLSX.utils.sheet_to_json(targetSheet, { header: 1 });
-                
-                if (jsonData.length < 2) {
-                    return [];
-                }
-                
-                const headers = jsonData[0];
-                const data = jsonData.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, index) => {
-                        obj[header] = row[index] || '';
-                    });
-                    return obj;
-                });
-                
-                // Filter hanya data yang aktif
-                const activeData = data.filter(item => item.status === 'active');
-                
-                return activeData;
-                
-            } catch (error) {
-                throw error;
-            }
-        }
-
-        // Fungsi untuk format tanggal
-        function formatDate(dateStr) {
-            try {
-                if (!dateStr) return 'Tanggal tidak tersedia';
-                const excelEpoch = new Date(1899, 11, 30);
-                var date = new Date(excelEpoch.getTime() + dateStr * 24 * 60 * 60 * 1000);
-                var date = date.toISOString().split("T")[0];
-                return date;
-            } catch {
-                return dateStr;
-            }
-        }
-
-        // Function to generate detailed content for reading page
-        function generateDetailedContent(item, type) {
-            const isLomba = type === 'lomba';
-            
-            // Generate comprehensive content based on available data
-            const sections = [];
-            
-            if (isLomba) {
-                // Lomba-specific content
-                sections.push({
-                    title: "🏆 Prestasi Gemilang",
-                    content: `Tim XI PPLG kembali menorehkan prestasi membanggakan dalam kompetisi ${item.judul || 'lomba'}. Dengan dedikasi tinggi dan kerja keras yang luar biasa, para siswa berhasil menunjukkan kemampuan terbaik mereka di hadapan peserta dari berbagai sekolah.`
-                });
-                
-                sections.push({
-                    title: "📊 Statistik Kemenangan",
-                    content: `Berikut adalah pencapaian detail yang berhasil diraih dalam kompetisi ini:`,
-                    isStats: true,
-                    stats: [
-                        { number: item.highlight_1_angka || '1st', label: item.highlight_1_label || 'Juara Umum' },
-                        { number: item.highlight_2_angka || '100%', label: item.highlight_2_label || 'Tingkat Keberhasilan' },
-                        { number: item.highlight_3_angka || '50+', label: item.highlight_3_label || 'Peserta Lain' }
-                    ]
-                });
-                
-                sections.push({
-                    title: "🌟 Dampak Prestasi",
-                    content: `Prestasi ini tidak hanya menjadi kebanggaan bagi XI PPLG, tetapi juga membuktikan kualitas pendidikan dan pembinaan yang diberikan kepada siswa. Dengan pencapaian ini, diharapkan dapat memotivasi siswa lainnya untuk terus berprestasi dan mengharumkan nama sekolah.`
-                });
-                
-                sections.push({
-                    title: "🚀 Langkah Selanjutnya",
-                    content: `Tim akan melanjutkan persiapan untuk kompetisi-kompetisi selanjutnya dengan target pencapaian yang lebih tinggi. Dukungan dari seluruh civitas akademika XI PPLG akan terus diberikan untuk memastikan prestasi yang berkelanjutan.`
-                });
-            } else {
-                // News-specific content
-                sections.push({
-                    title: "📰 Berita Utama",
-                    content: item.deskripsi || `Dalam perkembangan terbaru di XI PPLG, ${item.judul} menjadi sorotan utama yang menarik perhatian seluruh komunitas sekolah. Peristiwa ini menandai milestone penting dalam perjalanan pendidikan di institusi kami.`
-                });
-                
-                sections.push({
-                    title: "🔍 Analisis Mendalam",
-                    content: `Berdasarkan observasi dan data yang terkumpul, kejadian ini memiliki dampak signifikan terhadap dinamika kehidupan sekolah. Para stakeholder terkait telah memberikan respon positif dan dukungan penuh untuk kelanjutan program ini.`
-                });
-                
-                sections.push({
-                    title: "💡 Insight & Pembelajaran",
-                    content: `Dari peristiwa ini, kita dapat mengambil beberapa pembelajaran berharga yang akan menjadi bekal untuk pengembangan program-program selanjutnya. Kolaborasi antar tim dan dukungan komunitas terbukti menjadi kunci kesuksesan.`
-                });
-                
-                sections.push({
-                    title: "📈 Proyeksi ke Depan",
-                    content: `Dengan momentum positif yang tercipta, diharapkan inisiatif serupa dapat terus dikembangkan dan diimplementasikan. Tim akan terus melakukan evaluasi dan perbaikan untuk memastikan kualitas dan keberlanjutan program.`
-                });
-            }
-            
-            return sections;
-        }
-
-        // Function to open reading page
-        function openReading(itemId, type) {
-            const data = type === 'lomba' ? globalLombaData : globalNewsData;
-            const item = data.find(d => d.id === itemId) || data[0]; // Fallback to first item
-            
-            if (!item) {
-                return;
-            }
-            
-            const sections = generateDetailedContent(item, type);
-            const isLomba = type === 'lomba';
-            
-            const articleHTML = `
-                <div class="article-header card-hover">
-                    <h1 class="article-title">
-                        ${item.emoji || item.emoji_utama || '📰'} ${item.judul || 'Judul Tidak Tersedia'}
+                    <h1
+                        class="text-7xl md:text-9xl font-black mb-6 bg-gradient-to-br from-blue-600 to-blue-900 bg-clip-text text-transparent animate-slide-in-left">
+                        XI PPLG
                     </h1>
-                    
-                    <div class="article-meta">
-                        <div class="meta-item">
-                            <span>📅</span>
-                            <span>${formatDate(item.tanggal)}</span>
+
+                    <div class="mb-8 animate-slide-in-right">
+                        <p class="text-2xl md:text-3xl font-semibold text-gray-200 mb-2">
+                            Kelas Pengembangan Perangkat Lunak dan Gim
+                        </p>
+                        <p class="text-lg text-gray-400">
+                            🏫 SMKN 2 KUTA SELATAN | 💻 Future Programmers | 🚀 Innovation Hub
+                        </p>
+                    </div>
+
+                    <!-- Enhanced Social Links -->
+                    <div class="grid md:grid-cols-3 gap-6 mt-12 animate-slide-in-left">
+                        <a href="https://open.spotify.com/playlist/0uC9w4nbELhR5KUXGZ6FsF?si=46devFeuSGuqP88X40xp0g"
+                            target="_blank"
+                            class="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
+                            <div
+                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                            </div>
+                            <div class="relative flex items-center justify-center space-x-3">
+                                <div class="text-3xl animate-wiggle">
+                                    <img src="/XI-PPLG/general/asset/SPOTIFY-LOGO.png" alt="png" class="w-8 h-8">
+                                </div>
+                                <div>
+                                    <div class="font-black">Spotify</div>
+                                    <div class="text-sm opacity-90">Playlist Kelas</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.tiktok.com/@x_rpldwisaka" target="_blank"
+                            class="group relative overflow-hidden bg-gradient-to-r from-puPPLGe-500 to-pink-500 hover:from-puPPLGe-400 hover:to-pink-400 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
+                            <div
+                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                            </div>
+                            <div class="relative flex items-center justify-center space-x-3">
+                                <div class="text-3xl animate-bounce">
+                                    <img src="/XI-PPLG/general/asset/TIKTOK-LOGO.png" alt="png" class="w-8 h-8">
+                                </div>
+                                <div>
+                                    <div class="font-black">TikTok</div>
+                                    <div class="text-sm opacity-90">Video Seru</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.instagram.com/vivaceclass" target="_blank"
+                            class="group relative overflow-hidden bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 text-white py-6 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:rotate-1 card-hover">
+                            <div
+                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                            </div>
+                            <div class="relative flex items-center justify-center space-x-3">
+                                <div class="text-3xl animate-pulse">
+                                    <img src="/XI-PPLG/general/asset/INSTAGRAM--LOGO.png" alt="png" class="w-8 h-8">
+                                </div>
+                                <div>
+                                    <div class="font-black">Instagram</div>
+                                    <div class="text-sm opacity-90">Foto & Story</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Scroll Indicator -->
+                    <div class="mt-16 animate-bounce">
+                        <div class="w-6 h-10 border-2 border-electric-blue rounded-full flex justify-center">
+                            <div class="w-1 h-3 bg-electric-blue rounded-full mt-2 animate-pulse"></div>
                         </div>
-                        <div class="meta-item">
-                            <span>👤</span>
-                            <span>${item.reporter || item.tim || 'Tim XI PPLG'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span>📍</span>
-                            <span>${item.lokasi || 'XI PPLG'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span>⏱️</span>
-                            <span>${item.estimasi_baca || '5 menit baca'}</span>
-                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Scroll untuk lebih banyak</p>
                     </div>
                 </div>
-                
-                <div class="article-content card-hover">
-                    ${sections.map(section => {
-                        if (section.isStats) {
-                            return `
-                                <div class="content-section">
-                                    <h3>${section.title}</h3>
-                                    <p>${section.content}</p>
-                                    <div class="stats-grid">
-                                        ${section.stats.map(stat => `
-                                            <div class="stat-card">
-                                                <span class="stat-number">${stat.number}</span>
-                                                <span class="stat-label">${stat.label}</span>
-                                            </div>
-                                        `).join('')}
+            </section>
+
+            <!-- Tentang Section -->
+            <section id="tentang" class="py-20 bg-gradient-to-br from-slate-800 to-slate-900 relative">
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-electric-blue rounded-full animate-rotate-slow"></div>
+                    <div class="absolute bottom-1/4 right-1/4 w-24 h-24 bg-hot-pink rounded-full animate-pulse"></div>
+                </div>
+
+                <div class="max-w-6xl mx-auto px-4 relative z-10">
+                    <div class="text-center mb-16">
+                        <h2
+                            class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-neon-green to-electric-blue bg-clip-text text-transparent">
+                            <span class="emoji">🎯</span> Tentang Kita
+                        </h2>
+                        <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="space-y-8 animate-slide-in-left">
+                            <div class="glassmorphism rounded-3xl p-8 card-hover">
+                                <h3 class="text-3xl font-bold text-electric-blue mb-4 flex items-center">
+                                    <span class="mr-3 text-4xl">🚀</span>
+                                    Siapa Sih Kita?
+                                </h3>
+                                <p class="text-lg text-gray-200 leading-relaxed mb-4">
+                                    Halo! Kita adalah geng programmer masa depan dari SMK Negeri 2 Kuta Selatan. Di sini kita
+                                    belajar coding, bikin aplikasi keren, dan jadi tech-savvy yang siap menghadapi dunia
+                                    digital!
+                                </p>
+                                <p class="text-lg text-gray-200 leading-relaxed">
+                                    Gak cuma ngoding doang lho, kita juga asik banget orangnya. Buktinya ada playlist Spotify
+                                    sama konten TikTok yang viral! 😎
+                                </p>
+                            </div>
+
+                            <div class="glassmorphism rounded-3xl p-8 card-hover">
+                                <h3 class="text-3xl font-bold text-hot-pink mb-4 flex items-center">
+                                    <span class="mr-3 text-4xl">�</span>
+                                    Kenapa PPLG?
+                                </h3>
+                                <p class="text-lg text-gray-200 leading-relaxed">
+                                    Karena programming itu masa depan! Di PPLG, kita belajar bikin website, aplikasi mobile,
+                                    game, dan semua hal cool tentang teknologi. Plus, prospek kerjanya mantap banget di era
+                                    digital ini!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 animate-slide-in-right">
+                            <div class="bg-gradient-to-br from-puPPLGe-500 to-indigo-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">💻</span>
+                                    Digital & Teknologi
+                                </h3>
+                                <div class="space-y-3 text-puPPLGe-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🌐</span>
+                                        <span>Pakai internet untuk hal positif (YouTube tutorial coding oke, tapi jangan
+                                            streaming game terus 😜)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🌐</span>
+                                        <span>Jangan hack sistem sekolah (meskipun kita udah jago coding)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🌐</span>
+                                        <span>Social media yang positif (konten yang edukatif dan inspiring)</span>
                                     </div>
                                 </div>
-                            `;
-                        } else {
-                            return `
-                                <div class="content-section">
-                                    <h3>${section.title}</h3>
-                                    <p>${section.content}</p>
-                                </div>
-                            `;
-                        }
-                    }).join('')}
-                    
-                    ${isLomba ? `
-                        <div class="highlight-box card-hover">
-                            <h3>🎉 Kutipan Istimewa</h3>
-                            <p style="font-style: italic; font-size: 1.2rem; text-align: center; color: var(--neon-green);">
-                                "Prestasi ini adalah bukti nyata dari dedikasi dan kerja keras seluruh tim. 
-                                Kami bangga dapat mengharumkan nama XI PPLG di tingkat yang lebih luas."
-                            </p>
-                            <p style="text-align: center; margin-top: 1rem; color: #94a3b8;">
-                                - ${item.reporter || 'Pembina Tim XI PPLG'}
-                            </p>
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <div class="related-articles">
-                    <h3 style="color: var(--electric-blue); font-size: 1.5rem; margin-bottom: 1rem;">
-                        📚 Artikel Terkait
-                    </h3>
-                    <div class="related-grid" id="related-articles-grid">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('article-content').innerHTML = articleHTML;
-            
-            // Populate related articles
-            populateRelatedArticles(item, type);
-            
-            // Show reading page
-            document.getElementById('berita').style.display = 'none';
-            document.getElementById('reading-page').classList.remove('hidden');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
+                            </div>
 
-        // Function to populate related articles
-        function populateRelatedArticles(currentItem, currentType) {
-            const relatedContainer = document.getElementById('related-articles-grid');
-            
-            // Get other articles (mix of lomba and news, excluding current)
-            const allArticles = [...globalLombaData, ...globalNewsData]
-                .filter(item => item.id !== currentItem.id)
-                .slice(0, 3);
-            
-            relatedContainer.innerHTML = allArticles.map(article => {
-                const articleType = globalLombaData.includes(article) ? 'lomba' : 'news';
-                return `
-                    <div class="related-card card-hover" onclick="openReading('${article.id}', '${articleType}')">
-                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                            <span style="background: ${articleType === 'lomba' ? 'linear-gradient(135deg, #ff006e, #ff7b00)' : 'linear-gradient(135deg, #00d4ff, #8b5cf6)'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; font-weight: bold;">
-                                ${articleType === 'lomba' ? '🏆 LOMBA' : '📰 NEWS'}
-                            </span>
-                        </div>
-                        <h4 style="color: white; font-weight: bold; margin-bottom: 0.5rem;">
-                            ${article.emoji || article.emoji_utama || '📝'} ${article.judul || 'Artikel Menarik'}
-                        </h4>
-                        <p style="color: #94a3b8; font-size: 0.9rem;">
-                            ${(article.deskripsi || 'Baca artikel menarik lainnya dari XI PPLG').substring(0, 100)}...
-                        </p>
-                        <div style="margin-top: 1rem; color: var(--electric-blue); font-size: 0.8rem;">
-                            📅 ${formatDate(article.tanggal)} • ⏱️ ${article.estimasi_baca || '5 menit baca'}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Function to close reading page
-        function closeReading() {
-            document.getElementById('reading-page').classList.add('hidden');
-            document.getElementById('berita').style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        // Modified render functions to include unique IDs and reading links
-        function renderLombaSection(lombaData) {
-            const lombaContainer = document.getElementById('lomba-section');
-            
-            if (!lombaData || lombaData.length === 0) {
-                lombaContainer.innerHTML = '';
-                return;
-            }
-            
-            const lomba = lombaData[0]; // Ambil data lomba terbaru
-            lomba.id = lomba.id || 'lomba-' + Date.now(); // Ensure ID exists
-            
-            lombaContainer.innerHTML = `
-                <div class="bg-gradient-to-r from-red-600 to-pink-600 rounded-3xl overflow-hidden news-modern card-hover group">
-                    <div class="p-8">
-                        <div class="flex items-center mb-6">
-                            <span class="bg-white text-red-600 px-4 py-2 rounded-full text-sm font-black mr-4 animate-pulse">
-                                🔥 BREAKING NEWS
-                            </span>
-                            <span class="text-pink-100 text-sm bg-white bg-opacity-20 px-3 py-1 rounded-full">${formatDate(lomba.tanggal)}</span>
-                        </div>
-                        
-                        <h3 class="text-4xl md:text-5xl font-black text-white mb-6 group-hover:text-yellow-200 transition-colors">
-                            ${lomba.emoji || '🏆'} ${lomba.judul || 'Judul tidak tersedia'}
-                        </h3>
-                        
-                        <p class="text-xl text-pink-50 leading-relaxed mb-6">
-                            ${lomba.deskripsi || 'Deskripsi tidak tersedia'}
-                        </p>
-                        
-                        <div class="bg-white bg-opacity-20 rounded-2xl p-6 mb-6">
-                            <h4 class="text-lg font-bold text-white mb-3">💫 Highlight Kemenangan:</h4>
-                            <div class="grid md:grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_1_angka || '0'}</div>
-                                    <div class="text-pink-100 text-sm">${lomba.highlight_1_label || 'Label 1'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_2_angka || '0'}</div>
-                                    <div class="text-pink-100 text-sm">${lomba.highlight_2_label || 'Label 2'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-yellow-300">${lomba.highlight_3_angka || '0'}</div>
-                                    <div class="text-pink-100 text-sm">${lomba.highlight_3_label || 'Label 3'}</div>
+                            <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">🤝</span>
+                                    Teamwork & Attitude
+                                </h3>
+                                <div class="space-y-3 text-orange-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">❤️</span>
+                                        <span>Respect sama semua orang (guru, teman, cleaning service, semua!)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">❤️</span>
+                                        <span>Kerja tim yang solid (pair programming lebih seru daripada solo)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">❤️</span>
+                                        <span>Help teman yang stuck (sharing is caring, debug bareng lebih cepet)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-red-600 font-black text-lg">📝</span>
-                                </div>
-                                <div>
-                                    <div class="text-white font-bold">${lomba.reporter || 'Reporter'}</div>
-                                    <div class="text-pink-200 text-sm">${lomba.lokasi || 'Lokasi'}</div>
-                                </div>
-                            </div>
-                            <button onclick="openReading('${lomba.id}', 'lomba')" class="bg-white text-red-600 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105">
-                                Baca Selengkapnya 🚀
-                            </button>
+                    </div>
+
+                    <!-- Fun Rules Reminder -->
+                    <div class="mt-12 text-center">
+                        <div class="inline-block glassmorphism rounded-2xl p-6 card-hover">
+                            <h4 class="text-2xl font-bold text-electric-blue mb-3">� Ingat Ya!</h4>
+                            <p class="text-lg text-gray-200">Rules ini bukan buat bikin hidup susah, tapi buat bikin kita semua
+                                berkembang jadi programmer yang keren dan profesional! 🚀</p>
                         </div>
                     </div>
                 </div>
-            `;
-        }
+            </section>
 
-        // Fungsi untuk render news grid
-        function renderNewsGrid(newsData) {
-            const gridContainer = document.getElementById('news-grid');
-            const gridNews = newsData.filter(news => news.layout_type === 'grid').slice(0, 3);
-            
-            
-            if (gridNews.length === 0) {
-                gridContainer.innerHTML = '<div class="col-span-3 text-center text-gray-400">Tidak ada berita grid tersedia</div>';
-                return;
-            }
-            
-            gridContainer.innerHTML = gridNews.map(news => {
-                news.id = news.id || 'news-' + Date.now() + Math.random(); // Ensure unique ID
-                return `
-                    <article class="news-modern rounded-2xl overflow-hidden card-hover group cursor-pointer" onclick="openReading('${news.id}', 'news')">
-                        <div class="p-6">
-                            <div class="flex items-center mb-4">
-                                <span class="bg-gradient-to-r ${news.kategori_warna || 'from-blue-500 to-cyan-500'} text-white px-3 py-1 rounded-full text-xs font-bold mr-3">
-                                    ${news.kategori_emoji || '📰'} ${news.kategori || 'NEWS'}
-                                </span>
-                                <span class="text-gray-400 text-sm">${formatDate(news.tanggal)}</span>
-                            </div>
-                            
-                            <h4 class="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
-                                ${news.emoji_utama || '📝'} ${news.judul || 'Judul tidak tersedia'}
-                            </h4>
-                            
-                            <p class="text-gray-400 text-sm mb-4 leading-relaxed">
-                                ${news.deskripsi || 'Deskripsi tidak tersedia'}
-                            </p>
-                            
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center space-x-2">
-                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                    <span class="text-blue-400 text-sm font-semibold">${news.tim || 'Tim'}</span>
-                                </div>
-                                <div class="flex items-center space-x-2 text-gray-500 text-xs">
-                                    <span>⏱️</span>
-                                    <span>${news.estimasi_baca || '5 menit baca'}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 pt-4 border-t border-gray-600">
-                                <button class="text-blue-400 text-sm font-semibold hover:text-blue-300 transition-colors">
-                                    Baca Selengkapnya →
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            }).join('');
-        }
+            <!-- Berita Section -->
+            <section id="berita" class="py-20 relative">
+                <div class="absolute inset-0 opacity-5">
+                    <div class="absolute top-10 left-10 w-20 h-20 bg-blue-500 rounded-full animate-pulse"></div>
+                    <div class="absolute bottom-20 right-20 w-16 h-16 bg-pink-500 rounded-full"
+                        style="animation: bounce 2s infinite;"></div>
+                    <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-green-500 rounded-full"
+                        style="animation: ping 2s infinite;"></div>
+                </div>
 
-        // Fungsi untuk render additional news
-        function renderAdditionalNews(newsData) {
-            const additionalContainer = document.getElementById('additional-news');
-            const additionalNews = newsData.filter(news => news.layout_type === 'additional').slice(0, 2);
-            
-            
-            if (additionalNews.length === 0) {
-                additionalContainer.innerHTML = '<div class="col-span-2 text-center text-gray-400">Tidak ada berita additional tersedia</div>';
-                return;
-            }
-            
-            additionalContainer.innerHTML = additionalNews.map(news => {
-                news.id = news.id || 'news-add-' + Date.now() + Math.random(); // Ensure unique ID
-                return `
-                    <article class="glassmorphism rounded-2xl p-6 card-hover group cursor-pointer" onclick="openReading('${news.id}', 'news')">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-16 h-16 bg-gradient-to-r ${news.icon_bg_gradient || 'from-yellow-400 to-orange-500'} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:animate-wiggle">
-                                <span class="text-white text-2xl">${news.icon_emoji || '📰'}</span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold mr-2">${news.kategori || 'NEWS'}</span>
-                                    <span class="text-gray-400 text-xs">${formatDate(news.tanggal)}</span>
-                                </div>
-                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
-                                    ${news.judul || 'Judul tidak tersedia'}
-                                </h4>
-                                <p class="text-gray-300 text-sm mb-3">
-                                    ${news.deskripsi || 'Deskripsi tidak tersedia'}
+                <div class="max-w-7xl mx-auto px-4 relative z-10">
+                    <div class="text-center mb-16">
+                        <h2
+                            class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-br from-[var(--cyber-purple)] to-[var(--electric-blue)] bg-clip-text text-transparent">
+                            <span class="emoji">📰</span> Berita Hot!
+                        </h2>
+                        <p class="text-xl text-gray-300">Update terbaru dari dunia XI PPLG yang selalu happening!</p>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loading-state" class="text-center py-20">
+                        <div class="loading-spinner mx-auto mb-4"></div>
+                        <p class="text-gray-400">Memuat berita terbaru...</p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div id="error-state" class="hidden text-center py-20">
+                        <div class="text-6xl mb-4">😵</div>
+                        <p class="text-red-400 text-xl mb-4">Oops! Gagal memuat berita</p>
+                        <button onclick="loadNews()"
+                            class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                            🔄 Coba Lagi
+                        </button>
+                    </div>
+
+                    <!-- Content Container -->
+                    <div id="news-content" class="hidden">
+                        <!-- Khusus Lomba -->
+                        <div id="lomba-section" class="mb-12"></div>
+
+                        <!-- News Grid -->
+                        <div id="news-grid" class="grid md:grid-cols-3 gap-8 mb-12"></div>
+
+                        <!-- Additional News -->
+                        <div id="additional-news" class="grid md:grid-cols-2 gap-8 mb-12"></div>
+
+                        <!-- Newsletter Subscription -->
+                        <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
+                            <h3 class="text-3xl font-bold mb-4">
+                                <p
+                                    class="bg-gradient-to-br from-[var(--electric-blue)] to-[var(--hot-pink)] bg-clip-text text-transparent">
+                                    <span class="emoji">📬</span> Stay Updated!
                                 </p>
-                                <button class="text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors">
-                                    Baca Artikel →
-                                </button>
+                            </h3>
+                            <p class="text-gray-300 mb-6">Gak mau ketinggalan berita seru dari XI PPLG? Follow social media
+                                kita!</p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <a href="#home"
+                                    class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                                    🔔 Ya Tinggal Follow
+                                </a>
                             </div>
                         </div>
-                    </article>
-                `;
-            }).join('');
-        }
+                    </div>
+                </div>
+            </section>
 
-        // Fungsi utama untuk load semua data
-        async function loadNews() {
-            const loadingState = document.getElementById('loading-state');
-            const errorState = document.getElementById('error-state');
-            const newsContent = document.getElementById('news-content');
-            
-            // Show loading
-            loadingState.classList.remove('hidden');
-            errorState.classList.add('hidden');
-            newsContent.classList.add('hidden');
-            
-            try {
-                
-                // Fetch data parallel
-                const [lombaData, newsData] = await Promise.all([
-                    fetchSheetData('lomba'),
-                    fetchSheetData('news')
-                ]);
-                
-                // Store data globally for reading page
-                globalLombaData = lombaData;
-                globalNewsData = newsData;
-                
-                // Add unique IDs if not present
-                globalLombaData.forEach((item, index) => {
-                    if (!item.id) item.id = 'lomba-' + index + '-' + Date.now();
-                });
-                globalNewsData.forEach((item, index) => {
-                    if (!item.id) item.id = 'news-' + index + '-' + Date.now();
-                });
-                
-                // Sort news by date (newest first)
-                if (newsData.length > 0) {
-                    newsData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                }
-                
-                // Render semua section
-                renderLombaSection(lombaData);
-                renderNewsGrid(newsData);
-                renderAdditionalNews(newsData);
-                
-                // Show content
-                loadingState.classList.add('hidden');
-                newsContent.classList.remove('hidden');
-                
-                
-            } catch (error) {
-                
-                // Show error state
-                loadingState.classList.add('hidden');
-                errorState.classList.remove('hidden');
-            }
-        }
+            <!-- Reading Page (Initially Hidden) -->
+            <div id="reading-page" class="hidden">
+                <div class="reading-container">
+                    <button class="back-button" onclick="closeReading()">
+                        ← Kembali ke Berita
+                    </button>
 
-        // Test function untuk debugging
-        async function testFetch() {
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
-                
-                if (response.ok) {
-                    const arrayBuffer = await response.arrayBuffer();
-                    const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-                }
-            } catch (error) {
-            }
-        }
+                    <div id="article-content">
+                        <!-- Content will be dynamically generated -->
+                    </div>
+                </div>
+            </div>
 
-        // Keyboard navigation for reading page
-        document.addEventListener('keydown', function(e) {
-            const readingPage = document.getElementById('reading-page');
-            if (!readingPage.classList.contains('hidden')) {
-                if (e.key === 'Escape') {
-                    closeReading();
-                }
-            }
-        });
+            <!-- Stats Section -->
+            <section id="stats">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="text-center p-6 bg-gradient-to-br from-electric-blue to-cyber-puPPLGe rounded-2xl card-hover">
+                        <div class="text-4xl font-black text-white mb-2">30+</div>
+                        <div class="text-white font-semibold">Siswa Keren</div>
+                        <div class="text-xs text-blue-200 mt-1">Yang siap jadi programmer handal</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-neon-green to-emerald-600 rounded-2xl card-hover">
+                        <div class="text-4xl font-black text-white mb-2">10+</div>
+                        <div class="text-white font-semibold">Proyek Cool</div>
+                        <div class="text-xs text-green-200 mt-1">Website & aplikasi yang udah dibuat</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-sunset-orange to-yellow-500 rounded-2xl card-hover">
+                        <div class="text-4xl font-black text-white mb-2">100%</div>
+                        <div class="text-white font-semibold">Semangat</div>
+                        <div class="text-xs text-orange-200 mt-1">Dalam belajar dan berkembang</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-hot-pink to-puPPLGe-600 rounded-2xl card-hover">
+                        <div class="text-4xl font-black text-white mb-2">∞</div>
+                        <div class="text-white font-semibold">Kreativitas</div>
+                        <div class="text-xs text-pink-200 mt-1">Ide-ide fresh yang gak ada habisnya</div>
+                    </div>
+                </div>
 
-        // Auto refresh setiap 5 menit
-        setInterval(loadNews, 5 * 60 * 1000);
+                <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
+                    <h4 class="text-2xl font-bold text-cyber-puPPLGe mb-4">🎯 Goal Kita</h4>
+                    <p class="text-gray-200">Jadi programmer yang gak cuma jago ngoding, tapi juga punya soft skill yang mantap dan siap
+                        kerja di perusahaan teknologi terbaik!</p>
+                </div>
+                </div>
+                </div>
+                </div>
+            </section>
 
-        // Load data saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', () => {
-            loadNews();
-        });
+            <!-- Personil Section -->
+            <section id="personil" class="py-20 bg-gradient-to-br from-indigo-900 to-puPPLGe-900 relative">
+                <div class="max-w-6xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2
+                            class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-sunset-orange to-hot-pink bg-clip-text text-transparent">
+                            <span class="emoji">👥</span> Tim Kece Kita
+                        </h2>
+                        <p class="text-xl text-gray-300">Meet the squad yang bikin kelas makin seru!</p>
+                    </div>
 
-        // Expose functions to global scope
-        window.testFetch = testFetch;
-        window.loadNews = loadNews;
-        window.openReading = openReading;
-        window.closeReading = closeReading;
-    </script>
+                    <div class="max-w-6xl mx-auto">
+                        <div class="grid md:grid-cols-2 gap-8 mb-12">
+                            <!-- Wali Kelas Card -->
+                            <div
+                                class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl p-8 text-center transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl group relative overflow-hidden">
+                                <!-- Shimmer overlay -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                                </div>
 
-    <!-- Footer -->
+                                <!-- Photo Container -->
+                                <div
+                                    class="w-32 h-32 bg-white rounded-full mx-auto mb-6 shadow-2xl ring-4 ring-white/30 group-hover:ring-white/60 transition-all duration-300 relative overflow-hidden">
+                                    <!-- Replace this placeholder with your actual SVG -->
+                                    <div
+                                        class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <img src="/XI-PPLG/general/asset/FOTO-WALI-KELAS.svg" alt="Teacher"
+                                            class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 relative z-10">
+                                    <h3 class="text-3xl font-bold text-white drop-shadow-lg">Restu Wiranata</h3>
+                                    <div
+                                        class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+                                        <span class="text-xl mr-2">🎓</span>
+                                        <p class="text-white font-semibold">Wali Kelas XI PPLG</p>
+                                    </div>
+                                    <p class="text-sm text-orange-50 leading-relaxed pt-2 px-4 max-w-xs mx-auto">
+                                        Yang sabar ngajarin kita dari nol sampai jadi programmer handal.
+                                        Thanks banget untuk semua ilmu dan bimbingannya! 🙏
+                                    </p>
+                                </div>
+
+                                <!-- Decorative floating elements -->
+                                <div class="absolute top-4 right-4 w-3 h-3 bg-white/20 rounded-full animate-ping"></div>
+                                <div class="absolute top-6 right-6 w-2 h-2 bg-white/30 rounded-full"></div>
+                                <div class="absolute bottom-6 left-4 w-4 h-4 bg-white/10 rounded-full animate-pulse"></div>
+                            </div>
+
+                            <!-- Guru Jurusan Card -->
+                            <div
+                                class="bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-3xl p-8 text-center transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl group relative overflow-hidden">
+                                <!-- Shimmer overlay -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                                </div>
+
+                                <!-- Photo Container -->
+                                <div
+                                    class="w-32 h-32 bg-white rounded-full mx-auto mb-6 shadow-2xl ring-4 ring-white/30 group-hover:ring-white/60 transition-all duration-300 relative overflow-hidden">
+                                    <!-- Replace this placeholder with your actual SVG -->
+                                    <div
+                                        class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <img src="/XI-PPLG/general/asset/FOTO-GURU-JURUSAN.svg" alt="Teacher"
+                                            class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 relative z-10">
+                                    <h3 class="text-3xl font-bold text-white drop-shadow-lg">Winda Widiasmini</h3>
+                                    <div
+                                        class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+                                        <span class="text-xl mr-2">💻</span>
+                                        <p class="text-white font-semibold">Guru Jurusan PPLG</p>
+                                    </div>
+                                    <p class="text-sm text-blue-50 leading-relaxed pt-2 px-4 max-w-xs mx-auto">
+                                        Mentor terbaik yang selalu mendorong kita untuk terus berkembang.
+                                        Terima kasih sudah sharing pengalaman dan tips programming! 🚀
+                                    </p>
+                                </div>
+
+                                <!-- Decorative floating elements -->
+                                <div class="absolute top-4 right-4 w-3 h-3 bg-white/20 rounded-full animate-ping"></div>
+                                <div class="absolute top-6 right-6 w-2 h-2 bg-white/30 rounded-full"></div>
+                                <div class="absolute bottom-6 left-4 w-4 h-4 bg-white/10 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- Fun Stats -->
+                        <div class="glassmorphism rounded-3xl p-8 card-hover">
+                            <h3 class="text-3xl font-bold text-center text-cyber-puPPLGe mb-8">🎉 Fun Facts Tentang Kita</h3>
+                            <div class="grid md:grid-cols-4 gap-6 text-center">
+                                <div>
+                                    <div class="text-4xl mb-2">☕</div>
+                                    <div class="text-2xl font-bold text-electric-blue">500+</div>
+                                    <div class="text-gray-300">Cup kopi yang udah diminum sambil bergadang</div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl mb-2">🐛</div>
+                                    <div class="text-2xl font-bold text-hot-pink">1000+</div>
+                                    <div class="text-gray-300">Msalah yang berhasil kita fix </div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl mb-2">💻</div>
+                                    <div class="text-2xl font-bold text-neon-green">24/7</div>
+                                    <div class="text-gray-300">Belajar setiap waktu</div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl mb-2">🏆</div>
+                                    <div class="text-2xl font-bold text-sunset-orange">∞</div>
+                                    <div class="text-gray-300">Prestasi yang bakal kita raih</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- Peraturan Section -->
+            <section id="peraturan" class="py-20 bg-gradient-to-br from-gray-900 to-black relative">
+                <div class="max-w-6xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2
+                            class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-hot-pink to-cyber-purple bg-clip-text text-transparent">
+                            <span class="emoji">📋</span> Aturan Main
+                        </h2>
+                        <p class="text-xl text-gray-300">Rules yang bikin kita tetap solid dan sukses bareng!</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6 animate-slide-in-left">
+                            <div class="bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">⏰</span>
+                                    Jadwal & Kedisiplinan
+                                </h3>
+                                <div class="space-y-3 text-red-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">✅</span>
+                                        <span>Datang tepat waktu (jangan sampai telat, nanti ketinggalan meme pagi!)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">✅</span>
+                                        <span>Pakai seragam yang rapi (biar keliatan professional meski masih remaja)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">✅</span>
+                                        <span>Jaga kebersihan kelas (coding environment yang bersih = mind yang clear)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">📚</span>
+                                    Belajar & Akademik
+                                </h3>
+                                <div class="space-y-3 text-green-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">💪</span>
+                                        <span>Kerjain tugas dengan serius (deadline is real, guys!)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">💪</span>
+                                        <span>Aktif di kelas (jangan malu buat nanya atau sharing ide)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">💪</span>
+                                        <span>Hati-hati sama komputer lab (ini bukan PC gaming center 😅)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 animate-slide-in-right">
+                            <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">🤝</span>
+                                    Etika & Kerjasama
+                                </h3>
+                                <div class="space-y-3 text-blue-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🤗</span>
+                                        <span>Hargai pendapat teman (setiap orang punya perspektif unik)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🤗</span>
+                                        <span>Jangan bully atau merendahkan (kita semua belajar bareng)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🤗</span>
+                                        <span>Support satu sama lain (kita tim, bukan kompetitor!)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-500 to-puPPLGe-600 rounded-3xl p-8 card-hover group">
+                                <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                                    <span class="mr-4 text-4xl group-hover:animate-wiggle">🎉</span>
+                                    Kegiatan & Event
+                                </h3>
+                                <div class="space-y-3 text-purple-50">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🎊</span>
+                                        <span>Ikut semua event kelas (dari coding competition sampai fun games)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🎊</span>
+                                        <span>Jangan lupa bawa snack (karena ngoding itu bikin lapar!)</span>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">🎊</span>
+                                        <span>Share momen seru di social media (biar semua tau betapa kerennya kita!)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+
     <footer class="bg-gradient-to-r from-gray-900 via-slate-900 to-black py-16 relative">
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-electric-blue via-hot-pink to-neon-green"></div>
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-electric-blue via-hot-pink to-neon-green">
+            </div>
         </div>
-        
+
         <div class="max-w-6xl mx-auto px-4 relative z-10">
             <div class="text-center">
                 <div class="flex items-center justify-center space-x-4 mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse-glow">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse-glow">
                         <div class="text-white font-black text-7xl neon-text">
                             <img src="/XI-PPLG/general/asset/PPLG-LOGO.ico" alt="ico" class="">
                         </div>
                     </div>
                     <div class="text-left">
-                        <span class="text-4xl font-black bg-gradient-to-br from-blue-600 bg-clip-text text-transparent">PPLG</span>
+                        <span
+                            class="text-4xl font-black bg-gradient-to-br from-blue-600 bg-clip-text text-transparent">PPLG</span>
                         <div class="text-gray-400 text-sm">Coding • Creating • Connecting</div>
                     </div>
                 </div>
-                
+
                 <p class="text-xl text-gray-300 mb-2 font-semibold">🏫 SMKN 2 KUTA SELATAN</p>
                 <p class="text-gray-400 mb-8">Kelas X Rekayasa Perangkat Lunak - Where Dreams Meet Code 💻✨</p>
-                
+
                 <!-- More Feature -->
                 <div class="flex justify-center space-x-8 mb-8">
-                    <a href="/XI-PPLG/general/class/kas-01.html" target="_blank" 
-                       class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
-                        <div class="w-12 h-12 bg-gradient-to-r from-puPPLGe-500 to-pink-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <a href="/XI-PPLG/general/class/data-kas.html" target="_blank"
+                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-puPPLGe-500 to-pink-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                             <span class="text-white text-xl">💸</span>
                         </div>
                         <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Donatur </span>
                     </a>
-                    
-                    <a href="/XI-PPLG/general/class/schedule-01.html" target="_blank"
-                       class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
-                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+
+                    <a href="/XI-PPLG/general/class/jadwal-pelajaran.html" target="_blank"
+                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                             <span class="text-white text-xl">📚</span>
                         </div>
                         <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Jadwal Sekolah </span>
                     </a>
-                    
-                    <a href="/XI-PPLG/general/class/fotbar-01.html" target="_blank"
-                       class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
-                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+
+                    <a href="/XI-PPLG/general/class/foto-bareng.html" target="_blank"
+                        class="group flex flex-col items-center p-4 rounded-2xl hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                             <span class="text-white text-xl">👨‍👨‍👧‍👧</span>
                         </div>
                         <span class="text-gray-400 group-hover:text-white text-sm font-semibold">Foto Bareng </span>
@@ -1347,447 +722,4 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Mobile menu toggle with animation
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.style.transform = mobileMenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
-        });
-
-        // Enhanced smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    mobileMenu.classList.add('hidden');
-                    mobileMenuBtn.style.transform = 'rotate(0deg)';
-                }
-            });
-        });
-
-        // Advanced scroll effects
-        let ticking = false;
-        
-        function updateAnimations() {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            
-            // Parallax for floating shapes
-            const shapes = document.querySelectorAll('.shape');
-            shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.3;
-                shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-            });
-            
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateAnimations);
-                ticking = true;
-            }
-        });
-
-        // Interactive card effects
-        document.querySelectorAll('.card-hover').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-12px) scale(1.03) rotate(1deg)';
-                this.style.boxShadow = '0 25px 50px -12px rgba(0, 212, 255, 0.3)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1) rotate(0deg)';
-                this.style.boxShadow = 'none';
-            });
-        });
-
-        // Random emoji animations
-        function createFloatingEmoji() {
-            const emojis = ['💻', '🚀', '⭐', '💡', '🎯', '🔥', '⚡', '🌟'];
-            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            const span = document.createElement('span');
-            span.textContent = emoji;
-            span.className = 'fixed pointer-events-none z-50 text-2xl opacity-70';
-            span.style.left = Math.random() * window.innerWidth + 'px';
-            span.style.top = window.innerHeight + 'px';
-            
-            document.body.appendChild(span);
-            
-            let pos = window.innerHeight;
-            const animation = setInterval(() => {
-                pos -= 2;
-                span.style.top = pos + 'px';
-                span.style.transform = `rotate(${pos * 0.5}deg)`;
-                
-                if (pos < -50) {
-                    clearInterval(animation);
-                    document.body.removeChild(span);
-                }
-            }, 50);
-        }
-
-        // Create floating emojis periodically
-        setInterval(createFloatingEmoji, 3000);
-
-        // Dynamic color changing for neon effects
-        setInterval(() => {
-            const neonElements = document.querySelectorAll('.animate-pulse-glow');
-            neonElements.forEach(el => {
-                const colors = ['electric-blue', 'cyber-puPPLGe', 'neon-green', 'hot-pink', 'sunset-orange'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                el.style.boxShadow = `0 0 30px var(--${randomColor})`;
-            });
-        }, 2000);
-
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    
-                    // Add staggered animation to children
-                    const children = entry.target.querySelectorAll('.card-hover');
-                    children.forEach((child, index) => {
-                        setTimeout(() => {
-                            child.style.opacity = '1';
-                            child.style.transform = 'translateY(0)';
-                        }, index * 100);
-                    });
-                }
-            });
-        }, observerOptions);
-
-        // Observe sections
-        document.querySelectorAll('section').forEach(section => {
-            if (section.id !== 'home') {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(30px)';
-                section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                observer.observe(section);
-            }
-        });
-
-        // Active navigation with smooth color transitions
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 100;
-                if (scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                const span = link.querySelector('span');
-                if (link.getAttribute('href') === `#${current}`) {
-                    span.style.transform = 'scale(1.1)';
-                    span.style.textShadow = '0 0 10px currentColor';
-                } else {
-                    span.style.transform = 'scale(1)';
-                    span.style.textShadow = 'none';
-                }
-            });
-        });
-
-        // Easter egg: Konami code
-        let konamiCode = [];
-        const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
-
-        document.addEventListener('keydown', (e) => {
-            konamiCode.push(e.keyCode);
-            if (konamiCode.length > konami.length) {
-                konamiCode.shift();
-            }
-            
-            if (konamiCode.toString() === konami.toString()) {
-                // Secret animation
-                document.body.style.animation = 'rainbow 2s ease-in-out';
-                setTimeout(() => {
-                    alert('🎉 Selamat! Kamu menemukan easter egg XI PPLG! Kamu layak jadi programmer sejati! 🚀');
-                    document.body.style.animation = '';
-                }, 1000);
-                konamiCode = [];
-            }
-        });
-    </script>
-    
-    <style>
-        @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(180deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-    </style>
-</body>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="text-center p-6 bg-gradient-to-br from-electric-blue to-cyber-puPPLGe rounded-2xl card-hover">
-                            <div class="text-4xl font-black text-white mb-2">30+</div>
-                            <div class="text-white font-semibold">Siswa Keren</div>
-                            <div class="text-xs text-blue-200 mt-1">Yang siap jadi programmer handal</div>
-                        </div>
-                        <div class="text-center p-6 bg-gradient-to-br from-neon-green to-emerald-600 rounded-2xl card-hover">
-                            <div class="text-4xl font-black text-white mb-2">10+</div>
-                            <div class="text-white font-semibold">Proyek Cool</div>
-                            <div class="text-xs text-green-200 mt-1">Website & aplikasi yang udah dibuat</div>
-                        </div>
-                        <div class="text-center p-6 bg-gradient-to-br from-sunset-orange to-yellow-500 rounded-2xl card-hover">
-                            <div class="text-4xl font-black text-white mb-2">100%</div>
-                            <div class="text-white font-semibold">Semangat</div>
-                            <div class="text-xs text-orange-200 mt-1">Dalam belajar dan berkembang</div>
-                        </div>
-                        <div class="text-center p-6 bg-gradient-to-br from-hot-pink to-puPPLGe-600 rounded-2xl card-hover">
-                            <div class="text-4xl font-black text-white mb-2">∞</div>
-                            <div class="text-white font-semibold">Kreativitas</div>
-                            <div class="text-xs text-pink-200 mt-1">Ide-ide fresh yang gak ada habisnya</div>
-                        </div>
-                    </div>
-                    
-                    <div class="glassmorphism rounded-3xl p-8 text-center card-hover">
-                        <h4 class="text-2xl font-bold text-cyber-puPPLGe mb-4">🎯 Goal Kita</h4>
-                        <p class="text-gray-200">Jadi programmer yang gak cuma jago ngoding, tapi juga punya soft skill yang mantap dan siap kerja di perusahaan teknologi terbaik!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Personil Section -->
-    <section id="personil" class="py-20 bg-gradient-to-br from-indigo-900 to-puPPLGe-900 relative">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-sunset-orange to-hot-pink bg-clip-text text-transparent">
-                    <span class="emoji">👥</span> Tim Kece Kita
-                </h2>
-                <p class="text-xl text-gray-300">Meet the squad yang bikin kelas makin seru!</p>
-            </div>
-            
-        <div class="max-w-6xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <!-- Wali Kelas Card -->
-                    <div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl p-8 text-center transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl group relative overflow-hidden">
-                        <!-- Shimmer overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                        
-                        <!-- Photo Container -->
-                        <div class="w-32 h-32 bg-white rounded-full mx-auto mb-6 shadow-2xl ring-4 ring-white/30 group-hover:ring-white/60 transition-all duration-300 relative overflow-hidden">
-                            <!-- Replace this placeholder with your actual SVG -->
-                            <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <img src="/XI-PPLG/general/asset/FOTO-WALI-KELAS.svg" 
-                                alt="Teacher" 
-                                class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
-                            </div>
-                        </div>
-                        
-                        <div class="space-y-3 relative z-10">
-                            <h3 class="text-3xl font-bold text-white drop-shadow-lg">Restu Wiranata</h3>
-                            <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                                <span class="text-xl mr-2">🎓</span>
-                                <p class="text-white font-semibold">Wali Kelas XI PPLG</p>
-                            </div>
-                            <p class="text-sm text-orange-50 leading-relaxed pt-2 px-4 max-w-xs mx-auto">
-                                Yang sabar ngajarin kita dari nol sampai jadi programmer handal. 
-                                Thanks banget untuk semua ilmu dan bimbingannya! 🙏
-                            </p>
-                        </div>
-                        
-                        <!-- Decorative floating elements -->
-                        <div class="absolute top-4 right-4 w-3 h-3 bg-white/20 rounded-full animate-ping"></div>
-                        <div class="absolute top-6 right-6 w-2 h-2 bg-white/30 rounded-full"></div>
-                        <div class="absolute bottom-6 left-4 w-4 h-4 bg-white/10 rounded-full animate-pulse"></div>
-                    </div>
-
-                    <!-- Guru Jurusan Card -->
-                    <div class="bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-3xl p-8 text-center transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl group relative overflow-hidden">
-                        <!-- Shimmer overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                        
-                        <!-- Photo Container -->
-                        <div class="w-32 h-32 bg-white rounded-full mx-auto mb-6 shadow-2xl ring-4 ring-white/30 group-hover:ring-white/60 transition-all duration-300 relative overflow-hidden">
-                            <!-- Replace this placeholder with your actual SVG -->
-                            <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                <img src="/XI-PPLG/general/asset/FOTO-GURU-JURUSAN.svg" 
-                                alt="Teacher" 
-                                class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
-                            </div>
-                        </div>
-                        
-                        <div class="space-y-3 relative z-10">
-                            <h3 class="text-3xl font-bold text-white drop-shadow-lg">Winda Widiasmini</h3>
-                            <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                                <span class="text-xl mr-2">💻</span>
-                                <p class="text-white font-semibold">Guru Jurusan PPLG</p>
-                            </div>
-                            <p class="text-sm text-blue-50 leading-relaxed pt-2 px-4 max-w-xs mx-auto">
-                                Mentor terbaik yang selalu mendorong kita untuk terus berkembang. 
-                                Terima kasih sudah sharing pengalaman dan tips programming! 🚀
-                            </p>
-                        </div>
-                        
-                        <!-- Decorative floating elements -->
-                        <div class="absolute top-4 right-4 w-3 h-3 bg-white/20 rounded-full animate-ping"></div>
-                        <div class="absolute top-6 right-6 w-2 h-2 bg-white/30 rounded-full"></div>
-                        <div class="absolute bottom-6 left-4 w-4 h-4 bg-white/10 rounded-full animate-pulse"></div>
-                    </div>
-                </div>
-            
-            <!-- Fun Stats -->
-            <div class="glassmorphism rounded-3xl p-8 card-hover">
-                <h3 class="text-3xl font-bold text-center text-cyber-puPPLGe mb-8">🎉 Fun Facts Tentang Kita</h3>
-                <div class="grid md:grid-cols-4 gap-6 text-center">
-                    <div>
-                        <div class="text-4xl mb-2">☕</div>
-                        <div class="text-2xl font-bold text-electric-blue">500+</div>
-                        <div class="text-gray-300">Cup kopi yang udah diminum sambil bergadang</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl mb-2">🐛</div>
-                        <div class="text-2xl font-bold text-hot-pink">1000+</div>
-                        <div class="text-gray-300">Msalah yang berhasil kita fix </div>
-                    </div>
-                    <div>
-                        <div class="text-4xl mb-2">💻</div>
-                        <div class="text-2xl font-bold text-neon-green">24/7</div>
-                        <div class="text-gray-300">Belajar setiap waktu</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl mb-2">🏆</div>
-                        <div class="text-2xl font-bold text-sunset-orange">∞</div>
-                        <div class="text-gray-300">Prestasi yang bakal kita raih</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Peraturan Section -->
-    <section id="peraturan" class="py-20 bg-gradient-to-br from-gray-900 to-black relative">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-hot-pink to-cyber-puPPLGe bg-clip-text text-transparent">
-                    <span class="emoji">📋</span> Aturan Main
-                </h2>
-                <p class="text-xl text-gray-300">Rules yang bikin kita tetap solid dan sukses bareng!</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-6 animate-slide-in-left">
-                    <div class="bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">⏰</span>
-                            Jadwal & Kedisiplinan
-                        </h3>
-                        <div class="space-y-3 text-red-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">✅</span>
-                                <span>Datang tepat waktu (jangan sampai telat, nanti ketinggalan meme pagi!)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">✅</span>
-                                <span>Pakai seragam yang rapi (biar keliatan professional meski masih remaja)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">✅</span>
-                                <span>Jaga kebersihan kelas (coding environment yang bersih = mind yang clear)</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">📚</span>
-                            Belajar & Akademik
-                        </h3>
-                        <div class="space-y-3 text-green-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">💪</span>
-                                <span>Kerjain tugas dengan serius (deadline is real, guys!)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">💪</span>
-                                <span>Aktif di kelas (jangan malu buat nanya atau sharing ide)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">💪</span>
-                                <span>Hati-hati sama komputer lab (ini bukan PC gaming center 😅)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-6 animate-slide-in-right">
-                    <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">🤝</span>
-                            Etika & Kerjasama
-                        </h3>
-                        <div class="space-y-3 text-blue-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🤗</span>
-                                <span>Hargai pendapat teman (setiap orang punya perspektif unik)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🤗</span>
-                                <span>Jangan bully atau merendahkan (kita semua belajar bareng)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🤗</span>
-                                <span>Support satu sama lain (kita tim, bukan kompetitor!)</span>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="bg-gradient-to-br from-purple-500 to-puPPLGe-600 rounded-3xl p-8 card-hover group">
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
-                            <span class="mr-4 text-4xl group-hover:animate-wiggle">🎉</span>
-                            Kegiatan & Event
-                        </h3>
-                        <div class="space-y-3 text-purple-50">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🎊</span>
-                                <span>Ikut semua event kelas (dari coding competition sampai fun games)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🎊</span>
-                                <span>Jangan lupa bawa snack (karena ngoding itu bikin lapar!)</span>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <span class="text-xl">🎊</span>
-                                <span>Share momen seru di social media (biar semua tau betapa kerennya kita!)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div class="flex justify-center space-x-8 mb-8">
-        <div class="border-t border-gray-700 pt-8 w-full max-w-3xl mx-auto">
-            <p class="text-gray-500 text-center mb-4">
-                Made with ❤️ and lots of ☕ by XI PPLG Students
-            </p>
-            <p class="text-gray-600 text-center">
-                © 2025 XI PPLG SMKN 2 KUTA SELATAN. Semua hak cipta dilindungi. 
-                <span class="text-electric-blue">Keep coding, keep dreaming! 🚀</span>
-            </p>
-        </div>
-    </div>
 </html>

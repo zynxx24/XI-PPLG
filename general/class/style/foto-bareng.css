@@ -1,0 +1,11 @@
+.photo-card:hover .photo-overlay {
+     opacity: 1;
+}
+
+.modal {
+     display: none;
+}
+
+.modal.active {
+     display: flex !important;
+}
