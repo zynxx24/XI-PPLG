@@ -1,79 +1,79 @@
 [
-     {
-          "kode": "KK PPLG",
-          "nama": "Konsentrasi Keahlian PPLG",
-          "guru": "Bu Winda Widiasmini",
-          "telp": "+6283870521087",
-          "color": "blue"
-     },
-     {
-          "kode": "MP PPLG",
-          "nama": "Mata Pelajaran Pilihan PPLG",
-          "guru": "Bu Winda Widiasmini",
-          "telp": "+6283870521087",
-          "color": "indigo"
-     },
-     {
-          "kode": "KIK",
-          "nama": "Kewirausahaan",
-          "guru": "Pak Restu Wiratana",
-          "telp": "+6282145088354",
-          "color": "yellow"
-     },
-     {
-          "kode": "PP",
-          "nama": "Projek P5",
-          "guru": "Bu Happy",
-          "telp": "+6287761682482",
-          "color": "red"
-     },
-     {
-          "kode": "B.INDO",
-          "nama": "Bahasa Indonesia",
-          "guru": "Bu Mega",
-          "telp": "+6282236356161",
-          "color": "green"
-     },
-     {
-          "kode": "SEJ",
-          "nama": "Sejarah",
-          "guru": "Bu Teklasani",
-          "telp": "+6281339393953",
-          "color": "purple"
-     },
-     {
-          "kode": "BB",
-          "nama": "Bahasa Bali",
-          "guru": "Bu Sinta",
-          "telp": "-",
-          "color": "indigo"
-     },
-     {
-          "kode": "PABP",
-          "nama": "Pendidikan Agama dan Budi Pekerti",
-          "guru": "Bu Chika",
-          "telp": "+6282145846314",
-          "color": "orange"
-     },
-     {
-          "kode": "PJOK",
-          "nama": "Pendidikan Jasmani",
-          "guru": "Pak Wartana",
-          "telp": "-",
-          "color": "pink"
-     },
-     {
-          "kode": "B.ING",
-          "nama": "Bahasa Inggris",
-          "guru": "Bu Ayu Widhyastuti",
-          "telp": "+6281246267654",
-          "color": "cyan"
-     },
-     {
-          "kode": "MAT",
-          "nama": "Matematika",
-          "guru": "Pak Restu Wiratana",
-          "telp": "+6282145088354",
-          "color": "lime"
-     }
+        {
+            "kode": "KK PPLG",
+            "nama": "Konsentrasi Keahlian PPLG",
+            "guru": "Bu Winda Widiasmini",
+            "telp": "+6283870521087",
+            "color": "blue"
+        },
+        {
+            "kode": "MP PPLG",
+            "nama": "Mata Pelajaran Pilihan PPLG",
+            "guru": "Bu Winda Widiasmini",
+            "telp": "+6283870521087",
+            "color": "indigo"
+        },
+        {
+            "kode": "KIK",
+            "nama": "Kewirausahaan",
+            "guru": "Pak Restu Wiratana",
+            "telp": "+6282145088354",
+            "color": "yellow"
+        },
+        {
+            "kode": "PP",
+            "nama": "Projek P5",
+            "guru": "Bu Happy",
+            "telp": "+6287761682482",
+            "color": "red"
+        },
+        {
+            "kode": "B.INDO",
+            "nama": "Bahasa Indonesia",
+            "guru": "Bu Mega",
+            "telp": "+6282236356161",
+            "color": "green"
+        },
+        {
+            "kode": "SEJ",
+            "nama": "Sejarah",
+            "guru": "Bu Teklasani",
+            "telp": "+6281339393953",
+            "color": "purple"
+        },
+        {
+            "kode": "BB",
+            "nama": "Bahasa Bali",
+            "guru": "Bu Sinta",
+            "telp": "-",
+            "color": "indigo"
+        },
+        {
+            "kode": "PABP",
+            "nama": "Pendidikan Agama dan Budi Pekerti",
+            "guru": "Bu Chika",
+            "telp": "+6282145846314",
+            "color": "orange"
+        },
+        {
+            "kode": "PJOK",
+            "nama": "Pendidikan Jasmani",
+            "guru": "Pak Wartana",
+            "telp": "-",
+            "color": "pink"
+        },
+        {
+            "kode": "B.ING",
+            "nama": "Bahasa Inggris",
+            "guru": "Bu Ayu Widhyastuti",
+            "telp": "+6281246267654",
+            "color": "cyan"
+        },
+        {
+            "kode": "MAT",
+            "nama": "Matematika",
+            "guru": "Pak Restu Wiratana",
+            "telp": "+6282145088354",
+            "color": "lime"
+        }
 ]

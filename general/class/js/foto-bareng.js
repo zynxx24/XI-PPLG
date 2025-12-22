@@ -1,10 +1,9 @@
-const PHOTOS_DATA = fetch('/XI-PPLG/general/class/JSON/photo-data.JSON')
+const PHOTOS_DATA = fetch('./JSON/photo-data.JSON')
      .then(response => response.json())
      .catch(error => {
           console.error('Error loading photos data:', error);
           return [];
      });
-
 let currentFilter = 'all';
 
 function renderPhotos(filter = 'all') {

@@ -1,132 +1,36 @@
 {
-     "senin": [
-          {
-               "mapel": "KK PPLG",
-               "guru": "Bu Winda Widiasmini",
-               "jam": 10
-          }
-     ],
-     "selasa": [
-          {
-               "mapel": "MP PPLG",
-               "guru": "Bu Winda Widiasmini",
-               "jam": 2
-          },
-          {
-               "mapel": "KIK",
-               "guru": "Pak Restu Wiratana",
-               "jam": 3
-          },
-          {
-               "mapel": "MP PPLG",
-               "guru": "Bu Winda Widiasmini",
-               "jam": 2
-          },
-          {
-               "mapel": "KIK",
-               "guru": "Pak Restu Wiratana",
-               "jam": 2
-          },
-          {
-               "mapel": "PP",
-               "guru": "Bu Happy",
-               "jam": 1
-          }
-     ],
-     "rabu": [
-          {
-               "mapel": "B.INDO",
-               "guru": "Bu Mega",
-               "jam": 1
-          },
-          {
-               "mapel": "SEJ",
-               "guru": "Bu Teklasani",
-               "jam": 1
-          },
-          {
-               "mapel": "BB",
-               "guru": "Bu Sinta",
-               "jam": 1
-          },
-          {
-               "mapel": "PP",
-               "guru": "Bu Happy",
-               "jam": 1
-          },
-          {
-               "mapel": "PABP",
-               "guru": "Bu Chika",
-               "jam": 1
-          },
-          {
-               "mapel": "B.INDO",
-               "guru": "Bu Mega",
-               "jam": 2
-          },
-          {
-               "mapel": "BB",
-               "guru": "Bu Sinta",
-               "jam": 1
-          },
-          {
-               "mapel": "PABP",
-               "guru": "Bu Chika",
-               "jam": 2
-          }
-     ],
-     "kamis": [
-          {
-               "mapel": "PJOK",
-               "guru": "Pak Wartana",
-               "jam": 1
-          },
-          {
-               "mapel": "KK PPLG",
-               "guru": "Bu Winda Widiasmini",
-               "jam": 4
-          },
-          {
-               "mapel": "PJOK",
-               "guru": "Pak Wartana",
-               "jam": 1
-          },
-          {
-               "mapel": "KK PPLG",
-               "guru": "Bu Winda Widiasmini",
-               "jam": 4
-          }
-     ],
-     "jumat": [
-          {
-               "mapel": "B.ING",
-               "guru": "Bu Ayu Widhyastuti",
-               "jam": 1
-          },
-          {
-               "mapel": "MAT",
-               "guru": "Pak Restu Wiratana",
-               "jam": 1
-          },
-          {
-               "mapel": "KOSONG",
-               "guru": "",
-               "jam": 3
-          },
-          {
-               "mapel": "B.ING",
-               "guru": "Bu Ayu Widhyastuti",
-               "jam": 2
-          },
-          {
-               "mapel": "SEJ",
-               "guru": "Bu Teklasani",
-               "jam": 1
-          },
-          {
-               "mapel": "MAT",
-               "guru": "Pak Restu Wiratana",
-               "jam": 2
-          }
-     ]
+        "senin": [
+            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 10 }
+        ],
+        "selasa": [
+            { "mapel": "MP PPLG", "guru": "Bu Winda Widiasmini", "jam": 2 },
+            { "mapel": "KIK", "guru": "Pak Restu Wiratana", "jam": 3 },
+            { "mapel": "MP PPLG", "guru": "Bu Winda Widiasmini", "jam": 2 },
+            { "mapel": "KIK", "guru": "Pak Restu Wiratana", "jam": 2 },
+            { "mapel": "PP", "guru": "Bu Happy", "jam": 1 }
+        ],
+        "rabu": [
+            { "mapel": "B.INDO", "guru": "Bu Mega", "jam": 1 },
+            { "mapel": "SEJ", "guru": "Bu Teklasani", "jam": 1 },
+            { "mapel": "BB", "guru": "Bu Sinta", "jam": 1 },
+            { "mapel": "PP", "guru": "Bu Happy", "jam": 1 },
+            { "mapel": "PABP", "guru": "Bu Chika", "jam": 1 },
+            { "mapel": "B.INDO", "guru": "Bu Mega", "jam": 2 },
+            { "mapel": "BB", "guru": "Bu Sinta", "jam": 1 },
+            { "mapel": "PABP", "guru": "Bu Chika", "jam": 2 }
+        ],
+        "kamis": [
+            { "mapel": "PJOK", "guru": "Pak Wartana", "jam": 1 },
+            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 4 },
+            { "mapel": "PJOK", "guru": "Pak Wartana", "jam": 1 },
+            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 4 }
+        ],
+        "jumat": [
+            { "mapel": "B.ING", "guru": "Bu Ayu Widhyastuti", "jam": 1 },
+            { "mapel": "MAT", "guru": "Pak Restu Wiratana", "jam": 1 },
+            { "mapel": "KOSONG", "guru": "", "jam": 3 },
+            { "mapel": "B.ING", "guru": "Bu Ayu Widhyastuti", "jam": 2 },
+            { "mapel": "SEJ", "guru": "Bu Teklasani", "jam": 1 },
+            { "mapel": "MAT", "guru": "Pak Restu Wiratana", "jam": 2 }
+        ]
 }
