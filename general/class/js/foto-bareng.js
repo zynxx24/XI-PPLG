@@ -1,14 +1,16 @@
 const PHOTOS_DATA = fetch('./JSON/photo-data.JSON')
-     .then(response => response.json())
+     .then(res => res.json())
      .catch(error => {
           console.error('Error loading photos data:', error);
           return [];
      });
+
 let currentFilter = 'all';
 
 function renderPhotos(filter = 'all') {
      const gallery = document.getElementById('galleryGrid');
-     const photos = filter === 'all' ? PHOTOS_DATA : PHOTOS_DATA.filter(p => p.category === filter);
+     const photoArray = Object.values(PHOTOS_DATA);
+     const photos = filter === 'all' ? photoArray : photoArray.filter(p => p.category === filter);
 
      gallery.innerHTML = photos.map((photo, index) => `
                 <div class="photo-card group cursor-pointer rounded-2xl overflow-hidden bg-slate-800/50 backdrop-blur-sm border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50" 
@@ -39,7 +41,7 @@ function renderPhotos(filter = 'all') {
      updateStats();
 }
 
-function filterPhotos(category) {
+function filterPhotos(category, event) {
      currentFilter = category;
 
      document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -77,8 +79,9 @@ function closeModal() {
 }
 
 function updateStats() {
-     const filteredPhotos = currentFilter === 'all' ? PHOTOS_DATA : PHOTOS_DATA.filter(p => p.category === currentFilter);
-     const categories = [...new Set(PHOTOS_DATA.map(p => p.category))];
+     const photoArray = Object.values(PHOTOS_DATA);
+     const filteredPhotos = currentFilter === 'all' ? photoArray : photoArray.filter(p => p.category === currentFilter);
+     const categories = new Set(photoArray.map(p => p.category));
 
      document.getElementById('totalPhotos').textContent = filteredPhotos.length;
      document.getElementById('totalCategories').textContent = categories.length;

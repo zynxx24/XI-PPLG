@@ -3,22 +3,29 @@ let JADWAL_DATA = {};
 let GURU_DATA = [];
 
 // Fetch JSON data
-fetch('./JSON/jadwal-pelajaran.JSON')
-    .then(response => response.json())
-    .then(data => {
-        JADWAL_DATA = data.jadwal;
-        renderJadwal();
-    })
-    .catch(error => console.error('Error loading data:', error));
+async function loadData() {
+    try {
+        const [jadwalResponse, guruResponse] = await Promise.all([
+            fetch('./JSON/jadwal-pelajaran.JSON'),
+            fetch('./JSON/daftar-guru.JSON')
+        ]);
 
-// Fetch JSON data
-fetch('./json/daftar-guru.JSON')
-    .then(response => response.json())
-    .then(data => {
-        GURU_DATA = data.guru;
+        const jadwalData = await jadwalResponse.json();
+        const guruData = await guruResponse.json();
+
+        JADWAL_DATA = jadwalData;
+        GURU_DATA = guruData;
+
+        renderJadwal();
         renderGuru();
-    })
-    .catch(error => console.error('Error loading data:', error));
+        initInteractions();
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+loadData();
+
 
 function renderJadwal() {
     const tbody = document.getElementById('scheduleTableBody');
@@ -33,7 +40,7 @@ function renderJadwal() {
 
     days.forEach(day => {
         const schedule = JADWAL_DATA[day];
-        
+
         if (!schedule) {
             console.error(`Data untuk hari ${day} tidak ditemukan`);
             return;
@@ -51,24 +58,24 @@ function renderJadwal() {
         // Generate kolom jadwal (10 jam pelajaran)
         schedule.forEach(mapel => {
             const cell = document.createElement('td');
-            
+
             if (mapel.mapel === 'KOSONG') {
                 cell.className = 'px-4 py-3 bg-slate-800';
                 cell.colSpan = mapel.jam;
             } else {
                 const mapelKey = mapel.mapel.toLowerCase().replace(/\./g, '').replace(/ /g, '-');
                 const textColor = ['KIK'].includes(mapel.mapel) ? 'text-slate-800' : 'text-white';
-                const smallColor = ['KIK'].includes(mapel.mapel) ? 'text-yellow-800' : 
-                                  mapel.mapel.includes('PPLG') ? 'text-blue-100' : 
-                                  mapel.mapel === 'PP' ? 'text-red-100' :
-                                  mapel.mapel === 'B.INDO' ? 'text-green-100' :
-                                  mapel.mapel === 'SEJ' ? 'text-purple-100' :
-                                  mapel.mapel === 'BB' ? 'text-indigo-100' :
-                                  mapel.mapel === 'PABP' ? 'text-orange-100' :
-                                  mapel.mapel === 'PJOK' ? 'text-pink-100' :
-                                  mapel.mapel === 'B.ING' ? 'text-cyan-100' :
-                                  mapel.mapel === 'MAT' ? 'text-green-100' : 'text-blue-100';
-                
+                const smallColor = ['KIK'].includes(mapel.mapel) ? 'text-yellow-800' :
+                    mapel.mapel.includes('PPLG') ? 'text-blue-100' :
+                        mapel.mapel === 'PP' ? 'text-red-100' :
+                            mapel.mapel === 'B.INDO' ? 'text-green-100' :
+                                mapel.mapel === 'SEJ' ? 'text-purple-100' :
+                                    mapel.mapel === 'BB' ? 'text-indigo-100' :
+                                        mapel.mapel === 'PABP' ? 'text-orange-100' :
+                                            mapel.mapel === 'PJOK' ? 'text-pink-100' :
+                                                mapel.mapel === 'B.ING' ? 'text-cyan-100' :
+                                                    mapel.mapel === 'MAT' ? 'text-green-100' : 'text-blue-100';
+
                 cell.className = `px-2 py-3 subject-${mapelKey} ${textColor} text-center font-semibold`;
                 cell.colSpan = mapel.jam;
                 cell.innerHTML = `
@@ -76,7 +83,7 @@ function renderJadwal() {
                     <small class="${smallColor}">${mapel.guru}</small>
                 `;
             }
-            
+
             row.appendChild(cell);
         });
 
@@ -84,14 +91,13 @@ function renderJadwal() {
     });
 }
 
-
 function renderGuru() {
     const container = document.getElementById('teacherList');
-    
+
     GURU_DATA.forEach(guru => {
         const card = document.createElement('div');
         card.className = `glass-effect rounded-2xl p-6 border-l-4 border-${guru.color}-500 hover:scale-105 transition-transform duration-300`;
-        
+
         card.innerHTML = `
             <div class="flex items-center mb-3">
                 <div class="w-3 h-3 bg-${guru.color}-500 rounded-full mr-3 animate-pulse"></div>
@@ -101,12 +107,12 @@ function renderGuru() {
             <p class="text-${guru.color}-200 font-semibold">👨‍🏫 ${guru.guru}</p>
             <p class="text-xs text-slate-400 mt-2">📱 ${guru.telp}</p>
         `;
-        
+
         container.appendChild(card);
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function initInteractions() {
     // Scroll animation
     const observerOptions = {
         threshold: 0.1,
@@ -149,4 +155,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }, 100);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Load data akan otomatis render
 });
