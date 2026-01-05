@@ -4,7 +4,7 @@
         ],
         "selasa": [
             { "mapel": "Pendidikan Pancasila", "guru": "Naf Ul Azmi, S.Pd", "jam": 2 },
-            { "mapel": "Rekayasa Perangkat Lunak", "guru": "Ida Bagus Pratama Surya, S.Tr.Kom", "jam": 7 }
+            { "mapel": "Rekayasa Perangkat Lunak", "guru": "Ida Bagus Pratama Surya, S.Tr.Kom", "jam": 8 }
 
         ],
         "rabu": [
@@ -15,7 +15,7 @@
         "kamis": [
             { "mapel": "Olahraga", "guru": "I Wayan Wartana, S.Pd., M.M., M.Si", "jam": 2 },
             { "mapel": "KIK", "guru": "I Made Arya Septyasa, S.Pd", "jam": 5 },
-            { "mapel": "Matematika", "guru": "I Ketut Restu Wiranata, S.Si", "jam": 1 }
+            { "mapel": "Matematika", "guru": "I Ketut Restu Wiranata, S.Si", "jam": 3 }
         ],
         "jumat": [
             { "mapel": "Sejarah", "guru": "Teklasani Juita, S.Pd", "jam":2 },
