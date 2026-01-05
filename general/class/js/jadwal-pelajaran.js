@@ -40,6 +40,7 @@ function renderJadwal() {
 
     days.forEach(day => {
         const schedule = JADWAL_DATA[day];
+        console.log(schedule);
 
         if (!schedule) {
             console.error(`Data untuk hari ${day} tidak ditemukan`);
@@ -66,15 +67,15 @@ function renderJadwal() {
                 const mapelKey = mapel.mapel.toLowerCase().replace(/\./g, '').replace(/ /g, '-');
                 const textColor = ['KIK'].includes(mapel.mapel) ? 'text-slate-800' : 'text-white';
                 const smallColor = ['KIK'].includes(mapel.mapel) ? 'text-yellow-800' :
-                    mapel.mapel.includes('PPLG') ? 'text-blue-100' :
-                        mapel.mapel === 'PP' ? 'text-red-100' :
-                            mapel.mapel === 'B.INDO' ? 'text-green-100' :
-                                mapel.mapel === 'SEJ' ? 'text-purple-100' :
-                                    mapel.mapel === 'BB' ? 'text-indigo-100' :
-                                        mapel.mapel === 'PABP' ? 'text-orange-100' :
-                                            mapel.mapel === 'PJOK' ? 'text-pink-100' :
-                                                mapel.mapel === 'B.ING' ? 'text-cyan-100' :
-                                                    mapel.mapel === 'MAT' ? 'text-green-100' : 'text-blue-100';
+                    mapel.mapel.includes("Rekayasa Perangkat Lunak") ? 'text-blue-100' :
+                        mapel.mapel === 'Pendidikan Pancasila' ? 'text-red-100' :
+                            mapel.mapel === 'Bahasa Indonesia' ? 'text-green-100' :
+                                mapel.mapel === 'Sejarah' ? 'text-purple-100' :
+                                    mapel.mapel === 'Bahasa Bali' ? 'text-indigo-100' :
+                                        mapel.mapel === 'Pendidikan Agama dan Budi Pekerti' ? 'text-orange-100' :
+                                            mapel.mapel === 'Pendidikan Jasmani dan Olahraga' ? 'text-pink-100' :
+                                                mapel.mapel === 'Bahasa Inggris' ? 'text-cyan-100' :
+                                                    mapel.mapel === 'Matematika' ? 'text-green-100' : 'text-blue-100';
 
                 cell.className = `px-2 py-3 subject-${mapelKey} ${textColor} text-center font-semibold`;
                 cell.colSpan = mapel.jam;
@@ -96,12 +97,12 @@ function renderGuru() {
 
     GURU_DATA.forEach(guru => {
         const card = document.createElement('div');
-        card.className = `glass-effect rounded-2xl p-6 border-l-4 border-${guru.color}-500 hover:scale-105 transition-transform duration-300`;
+        card.className = `glass-effect rounded-2xl p-6 border-l-4 border-${guru.color} hover:scale-105 transition-transform duration-300`;
 
         card.innerHTML = `
             <div class="flex items-center mb-3">
-                <div class="w-3 h-3 bg-${guru.color}-500 rounded-full mr-3 animate-pulse"></div>
-                <h3 class="text-lg font-bold text-${guru.color}-300">${guru.kode}</h3>
+                <div class="w-3 h-3 bg-${guru.color} rounded-full mr-3 animate-pulse"></div>
+                <h3 class="text-lg font-bold text-${guru.color}">${guru.kode}</h3>
             </div>
             <p class="text-slate-300 text-sm mb-2">${guru.nama}</p>
             <p class="text-${guru.color}-200 font-semibold">👨‍🏫 ${guru.guru}</p>

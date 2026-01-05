@@ -1,79 +1,79 @@
 [
         {
-            "kode": "KK PPLG",
-            "nama": "Konsentrasi Keahlian PPLG",
-            "guru": "Bu Winda Widiasmini",
-            "telp": "+6283870521087",
-            "color": "blue"
-        },
-        {
-            "kode": "MP PPLG",
-            "nama": "Mata Pelajaran Pilihan PPLG",
-            "guru": "Bu Winda Widiasmini",
-            "telp": "+6283870521087",
-            "color": "indigo"
-        },
-        {
-            "kode": "KIK",
-            "nama": "Kewirausahaan",
-            "guru": "Pak Restu Wiratana",
-            "telp": "+6282145088354",
-            "color": "yellow"
+            "kode": "RPL",
+            "nama": "Rekayasa Perangkat Lunak",
+            "guru": "Ida Bagus Pratama Surya, S.Tr.Kom",
+            "telp": "+62895800228335",
+            "color": "blue-500"
         },
         {
             "kode": "PP",
-            "nama": "Projek P5",
-            "guru": "Bu Happy",
-            "telp": "+6287761682482",
-            "color": "red"
+            "nama": "Pendidikan Pancasila",
+            "guru": "Naf Ul Azmi, S.Pd",
+            "telp": "-",
+            "color": "violet-500"
+        },
+        {
+            "kode": "PDLRPL",
+            "nama": "Pendalaman RPL",
+            "guru": "I Putu Pande Rizky Astawan, S.Kom., M.T",
+            "telp": "-",
+            "color": "rose-500"
         },
         {
             "kode": "B.INDO",
             "nama": "Bahasa Indonesia",
-            "guru": "Bu Mega",
-            "telp": "+6282236356161",
-            "color": "green"
+            "guru": "Jallu Tri Solandari, S.Pd",
+            "telp": "+6285823254694",
+            "color": "emerald-500"
         },
         {
-            "kode": "SEJ",
-            "nama": "Sejarah",
-            "guru": "Bu Teklasani",
-            "telp": "+6281339393953",
-            "color": "purple"
-        },
-        {
-            "kode": "BB",
-            "nama": "Bahasa Bali",
-            "guru": "Bu Sinta",
+            "kode": "B.ING",
+            "nama": "Bahasa Inggris",
+            "guru": "I Gede Esa Ananda, S.S",
             "telp": "-",
-            "color": "indigo"
+            "color": "indigo-500"
+        },
+        {
+            "kode": "B.Bali",
+            "nama": "Bahasa Bali",
+            "guru": "Komang Sinta Anggreningsih, S.Pd",
+            "telp": "-",
+            "color": "pink-500"
         },
         {
             "kode": "PABP",
             "nama": "Pendidikan Agama dan Budi Pekerti",
             "guru": "Bu Chika",
             "telp": "+6282145846314",
-            "color": "orange"
+            "color": "amber-500"
         },
         {
             "kode": "PJOK",
             "nama": "Pendidikan Jasmani",
-            "guru": "Pak Wartana",
+            "guru": "I Wayan Wartana, S.Pd., M.M., M.Si",
             "telp": "-",
-            "color": "pink"
+            "color": "teal-500"
         },
         {
-            "kode": "B.ING",
-            "nama": "Bahasa Inggris",
-            "guru": "Bu Ayu Widhyastuti",
-            "telp": "+6281246267654",
-            "color": "cyan"
+            "kode": "KIK",
+            "nama": "KIK",
+            "guru": "I Made Arya Septyasa, S.Pd",
+            "telp": "-",
+            "color": "cyan-500"
         },
         {
             "kode": "MAT",
             "nama": "Matematika",
             "guru": "Pak Restu Wiratana",
             "telp": "+6282145088354",
-            "color": "lime"
+            "color": "purple-500"
+        },
+        {
+            "kode": "SJR",
+            "nama": "Sejarah",
+            "guru": "Teklasani Juita, S.Pd",
+            "telp": "+6281339393953",
+            "color": "orange-500"
         }
 ]

@@ -1,36 +1,26 @@
 {
         "senin": [
-            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 10 }
+            { "mapel": "Rekayasa Perangkat Lunak", "guru": "Ida Bagus Pratama Surya, S.Tr.Kom", "jam": 10 }
         ],
         "selasa": [
-            { "mapel": "MP PPLG", "guru": "Bu Winda Widiasmini", "jam": 2 },
-            { "mapel": "KIK", "guru": "Pak Restu Wiratana", "jam": 3 },
-            { "mapel": "MP PPLG", "guru": "Bu Winda Widiasmini", "jam": 2 },
-            { "mapel": "KIK", "guru": "Pak Restu Wiratana", "jam": 2 },
-            { "mapel": "PP", "guru": "Bu Happy", "jam": 1 }
+            { "mapel": "Pendidikan Pancasila", "guru": "Naf Ul Azmi, S.Pd", "jam": 2 },
+            { "mapel": "Rekayasa Perangkat Lunak", "guru": "Ida Bagus Pratama Surya, S.Tr.Kom", "jam": 7 }
+
         ],
         "rabu": [
-            { "mapel": "B.INDO", "guru": "Bu Mega", "jam": 1 },
-            { "mapel": "SEJ", "guru": "Bu Teklasani", "jam": 1 },
-            { "mapel": "BB", "guru": "Bu Sinta", "jam": 1 },
-            { "mapel": "PP", "guru": "Bu Happy", "jam": 1 },
-            { "mapel": "PABP", "guru": "Bu Chika", "jam": 1 },
-            { "mapel": "B.INDO", "guru": "Bu Mega", "jam": 2 },
-            { "mapel": "BB", "guru": "Bu Sinta", "jam": 1 },
-            { "mapel": "PABP", "guru": "Bu Chika", "jam": 2 }
+            { "mapel": "Pendalaman RPL", "guru": "I Putu Pande Rizky Astawan, S.Kom., M.T", "jam": 4 },
+            { "mapel": "Bahasa Inggris", "guru": "I Gede Esa Ananda, S.S", "jam": 4 },
+            { "mapel": "Projek dan Wali", "guru": " - ", "jam": 2 }
         ],
         "kamis": [
-            { "mapel": "PJOK", "guru": "Pak Wartana", "jam": 1 },
-            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 4 },
-            { "mapel": "PJOK", "guru": "Pak Wartana", "jam": 1 },
-            { "mapel": "KK PPLG", "guru": "Bu Winda Widiasmini", "jam": 4 }
+            { "mapel": "Olahraga", "guru": "I Wayan Wartana, S.Pd., M.M., M.Si", "jam": 2 },
+            { "mapel": "KIK", "guru": "I Made Arya Septyasa, S.Pd", "jam": 5 },
+            { "mapel": "Matematika", "guru": "I Ketut Restu Wiranata, S.Si", "jam": 1 }
         ],
         "jumat": [
-            { "mapel": "B.ING", "guru": "Bu Ayu Widhyastuti", "jam": 1 },
-            { "mapel": "MAT", "guru": "Pak Restu Wiratana", "jam": 1 },
-            { "mapel": "KOSONG", "guru": "", "jam": 3 },
-            { "mapel": "B.ING", "guru": "Bu Ayu Widhyastuti", "jam": 2 },
-            { "mapel": "SEJ", "guru": "Bu Teklasani", "jam": 1 },
-            { "mapel": "MAT", "guru": "Pak Restu Wiratana", "jam": 2 }
+            { "mapel": "Sejarah", "guru": "Teklasani Juita, S.Pd", "jam":2 },
+            { "mapel": "Bahasa Bali", "guru": "Komang Sinta Anggreningsih, S.Pd", "jam": 2 },
+            { "mapel": "Bahasa Indonesia", "guru": "Jallu Tri Solandari, S.Pd", "jam": 3 },
+            { "mapel": "Agama", "guru": "Ni Putu Chika Aristia Santi, S.Ag., M.Pd.H", "jam": 3 }
         ]
 }

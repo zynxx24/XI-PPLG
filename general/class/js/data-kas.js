@@ -132,6 +132,7 @@ function copyText(id) {
 }
 
 function loadDataKasTable(data = dataKas) {
+
      const tbody = document.getElementById('datakas-tbody');
      if (!tbody) {
           console.error("datakas-tbody element not found");
@@ -158,7 +159,16 @@ function loadDataKasTable(data = dataKas) {
           let cellsHTML = `<td class="py-3 px-4 font-medium text-white sticky left-0 bg-gray-800">${student.Nama || 'N/A'}</td>`;
 
           // Define the expected date columns based on your table headers
-          const dateColumns = ['Tanggal', '__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6', '__EMPTY_7'];
+          const dateColumns = [
+               'Tanggal',
+               '__EMPTY',
+               '__EMPTY_1',
+               '__EMPTY_2',
+               '__EMPTY_3',
+               '__EMPTY_4',
+               '__EMPTY_5',
+               '__EMPTY_6'
+          ];
 
           dateColumns.forEach(dateKey => {
                const status = student[dateKey];
@@ -748,14 +758,6 @@ async function initializeApp() {
 
 window.onload = function () {
      try {
-          // Generate QR codes
-          generateQRCode("V3ivwjV6mKHZEaSET1S3yGff3Txwphyq7Zk42kk9SCS", "qr-solana");
-          generateQRCode("0x8C940E048Df1040bcb3e1DEC5E3722432fd97757", "qr-eth");
-          generateQRCode("0xe193f6fa1bd99183deba7fdfdfa7f5ccefc67c06efccc8d30b2aca0ecfa3b0d9", "qr-sui");
-          generateQRCode("bc1pvu2v0pf264a0zq5jtr5007ywa4v564nf88g9hpvzt6g3wg4t6xpq4g58p6", "qr-btc-tap");
-          generateQRCode("bc1q237mznr7v8wvsrt02d6tfwdpu3x9eawcvnecq6", "qr-btc-segwit");
-
-          // Initialize app data
           initializeApp();
      } catch (error) {
           console.error("Error during initialization:", error);
