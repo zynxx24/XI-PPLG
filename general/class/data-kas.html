@@ -62,17 +62,20 @@
 
           <!-- Stats Dashboard -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 rounded-xl text-center">
-                    <h3 class="text-white text-sm font-medium">Total Kas</h3>
-                    <p id="total-amount" class="text-white text-3xl font-bold">Rp0</p>
+               <div
+                    class="bg-[#24283b] p-6 rounded-2xl text-center border-t-4 border-[#7aa2f7] shadow-lg shadow-[#1a1b26]/50">
+                    <h3 class="text-[#7aa2f7] text-sm font-bold uppercase tracking-wider mb-1">Total Kas</h3>
+                    <p id="total-amount" class="text-white text-3xl font-black drop-shadow-md">Rp0</p>
                </div>
-               <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 rounded-xl text-center">
-                    <h3 class="text-white text-sm font-medium">Sudah Bayar</h3>
-                    <p id="total-members" class="text-white text-3xl font-bold">0</p>
+               <div
+                    class="bg-[#24283b] p-6 rounded-2xl text-center border-t-4 border-[#9ece6a] shadow-lg shadow-[#1a1b26]/50">
+                    <h3 class="text-[#9ece6a] text-sm font-bold uppercase tracking-wider mb-1">Sudah Bayar</h3>
+                    <p id="total-members" class="text-white text-3xl font-black drop-shadow-md">0</p>
                </div>
-               <div class="bg-gradient-to-r from-purple-600 to-purple-700 p-6 rounded-xl text-center">
-                    <h3 class="text-white text-sm font-medium">Update Terakhir</h3>
-                    <p id="last-update" class="text-white text-xl font-bold">N/A</p>
+               <div
+                    class="bg-[#24283b] p-6 rounded-2xl text-center border-t-4 border-[#bb9af7] shadow-lg shadow-[#1a1b26]/50">
+                    <h3 class="text-[#bb9af7] text-sm font-bold uppercase tracking-wider mb-1">Update Terakhir</h3>
+                    <p id="last-update" class="text-white text-xl font-bold font-mono">N/A</p>
                </div>
           </div>
 
@@ -116,17 +119,18 @@
 
                <!-- Bitcoin -->
                <div
-                    class="flex items-center bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-effect">
+                    class="flex items-center bg-[#24283b]/60 backdrop-blur-sm p-6 rounded-2xl border border-[#7aa2f7]/20 shadow-lg hover:shadow-[#7aa2f7]/10 hover:border-[#7aa2f7]/50 transition-all duration-300 group">
                     <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png"
-                         class="w-10 h-10 mr-4" alt="Bitcoin" />
-                    <div class="flex-1">
-                         <h3 class="text-lg font-semibold text-white">Bitcoin</h3>
-                         <p id="btc" class="text-sm text-gray-300 break-all font-mono">
+                         class="w-12 h-12 mr-5 group-hover:scale-110 transition-transform" alt="Bitcoin" />
+                    <div class="flex-1 min-w-0">
+                         <h3 class="text-lg font-bold text-[#e0af68] mb-1">Bitcoin</h3>
+                         <p id="btc"
+                              class="text-xs md:text-sm text-[#565f89] font-mono break-all hover:text-[#a9b1d6] transition-colors">
                               bc1q9ny3w6e8lsfrxsazvtrp76tvsk9utud7svhdv2
                          </p>
                     </div>
                     <button onclick="copyText('btc')"
-                         class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                         class="ml-4 bg-[#e0af68]/10 hover:bg-[#e0af68]/20 text-[#e0af68] px-4 py-2 rounded-xl font-bold text-sm transition-all border border-[#e0af68]/20 hover:border-[#e0af68]/50 active:scale-95">
                          Copy
                     </button>
                </div>
@@ -138,20 +142,22 @@
           </div>
 
           <!-- Payment History Table -->
-          <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
-               <h2 class="text-xl font-semibold text-white mb-6">📊 Riwayat Pembayaran Kas</h2>
+          <div class="bg-[#24283b]/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-[#7aa2f7]/20">
+               <h2 class="text-xl font-bold text-[#7aa2f7] mb-6 flex items-center gap-2">
+                    <span class="text-2xl">📊</span> Riwayat Pembayaran Kas
+               </h2>
                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-gray-300">
+                    <table class="w-full text-sm text-[#a9b1d6]">
                          <thead>
-                              <tr class="border-b border-gray-700">
-                                   <th class="py-3 px-4 text-left font-semibold">Tipe</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Metode</th>
-                                   <th class="py-3 px-4 text-left font-semibold">From</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Jumlah</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+                              <tr class="border-b border-[#7aa2f7]/20 bg-[#1a1b26]/50">
+                                   <th class="py-4 px-4 text-left font-bold text-[#7aa2f7]">Tipe</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#7aa2f7]">Metode</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#7aa2f7]">From</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#7aa2f7]">Jumlah</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#7aa2f7]">Tanggal</th>
                               </tr>
                          </thead>
-                         <tbody id="payment-tbody">
+                         <tbody id="payment-tbody" class="divide-y divide-[#7aa2f7]/10">
                               <!-- Data will be loaded by JavaScript -->
                          </tbody>
                     </table>
@@ -159,19 +165,21 @@
           </div>
 
           <!-- Denda Table -->
-          <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
-               <h2 class="text-xl font-semibold text-white mb-6">📊 Riwayat Denda</h2>
+          <div class="bg-[#24283b]/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-[#f7768e]/20">
+               <h2 class="text-xl font-bold text-[#f7768e] mb-6 flex items-center gap-2">
+                    <span class="text-2xl">⚠️</span> Riwayat Denda
+               </h2>
                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-gray-300">
+                    <table class="w-full text-sm text-[#a9b1d6]">
                          <thead>
-                              <tr class="border-b border-gray-700">
-                                   <th class="py-3 px-4 text-left font-semibold">Nama</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Deskripsi</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Nominal</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+                              <tr class="border-b border-[#f7768e]/20 bg-[#1a1b26]/50">
+                                   <th class="py-4 px-4 text-left font-bold text-[#f7768e]">Nama</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#f7768e]">Deskripsi</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#f7768e]">Nominal</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#f7768e]">Tanggal</th>
                               </tr>
                          </thead>
-                         <tbody id="denda-tbody">
+                         <tbody id="denda-tbody" class="divide-y divide-[#f7768e]/10">
                               <!-- Data will be loaded by JavaScript -->
                          </tbody>
                     </table>
@@ -179,19 +187,21 @@
           </div>
 
           <!-- Donatur Table -->
-          <div class="bg-gray-800 bg-opacity-50 p-6 rounded-xl shadow-lg glass-effect">
-               <h2 class="text-xl font-semibold text-white mb-6">💸 Riwayat Donatur</h2>
+          <div class="bg-[#24283b]/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-[#bb9af7]/20">
+               <h2 class="text-xl font-bold text-[#bb9af7] mb-6 flex items-center gap-2">
+                    <span class="text-2xl">💸</span> Riwayat Donatur
+               </h2>
                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-gray-300">
+                    <table class="w-full text-sm text-[#a9b1d6]">
                          <thead>
-                              <tr class="border-b border-gray-700">
-                                   <th class="py-3 px-4 text-left font-semibold">Nama</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Deskripsi</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Nominal</th>
-                                   <th class="py-3 px-4 text-left font-semibold">Tanggal</th>
+                              <tr class="border-b border-[#bb9af7]/20 bg-[#1a1b26]/50">
+                                   <th class="py-4 px-4 text-left font-bold text-[#bb9af7]">Nama</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#bb9af7]">Deskripsi</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#bb9af7]">Nominal</th>
+                                   <th class="py-4 px-4 text-left font-bold text-[#bb9af7]">Tanggal</th>
                               </tr>
                          </thead>
-                         <tbody id="donatur-tbody">
+                         <tbody id="donatur-tbody" class="divide-y divide-[#bb9af7]/10">
                               <!-- Data will be loaded by JavaScript -->
                          </tbody>
                     </table>

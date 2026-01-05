@@ -143,7 +143,7 @@ function loadDataKasTable(data = dataKas) {
 
      if (!data || data.length === 0) {
           const row = document.createElement('tr');
-          row.innerHTML = '<td colspan="10" class="py-4 text-center text-gray-400">No data kas available</td>';
+          row.innerHTML = '<td colspan="10" class="py-4 text-center text-[#565f89]">No data kas available</td>';
           tbody.appendChild(row);
           return;
      }
@@ -153,10 +153,10 @@ function loadDataKasTable(data = dataKas) {
 
      validData.forEach((student, index) => {
           const row = document.createElement('tr');
-          row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+          row.className = 'border-b border-[#7aa2f7]/10 hover:bg-[#7aa2f7]/5 transition-colors';
 
           // Create cells for name and each date column
-          let cellsHTML = `<td class="py-3 px-4 font-medium text-white sticky left-0 bg-gray-800">${student.Nama || 'N/A'}</td>`;
+          let cellsHTML = `<td class="py-3 px-4 font-medium text-[#c0caf5] sticky left-0 bg-[#1a1b26] border-r border-[#7aa2f7]/20">${student.Nama || 'N/A'}</td>`;
 
           // Define the expected date columns based on your table headers
           const dateColumns = [
@@ -298,7 +298,7 @@ function loadPaymentTable(data = paymentData, sortByDate = true) {
           for (let i = startIndex; i < endIndex; i++) {
                const payment = sortedData[i];
                const row = document.createElement('tr');
-               row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+               row.className = 'border-b border-[#7aa2f7]/10 hover:bg-[#7aa2f7]/5 transition-colors';
                row.style.height = `${ITEM_HEIGHT}px`;
 
                const dateToJSDate = (date) => {
@@ -315,20 +315,20 @@ function loadPaymentTable(data = paymentData, sortByDate = true) {
 
                // Add indicator for latest entries (optional)
                const isRecent = i < 2;
-               const nameClass = isRecent ? 'font-medium text-green-300' : 'font-medium';
+               const nameClass = isRecent ? 'font-medium text-[#9ece6a]' : 'font-medium text-[#c0caf5]';
 
                row.innerHTML = `
             <td class="py-3 px-4 ${nameClass}">
               ${isRecent ? '🆕 ' : ''}${payment.nama || 'N/A'}
             </td>
             <td class="py-3 px-4">
-              <span class="px-2 py-1 bg-blue-600 rounded-full text-xs">${payment.metode || 'N/A'}</span>
+              <span class="px-2 py-1 bg-[#7aa2f7]/20 text-[#7aa2f7] rounded-full text-xs border border-[#7aa2f7]/30">${payment.metode || 'N/A'}</span>
             </td>
-            <td class="py-3 px-4 font-mono text-xs" title="${payment.from || 'N/A'}">
+            <td class="py-3 px-4 font-mono text-xs text-[#a9b1d6]" title="${payment.from || 'N/A'}">
               ${payment.from || 'N/A'}
             </td>
-            <td class="py-3 px-4 text-green-400 font-semibold">${formatCurrency(payment.jumlah) || 'Rp. 0'}</td>
-            <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+            <td class="py-3 px-4 text-[#9ece6a] font-semibold">${formatCurrency(payment.jumlah) || 'Rp. 0'}</td>
+            <td class="py-3 px-4 text-[#565f89] ${isRecent ? 'font-semibold' : ''}">
               ${dateToJSDate(payment.tanggal)}
             </td>
           `;
@@ -393,7 +393,7 @@ function LoadedPengeluarData(data = pengeluarData, sortByDate = true) {
 
      sortedData.forEach((loss, index) => {
           const row = document.createElement('tr');
-          row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+          row.className = 'border-b border-[#f7768e]/10 hover:bg-[#f7768e]/5 transition-colors';
 
           const dateToJSDate = (date) => {
                if (!date) return 'N/A';
@@ -408,20 +408,20 @@ function LoadedPengeluarData(data = pengeluarData, sortByDate = true) {
           }
 
           const isRecent = index < 2;
-          const nameClass = isRecent ? 'font-medium text-red-300' : 'font-medium';
+          const nameClass = isRecent ? 'font-medium text-[#f7768e]' : 'font-medium text-[#c0caf5]';
 
           row.innerHTML = `
           <td class="py-3 px-4 ${nameClass}">
             ${isRecent ? '🆕 ' : ''}${loss.barang || 'N/A'}
           </td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 bg-orange-600 rounded-full text-xs">${loss.jumlah || '0'}</span>
+            <span class="px-2 py-1 bg-[#e0af68]/20 text-[#e0af68] rounded-full text-xs border border-[#e0af68]/30">${loss.jumlah || '0'}</span>
           </td>
-          <td class="py-3 px-4 font-mono text-xs">
+          <td class="py-3 px-4 font-mono text-xs text-[#a9b1d6]">
             ${formatCurrency(loss.harga_satuan)}
           </td>
-          <td class="py-3 px-4 text-red-400 font-semibold">${formatCurrency(loss.harga_akhir)}</td>
-          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+          <td class="py-3 px-4 text-[#f7768e] font-semibold">${formatCurrency(loss.harga_akhir)}</td>
+          <td class="py-3 px-4 text-[#565f89] ${isRecent ? 'font-semibold' : ''}">
             ${dateToJSDate(loss.tanggal)}
           </td>
         `;
@@ -454,7 +454,7 @@ function LoadedDenda(data = dendaData, sortByDate = true) {
 
      sortedData.forEach((denda, index) => {
           const row = document.createElement('tr');
-          row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+          row.className = 'border-b border-[#f7768e]/10 hover:bg-[#f7768e]/5 transition-colors';
 
           const dateToJSDate = (date) => {
                if (!date) return 'N/A';
@@ -469,18 +469,18 @@ function LoadedDenda(data = dendaData, sortByDate = true) {
           }
 
           const isRecent = index < 2;
-          const nameClass = isRecent ? 'font-medium text-red-300' : 'font-medium';
+          const nameClass = isRecent ? 'font-medium text-[#f7768e]' : 'font-medium text-[#c0caf5]';
 
           row.innerHTML = `
           <td class="py-3 px-4 ${nameClass}">
             ${isRecent ? '🆕 ' : ''}${denda.nama || 'N/A'}
           </td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 bg-orange-600 rounded-full text-xs">${denda.deskripsi || 'N/A'}</span>
+            <span class="px-2 py-1 bg-[#e0af68]/20 text-[#e0af68] rounded-full text-xs border border-[#e0af68]/30">${denda.deskripsi || 'N/A'}</span>
           </td>
-          <td class="py-3 px-4 font-mono text-xs"> ${formatCurrency(denda.nominal)}
+          <td class="py-3 px-4 font-mono text-xs text-[#f7768e]"> ${formatCurrency(denda.nominal)}
           </td>
-          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+          <td class="py-3 px-4 text-[#565f89] ${isRecent ? 'font-semibold' : ''}">
             ${dateToJSDate(denda.tanggal)}
           </td>
         `;
@@ -513,7 +513,7 @@ function LoadedDonatur(data = donaturData, sortByDate = true) {
 
      sortedData.forEach((donatur, index) => {
           const row = document.createElement('tr');
-          row.className = 'border-b border-gray-700 hover:bg-gray-700 transition-colors';
+          row.className = 'border-b border-[#bb9af7]/10 hover:bg-[#bb9af7]/5 transition-colors';
 
           const dateToJSDate = (date) => {
                if (!date) return 'N/A';
@@ -528,18 +528,18 @@ function LoadedDonatur(data = donaturData, sortByDate = true) {
           }
 
           const isRecent = index < 2;
-          const nameClass = isRecent ? 'font-medium text-green-300' : 'font-medium';
+          const nameClass = isRecent ? 'font-medium text-[#bb9af7]' : 'font-medium text-[#c0caf5]';
 
           row.innerHTML = `
           <td class="py-3 px-4 ${nameClass}">
             ${isRecent ? '🆕 ' : ''}${donatur.nama || 'N/A'}
           </td>
           <td class="py-3 px-4">
-            <span class="px-2 py-1 bg-green-600 rounded-full text-xs">${donatur.deskripsi || 'N/A'}</span>
+            <span class="px-2 py-1 bg-[#bb9af7]/20 text-[#bb9af7] rounded-full text-xs border border-[#bb9af7]/30">${donatur.deskripsi || 'N/A'}</span>
           </td>
-          <td class="py-3 px-4 font-mono text-xs"> ${formatCurrency(donatur.nominal)}
+          <td class="py-3 px-4 font-mono text-xs text-[#bb9af7]"> ${formatCurrency(donatur.nominal)}
           </td>
-          <td class="py-3 px-4 text-gray-400 ${isRecent ? 'font-semibold' : ''}">
+          <td class="py-3 px-4 text-[#565f89] ${isRecent ? 'font-semibold' : ''}">
             ${dateToJSDate(donatur.tanggal)}
           </td>
         `;
@@ -584,10 +584,10 @@ function initChart() {
                },
                tooltip: {
                     trigger: 'axis',
-                    backgroundColor: '#374151',
-                    borderColor: '#6b7280',
+                    backgroundColor: '#24283b',
+                    borderColor: '#7aa2f7',
                     textStyle: {
-                         color: '#ffffff'
+                         color: '#c0caf5'
                     }
                },
                legend: {
@@ -632,7 +632,8 @@ function initChart() {
                          },
                          splitLine: {
                               lineStyle: {
-                                   color: '#374151'
+                                   color: '#7aa2f7',
+                                   opacity: 0.1
                               }
                          }
                     },
