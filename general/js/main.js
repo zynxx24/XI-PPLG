@@ -1,141 +1,141 @@
 // Fungsi untuk fetch data dari Google Sheets
 async function fetchSheetData(sheetName) {
-     try {
+    try {
 
-          const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
-          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const response = await fetch(GOOGLE_SHEETS_CONFIG.baseUrl);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-          const arrayBuffer = await response.arrayBuffer();
-          const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
 
-          // Cari sheet berdasarkan nama atau ambil sheet pertama sebagai fallback
-          let targetSheet;
-          if (workbook.Sheets[sheetName]) {
-               targetSheet = workbook.Sheets[sheetName];
-          } else {
-               // Fallback: cari sheet berdasarkan index
-               const sheetIndex = sheetName === 'lomba' ? 0 : 1;
-               const sheetKey = workbook.SheetNames[sheetIndex];
-               targetSheet = workbook.Sheets[sheetKey];
-          }
+        // Cari sheet berdasarkan nama atau ambil sheet pertama sebagai fallback
+        let targetSheet;
+        if (workbook.Sheets[sheetName]) {
+            targetSheet = workbook.Sheets[sheetName];
+        } else {
+            // Fallback: cari sheet berdasarkan index
+            const sheetIndex = sheetName === 'lomba' ? 0 : 1;
+            const sheetKey = workbook.SheetNames[sheetIndex];
+            targetSheet = workbook.Sheets[sheetKey];
+        }
 
-          if (!targetSheet) {
-               throw new Error(`Sheet '${sheetName}' not found in workbook`);
-          }
+        if (!targetSheet) {
+            throw new Error(`Sheet '${sheetName}' not found in workbook`);
+        }
 
-          // Convert sheet to JSON
-          const jsonData = XLSX.utils.sheet_to_json(targetSheet, { header: 1 });
+        // Convert sheet to JSON
+        const jsonData = XLSX.utils.sheet_to_json(targetSheet, { header: 1 });
 
-          if (jsonData.length < 2) {
-               return [];
-          }
+        if (jsonData.length < 2) {
+            return [];
+        }
 
-          const headers = jsonData[0];
-          const data = jsonData.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, index) => {
-                         obj[header] = row[index] || '';
-                         });
-                    return obj;
-                    });
+        const headers = jsonData[0];
+        const data = jsonData.slice(1).map(row => {
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = row[index] || '';
+            });
+            return obj;
+        });
 
-          // Filter hanya data yang aktif
-          const activeData = data.filter(item => item.status === 'active');
+        // Filter hanya data yang aktif
+        const activeData = data.filter(item => item.status === 'active');
 
-          return activeData;
+        return activeData;
 
-     } catch (error) {
-               throw error;
-          }
+    } catch (error) {
+        throw error;
+    }
 }
 
 // Fungsi untuk format tanggal
 function formatDate(dateStr) {
-     try {
-          if (!dateStr) return 'Tanggal tidak tersedia';
-          const excelEpoch = new Date(1899, 11, 30);
-          var date = new Date(excelEpoch.getTime() + dateStr * 24 * 60 * 60 * 1000);
-          var date = date.toISOString().split("T")[0];
-          return date;
-     } catch {
-               return dateStr;
-          }
+    try {
+        if (!dateStr) return 'Tanggal tidak tersedia';
+        const excelEpoch = new Date(1899, 11, 30);
+        var date = new Date(excelEpoch.getTime() + dateStr * 24 * 60 * 60 * 1000);
+        var date = date.toISOString().split("T")[0];
+        return date;
+    } catch {
+        return dateStr;
+    }
 }
 
 // Function to generate detailed content for reading page
 function generateDetailedContent(item, type) {
-     const isLomba = type === 'lomba';
+    const isLomba = type === 'lomba';
 
-     // Generate comprehensive content based on available data
-     const sections = [];
+    // Generate comprehensive content based on available data
+    const sections = [];
 
-     if (isLomba) {
-          // Lomba-specific content
-          sections.push({
-               title: "🏆 Prestasi Gemilang",
-               content: `Tim XI PPLG kembali menorehkan prestasi membanggakan dalam kompetisi ${item.judul || 'lomba'}. Dengan dedikasi tinggi dan kerja keras yang luar biasa, para siswa berhasil menunjukkan kemampuan terbaik mereka di hadapan peserta dari berbagai sekolah.`
-          });
+    if (isLomba) {
+        // Lomba-specific content
+        sections.push({
+            title: "🏆 Prestasi Gemilang",
+            content: `Tim XI PPLG kembali menorehkan prestasi membanggakan dalam kompetisi ${item.judul || 'lomba'}. Dengan dedikasi tinggi dan kerja keras yang luar biasa, para siswa berhasil menunjukkan kemampuan terbaik mereka di hadapan peserta dari berbagai sekolah.`
+        });
 
-          sections.push({
-               title: "📊 Statistik Kemenangan",
-               content: `Berikut adalah pencapaian detail yang berhasil diraih dalam kompetisi ini:`,
-               isStats: true,
-               stats: [
-                        { number: item.highlight_1_angka || '1st', label: item.highlight_1_label || 'Juara Umum' },
-                        { number: item.highlight_2_angka || '100%', label: item.highlight_2_label || 'Tingkat Keberhasilan' },
-                        { number: item.highlight_3_angka || '50+', label: item.highlight_3_label || 'Peserta Lain' }
-                    ]
-          });
+        sections.push({
+            title: "📊 Statistik Kemenangan",
+            content: `Berikut adalah pencapaian detail yang berhasil diraih dalam kompetisi ini:`,
+            isStats: true,
+            stats: [
+                { number: item.highlight_1_angka || '1st', label: item.highlight_1_label || 'Juara Umum' },
+                { number: item.highlight_2_angka || '100%', label: item.highlight_2_label || 'Tingkat Keberhasilan' },
+                { number: item.highlight_3_angka || '50+', label: item.highlight_3_label || 'Peserta Lain' }
+            ]
+        });
 
-          sections.push({
-               title: "🌟 Dampak Prestasi",
-               content: `Prestasi ini tidak hanya menjadi kebanggaan bagi XI PPLG, tetapi juga membuktikan kualitas pendidikan dan pembinaan yang diberikan kepada siswa. Dengan pencapaian ini, diharapkan dapat memotivasi siswa lainnya untuk terus berprestasi dan mengharumkan nama sekolah.`
-          });
+        sections.push({
+            title: "🌟 Dampak Prestasi",
+            content: `Prestasi ini tidak hanya menjadi kebanggaan bagi XI PPLG, tetapi juga membuktikan kualitas pendidikan dan pembinaan yang diberikan kepada siswa. Dengan pencapaian ini, diharapkan dapat memotivasi siswa lainnya untuk terus berprestasi dan mengharumkan nama sekolah.`
+        });
 
-          sections.push({
-               title: "🚀 Langkah Selanjutnya",
-               content: `Tim akan melanjutkan persiapan untuk kompetisi-kompetisi selanjutnya dengan target pencapaian yang lebih tinggi. Dukungan dari seluruh civitas akademika XI PPLG akan terus diberikan untuk memastikan prestasi yang berkelanjutan.`
-          });
+        sections.push({
+            title: "🚀 Langkah Selanjutnya",
+            content: `Tim akan melanjutkan persiapan untuk kompetisi-kompetisi selanjutnya dengan target pencapaian yang lebih tinggi. Dukungan dari seluruh civitas akademika XI PPLG akan terus diberikan untuk memastikan prestasi yang berkelanjutan.`
+        });
 
-     } else {
-          // News-specific content
-          sections.push({
-               title: "📰 Berita Utama",
-               content: item.deskripsi || `Dalam perkembangan terbaru di XI PPLG, ${item.judul} menjadi sorotan utama yang menarik perhatian seluruh komunitas sekolah. Peristiwa ini menandai milestone penting dalam perjalanan pendidikan di institusi kami.`
-          });
+    } else {
+        // News-specific content
+        sections.push({
+            title: "📰 Berita Utama",
+            content: item.deskripsi || `Dalam perkembangan terbaru di XI PPLG, ${item.judul} menjadi sorotan utama yang menarik perhatian seluruh komunitas sekolah. Peristiwa ini menandai milestone penting dalam perjalanan pendidikan di institusi kami.`
+        });
 
-          sections.push({
-               title: "🔍 Analisis Mendalam",
-               content: `Berdasarkan observasi dan data yang terkumpul, kejadian ini memiliki dampak signifikan terhadap dinamika kehidupan sekolah. Para stakeholder terkait telah memberikan respon positif dan dukungan penuh untuk kelanjutan program ini.`
-          });
+        sections.push({
+            title: "🔍 Analisis Mendalam",
+            content: `Berdasarkan observasi dan data yang terkumpul, kejadian ini memiliki dampak signifikan terhadap dinamika kehidupan sekolah. Para stakeholder terkait telah memberikan respon positif dan dukungan penuh untuk kelanjutan program ini.`
+        });
 
-          sections.push({
-               title: "💡 Insight & Pembelajaran",
-               content: `Dari peristiwa ini, kita dapat mengambil beberapa pembelajaran berharga yang akan menjadi bekal untuk pengembangan program-program selanjutnya. Kolaborasi antar tim dan dukungan komunitas terbukti menjadi kunci kesuksesan.`
-          });
+        sections.push({
+            title: "💡 Insight & Pembelajaran",
+            content: `Dari peristiwa ini, kita dapat mengambil beberapa pembelajaran berharga yang akan menjadi bekal untuk pengembangan program-program selanjutnya. Kolaborasi antar tim dan dukungan komunitas terbukti menjadi kunci kesuksesan.`
+        });
 
-          sections.push({
-               title: "📈 Proyeksi ke Depan",
-               content: `Dengan momentum positif yang tercipta, diharapkan inisiatif serupa dapat terus dikembangkan dan diimplementasikan. Tim akan terus melakukan evaluasi dan perbaikan untuk memastikan kualitas dan keberlanjutan program.`
-          });
-     }
+        sections.push({
+            title: "📈 Proyeksi ke Depan",
+            content: `Dengan momentum positif yang tercipta, diharapkan inisiatif serupa dapat terus dikembangkan dan diimplementasikan. Tim akan terus melakukan evaluasi dan perbaikan untuk memastikan kualitas dan keberlanjutan program.`
+        });
+    }
 
-     return sections;
+    return sections;
 }
 
 // Function to open reading page
 function openReading(itemId, type) {
-     const data = type === 'lomba' ? globalLombaData : globalNewsData;
-     const item = data.find(d => d.id === itemId) || data[0]; // Fallback to first item
+    const data = type === 'lomba' ? globalLombaData : globalNewsData;
+    const item = data.find(d => d.id === itemId) || data[0]; // Fallback to first item
 
-     if (!item) {
-          return;
-     }
+    if (!item) {
+        return;
+    }
 
-     const sections = generateDetailedContent(item, type);
-     const isLomba = type === 'lomba';
+    const sections = generateDetailedContent(item, type);
+    const isLomba = type === 'lomba';
 
-     const articleHTML = `
+    const articleHTML = `
           <div class="article-header card-hover">
                <h1 class="article-title">
                     ${item.emoji || item.emoji_utama || '📰'} ${item.judul || 'Judul Tidak Tersedia'}
@@ -164,9 +164,9 @@ function openReading(itemId, type) {
           <div class="article-content card-hover">
           ${sections.map(section => {
 
-               if (section.isStats) {
+        if (section.isStats) {
 
-                    return `
+            return `
 
                          <div class="content-section">
                               <h3>${section.title}</h3>
@@ -183,20 +183,20 @@ function openReading(itemId, type) {
 
                     `;
 
-               } else {
+        } else {
 
-                    return `
+            return `
                          <div class="content-section">
                               <h3>${section.title}</h3>
                               <p>${section.content}</p>
                          </div>
                     `;
-               }
+        }
 
-          }).join('')}
+    }).join('')}
                     
-               ${isLomba ? 
-               `
+               ${isLomba ?
+            `
                     <div class="highlight-box card-hover">
                          <h3>🎉 Kutipan Istimewa</h3>
                             <p style="font-style: italic; font-size: 1.2rem; text-align: center; color: var(--neon-green);">
@@ -220,31 +220,31 @@ function openReading(itemId, type) {
                     </div>
                `;
 
-     document.getElementById('article-content').innerHTML = articleHTML;
+    document.getElementById('article-content').innerHTML = articleHTML;
 
-     // Populate related articles
-     populateRelatedArticles(item, type);
+    // Populate related articles
+    populateRelatedArticles(item, type);
 
-     // Show reading page
-     document.getElementById('berita').style.display = 'none';
-     document.getElementById('reading-page').classList.remove('hidden');
+    // Show reading page
+    document.getElementById('berita').style.display = 'none';
+    document.getElementById('reading-page').classList.remove('hidden');
 
-     // Scroll to top
-     window.scrollTo(0, 0);
+    // Scroll to top
+    window.scrollTo(0, 0);
 }
 
 // Function to populate related articles
 function populateRelatedArticles(currentItem, currentType) {
-     const relatedContainer = document.getElementById('related-articles-grid');
+    const relatedContainer = document.getElementById('related-articles-grid');
 
-     // Get other articles (mix of lomba and news, excluding current)
-     const allArticles = [...globalLombaData, ...globalNewsData]
-          .filter(item => item.id !== currentItem.id)
-          .slice(0, 3);
+    // Get other articles (mix of lomba and news, excluding current)
+    const allArticles = [...globalLombaData, ...globalNewsData]
+        .filter(item => item.id !== currentItem.id)
+        .slice(0, 3);
 
-     relatedContainer.innerHTML = allArticles.map(article => {
-          const articleType = globalLombaData.includes(article) ? 'lomba' : 'news';
-          return `
+    relatedContainer.innerHTML = allArticles.map(article => {
+        const articleType = globalLombaData.includes(article) ? 'lomba' : 'news';
+        return `
                     <div class="related-card card-hover" onclick="openReading('${article.id}', '${articleType}')">
                         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
                             <span style="background: ${articleType === 'lomba' ? 'linear-gradient(135deg, #ff006e, #ff7b00)' : 'linear-gradient(135deg, #00d4ff, #8b5cf6)'}; color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; font-weight: bold;">
@@ -262,31 +262,31 @@ function populateRelatedArticles(currentItem, currentType) {
                         </div>
                     </div>
                 `;
-          }
-     ).join('');
+    }
+    ).join('');
 }
 
 // Function to close reading page
 function closeReading() {
-     document.getElementById('reading-page').classList.add('hidden');
-     document.getElementById('berita').style.display = 'block';
-     window.scrollTo(0, 0);
+    document.getElementById('reading-page').classList.add('hidden');
+    document.getElementById('berita').style.display = 'block';
+    window.scrollTo(0, 0);
 }
 
 // Modified render functions to include unique IDs and reading links
 function renderLombaSection(lombaData) {
-     const lombaContainer = document.getElementById('lomba-section');
+    const lombaContainer = document.getElementById('lomba-section');
 
-     if (!lombaData || lombaData.length === 0) {
-          lombaContainer.innerHTML = '';
-          return;
-     }
+    if (!lombaData || lombaData.length === 0) {
+        lombaContainer.innerHTML = '';
+        return;
+    }
 
-     const lomba = lombaData[0]; // Ambil data lomba terbaru
-     lomba.id = lomba.id || 'lomba-' + Date.now(); // Ensure ID exists
+    const lomba = lombaData[0]; // Ambil data lomba terbaru
+    lomba.id = lomba.id || 'lomba-' + Date.now(); // Ensure ID exists
 
-     lombaContainer.innerHTML = 
-          `
+    lombaContainer.innerHTML =
+        `
                <div class="bg-gradient-to-r from-red-600 to-pink-600 rounded-3xl overflow-hidden news-modern card-hover group">
                     <div class="p-8">
                          <div class="flex items-center mb-6">
@@ -390,7 +390,7 @@ function renderNewsGrid(newsData) {
                         </div>
                     </article>
                 `;
-        }
+    }
     ).join('');
 }
 
@@ -430,7 +430,7 @@ function renderAdditionalNews(newsData) {
                         </div>
                     </article>
                 `;
-        }
+    }
     ).join('');
 }
 
@@ -449,13 +449,13 @@ async function loadNews() {
         // Fetch data parallel
         const [
             lombaData,
-             newsData
-            ] = await Promise.all(
-                    [
-                        fetchSheetData('lomba'),
-                        fetchSheetData('news')
-                    ]
-                );
+            newsData
+        ] = await Promise.all(
+            [
+                fetchSheetData('lomba'),
+                fetchSheetData('news')
+            ]
+        );
 
         // Store data globally for reading page
         globalLombaData = lombaData;
@@ -473,7 +473,7 @@ async function loadNews() {
         // Sort news by date (newest first)
         if (newsData.length > 0) {
             newsData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-            }
+        }
 
         // Render semua section
         renderLombaSection(lombaData);
@@ -485,11 +485,11 @@ async function loadNews() {
         newsContent.classList.remove('hidden');
 
 
-        } catch (error) {
-            // Show error state
-            loadingState.classList.add('hidden');
-            errorState.classList.remove('hidden');
-        }
+    } catch (error) {
+        // Show error state
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+    }
 }
 
 // Test function untuk debugging
@@ -502,7 +502,7 @@ async function testFetch() {
             const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
         }
     } catch (error) {
-            console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error);
     }
 }
 
@@ -513,45 +513,56 @@ function updateAnimations() {
     // Parallax for floating shapes
     const shapes = document.querySelectorAll('.shape');
     shapes.forEach((shape, index) => {
-            const speed = (index + 1) * 0.3;
-            shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+        const speed = (index + 1) * 0.3;
+        shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
     });
 
     ticking = false;
 }
 
-// Random emoji animations
+// Random emoji animations - with limit to prevent memory leak
+let floatingEmojiCount = 0;
+const MAX_FLOATING_EMOJIS = 5;
+
 function createFloatingEmoji() {
+    // Skip on mobile for performance
+    if (window.innerWidth < 768) return;
+    // Limit max emojis
+    if (floatingEmojiCount >= MAX_FLOATING_EMOJIS) return;
+
+    floatingEmojiCount++;
     const emojis = ['💻', '🚀', '⭐', '💡', '🎯', '🔥', '⚡', '🌟'];
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
 
     const span = document.createElement('span');
     span.textContent = emoji;
     span.className = 'fixed pointer-events-none z-50 text-2xl opacity-70';
-        span.style.left = Math.random() * window.innerWidth + 'px';
-        span.style.top = window.innerHeight + 'px';
+    span.style.left = Math.random() * window.innerWidth + 'px';
+    span.style.top = window.innerHeight + 'px';
 
-        document.body.appendChild(span);
+    document.body.appendChild(span);
 
-        let pos = window.innerHeight;
-        const animation = setInterval(() => {
-            pos -= 2;
-            span.style.top = pos + 'px';
-            span.style.transform = `rotate(${pos * 0.5}deg)`;
+    let pos = window.innerHeight;
+    const animation = setInterval(() => {
+        pos -= 2;
+        span.style.top = pos + 'px';
+        span.style.transform = `rotate(${pos * 0.5}deg)`;
 
-            if (pos < -50) {
-                clearInterval(animation);
+        if (pos < -50) {
+            clearInterval(animation);
+            if (span.parentNode) {
                 document.body.removeChild(span);
             }
-        }, 
-        50);
+            floatingEmojiCount--;
+        }
+    }, 50);
 }
 
 // Konfigurasi Google Sheets
 const GOOGLE_SHEETS_CONFIG = {
-     baseUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx',
-     lombaSheet: 'lomba',
-     newsSheet: 'news'
+    baseUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx',
+    lombaSheet: 'lomba',
+    newsSheet: 'news'
 };
 
 // Global data
@@ -564,7 +575,7 @@ document.addEventListener('keydown', function (e) {
     const readingPage = document.getElementById('reading-page');
     if (!readingPage.classList.contains('hidden')) {
         if (e.key === 'Escape') {
-             closeReading();
+            closeReading();
         }
     }
 });
@@ -575,14 +586,16 @@ window.loadNews = loadNews;
 window.openReading = openReading;
 window.closeReading = closeReading;
 
-// Mobile menu toggle with animation
+// Mobile menu toggle with animation (with null check)
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
-mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenuBtn.style.transform = mobileMenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
-});
+if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenuBtn.style.transform = mobileMenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+    });
+}
 
 // Enhanced smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

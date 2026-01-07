@@ -7,7 +7,13 @@
 
 Halo semuanya! 👋 Selamat datang di repository resmi untuk website kelas **XI PPLG SMKN 2 Kuta Selatan**. Website ini adalah markas digital kita, tempat cari info jadwal, lihat foto-foto kenangan, cek data kas, dan update berita terbaru seputar kelas kita yang kece ini.
 
+
+### Link Penting
+- [🌐 Website Resmi](https://zynxx24.github.io/XI-PPLG/general/)
+- [📚 Dokumentasi Developer](dokumentasi.md) - **Baca ini jika ingin menjalankan di local!**
+
 Dibuat dengan ❤️ dan semangat coding yang membara!
+
 
 ---
 

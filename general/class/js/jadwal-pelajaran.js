@@ -1,6 +1,7 @@
 // Load data from data.json
 let JADWAL_DATA = {};
 let GURU_DATA = [];
+let JADWAL_PIKET_DATA = {};
 
 // Configuration for Subject Styling
 const SUBJECT_CONFIG = {
@@ -24,23 +25,27 @@ const SUBJECT_CONFIG = {
 // Fetch JSON data
 async function loadData() {
     try {
-        const [jadwalResponse, guruResponse] = await Promise.all([
+        const [jadwalResponse, guruResponse, piketResponse] = await Promise.all([
             fetch('./JSON/jadwal-pelajaran.JSON'),
-            fetch('./JSON/daftar-guru.JSON')
+            fetch('./JSON/daftar-guru.JSON'),
+            fetch('./JSON/jadwal-piket.JSON')
         ]);
 
-        if (!jadwalResponse.ok || !guruResponse.ok) {
+        if (!jadwalResponse.ok || !guruResponse.ok || !piketResponse.ok) {
             throw new Error('Network response was not ok');
         }
 
         const jadwalData = await jadwalResponse.json();
         const guruData = await guruResponse.json();
+        const piketData = await piketResponse.json();
 
         JADWAL_DATA = jadwalData;
         GURU_DATA = guruData;
+        JADWAL_PIKET_DATA = piketData;
 
         renderJadwal();
         renderGuru();
+        renderPiket();
         initInteractions();
     } catch (error) {
         console.error('Error loading data:', error);
@@ -157,6 +162,67 @@ function renderGuru() {
             </p>
             <div class="mt-4 pt-3 border-t border-[#7aa2f7]/10 flex justify-between items-center relative z-10">
                 <p class="text-[10px] text-[#565f89] font-mono bg-[#1a1b26]/50 px-2 py-1 rounded border border-[#7aa2f7]/10">📱 ${guru.telp}</p>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function renderPiket() {
+    const container = document.getElementById('picketList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Sort days to ensure order: Senin, Selasa, Rabu, Kamis, Jumat
+    const dayOrder = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
+
+    dayOrder.forEach((day, index) => {
+        const students = JADWAL_PIKET_DATA[day];
+        if (!students) return;
+
+        const card = document.createElement('div');
+        const delay = index * 100;
+
+        // Colors per day
+        const dayColors = {
+            'senin': 'from-red-500 to-pink-600',
+            'selasa': 'from-orange-400 to-yellow-500',
+            'rabu': 'from-green-500 to-emerald-600',
+            'kamis': 'from-blue-500 to-cyan-500',
+            'jumat': 'from-purple-500 to-indigo-600'
+        };
+
+        const gradient = dayColors[day] || 'from-slate-700 to-slate-800';
+
+        card.className = `bg-[#24283b]/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-[#7aa2f7]/20 hover:border-[#7aa2f7]/50 shadow-lg group`;
+        card.style.animationDelay = `${delay}ms`;
+
+        let studentsListHTML = '';
+        students.forEach(student => {
+            studentsListHTML += `
+                <li class="flex items-start space-x-2 text-[#a9b1d6] text-sm py-1 border-b border-[#7aa2f7]/5 last:border-0">
+                    <span class="text-[#7aa2f7] mt-1">user</span>
+                    <span>${student}</span>
+                </li>
+             `;
+        });
+        // Replace "user" with an SVG icon or emoji if desired, or just use a bullet
+        studentsListHTML = studentsListHTML.replace(/user/g, '👤');
+
+        card.innerHTML = `
+            <div class="h-2 bg-gradient-to-r ${gradient}"></div>
+            <div class="p-5">
+                <h3 class="text-xl font-bold text-white mb-4 capitalize flex items-center">
+                    <span class="w-8 h-8 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-sm mr-2 shadow-md">
+                        📅
+                    </span>
+                    ${day}
+                </h3>
+                <ul class="space-y-1">
+                    ${studentsListHTML}
+                </ul>
             </div>
         `;
 

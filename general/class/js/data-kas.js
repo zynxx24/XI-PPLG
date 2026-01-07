@@ -93,7 +93,7 @@ async function loadSheetData() {
                          nama: "Loading...",
                          metode: "N/A",
                          from: "N/A",
-                         jumlah: "$0",
+                         jumlah: "0",
                          tanggal: "N/A"
                     }
                ],
@@ -104,7 +104,10 @@ async function loadSheetData() {
                          daily: 0
                     }
                ],
-               dataKas: mockDataKas
+               dataKas: mockDataKas,
+               pengeluarData: [],
+               dendaData: [],
+               donaturData: []
           };
      }
 }
