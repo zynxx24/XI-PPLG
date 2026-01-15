@@ -5,6 +5,7 @@ let dataKas = [];
 let dendaData = [];
 let pengeluarData = [];
 let donaturData = [];
+let pungutanData = [];
 
 const FilePath = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_Ama88gT05SLXGpLuFxoBlZ8xlq2qSWenRQJwWjWFTtE4_2NNcDLES9dJYeuBFSIjUUOo01VOdXan/pub?output=xlsx';
 const SheetDoc = 'history'; // Ensure this matches the sheet name in your Google Sheet
@@ -13,6 +14,8 @@ const DataKas = 'datakas'; // Ensure this matches the sheet name in your Google 
 const SheetDendaData = 'denda'; // Ensure this matches the sheet name in your Google Sheet
 const SheetPengeluarData = 'pengeluaran'; // Ensure this matches the sheet name in your Google Sheet 
 const SheetDonaturData = 'donatur'; // Ensure this matches the sheet name in your Google Sheet
+const SheetPungutanData = 'pungutan'; // Sheet for pungutan/drama data
+
 
 async function loadSheetData() {
      try {
@@ -63,6 +66,13 @@ async function loadSheetData() {
                loadedDonaturData = XLSX.utils.sheet_to_json(donaturDataSheet);
           }
 
+          // Load data from 'pungutan' sheet
+          const pungutanDataSheet = workbook.Sheets[SheetPungutanData];
+          let loadedPungutanData = [];
+          if (pungutanDataSheet) {
+               loadedPungutanData = XLSX.utils.sheet_to_json(pungutanDataSheet, { header: 1 });
+          }
+
           // Return both datasets
           return {
                paymentData: loadedPaymentData,
@@ -70,7 +80,8 @@ async function loadSheetData() {
                dataKas: loadedDataKas,
                pengeluarData: LoadedPengeluarData,
                dendaData: loadedDendaData,
-               donaturData: loadedDonaturData
+               donaturData: loadedDonaturData,
+               pungutanData: loadedPungutanData
           };
      } catch (error) {
           console.error("Error loading sheet data:", error);
@@ -107,7 +118,8 @@ async function loadSheetData() {
                dataKas: mockDataKas,
                pengeluarData: [],
                dendaData: [],
-               donaturData: []
+               donaturData: [],
+               pungutanData: []
           };
      }
 }
@@ -241,6 +253,81 @@ function sortPaymentByDate(data) {
           // Sort descending (terbaru di atas)
           return dateB - dateA;
      });
+}
+
+function displayPungutanData(data = pungutanData) {
+     const loadingElement = document.getElementById('pungutan-loading');
+     const contentElement = document.getElementById('pungutan-content');
+
+     if (loadingElement) {
+          loadingElement.classList.add('hidden');
+     }
+
+     if (!contentElement) {
+          console.error('pungutan-content element not found');
+          return;
+     }
+
+     if (!data || data.length < 3) {
+          contentElement.innerHTML = '<p class="text-[#565f89]">Tidak ada data</p>';
+          return;
+     }
+
+     // Helper function to convert Excel serial date to readable format
+     const excelDateToReadable = (excelDate) => {
+          if (!excelDate) return 'N/A';
+          const excelEpoch = new Date(1899, 11, 30);
+          const convertedDate = new Date(excelEpoch.getTime() + excelDate * 24 * 60 * 60 * 1000);
+          return convertedDate.toISOString().split("T")[0];
+     };
+
+     const titleRow = data[0];
+     const dateRow = data[1];
+     const studentData = data.slice(2);
+
+     // Build Tokyo Night styled table
+     let html = `
+          <table class="w-full text-sm text-[#a9b1d6]">
+               <thead>
+                    <tr class="border-b border-[#73daca]/20 bg-[#1a1b26]/50">`;
+
+     // Header row - "Nama" column + converted date columns
+     html += `<th class="py-4 px-4 text-left font-bold text-[#73daca] sticky left-0 bg-[#1a1b26]">${titleRow[0] || 'Nama'}</th>`;
+
+     // Add date columns from dateRow (skip first empty cell)
+     if (dateRow) {
+          for (let i = 1; i < dateRow.length; i++) {
+               const dateStr = excelDateToReadable(dateRow[i]);
+               html += `<th class="py-4 px-4 text-center font-bold text-[#73daca] min-w-[80px]">${dateStr}</th>`;
+          }
+     }
+
+     html += `</tr></thead><tbody class="divide-y divide-[#73daca]/10">`;
+
+     // Data rows (students)
+     studentData.forEach((row) => {
+          if (!row || !row[0]) return; // Skip empty rows
+
+          html += '<tr class="hover:bg-[#73daca]/5 transition-colors">';
+
+          // First column - student name (sticky)
+          html += `<td class="py-3 px-4 font-medium text-[#c0caf5] sticky left-0 bg-[#24283b]/80">${row[0] || ''}</td>`;
+
+          // Status columns
+          for (let i = 1; i < row.length; i++) {
+               const cell = row[i];
+               const isChecked = cell === true || cell === 'TRUE' || cell === 1 || cell === '1' || cell === 'true';
+               const checkIcon = isChecked
+                    ? '<span class="text-[#9ece6a] text-lg">✅</span>'
+                    : '<span class="text-[#f7768e] text-lg">❌</span>';
+               html += `<td class="py-3 px-4 text-center">${checkIcon}</td>`;
+          }
+
+          html += '</tr>';
+     });
+
+     html += '</tbody></table>';
+     contentElement.innerHTML = html;
 }
 
 function sortPengeluaranByDate(data) {
@@ -717,7 +804,8 @@ async function initializeApp() {
                dataKas: loadedDataKas,
                pengeluarData: loadedPengeluarData,
                dendaData: loadedDendaData,
-               donaturData: loadedDonaturData
+               donaturData: loadedDonaturData,
+               pungutanData: loadedPungutanData
           } = await loadSheetData();
 
           // Update global variables
@@ -727,6 +815,7 @@ async function initializeApp() {
           pengeluarData = loadedPengeluarData;
           dendaData = loadedDendaData;
           donaturData = loadedDonaturData;
+          pungutanData = loadedPungutanData;
 
           console.log("Payment Data: Successfully loaded");
           console.log("Kas Chart Data: Successfully loaded");
@@ -734,6 +823,7 @@ async function initializeApp() {
           console.log("Pengeluaran Data: Successfully loaded");
           console.log("Denda Data: Successfully loaded")
           console.log("Donatur Data: Successfully loaded");
+          console.log("Pungutan Data: Successfully loaded");
 
           // Initialize UI components
           loadPaymentTable(paymentData);
@@ -741,6 +831,7 @@ async function initializeApp() {
           LoadedPengeluarData(pengeluarData);
           LoadedDenda(dendaData);
           LoadedDonatur(donaturData);
+          displayPungutanData(pungutanData);
           updateStats();
           initChart();
 
@@ -755,6 +846,7 @@ async function initializeApp() {
           LoadedPengeluarData([]);
           LoadedDenda([]);
           LoadedDonatur([]);
+          displayPungutanData([]);
           updateStats();
           initChart();
      }

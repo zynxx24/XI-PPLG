@@ -134,6 +134,24 @@
                          Copy
                     </button>
                </div>
+
+               <!-- BNB -->
+               <div
+                    class="flex items-center bg-[#24283b]/60 backdrop-blur-sm p-6 rounded-2xl border border-[#7aa2f7]/20 shadow-lg hover:shadow-[#7aa2f7]/10 hover:border-[#7aa2f7]/50 transition-all duration-300 group">
+                    <img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bnbt/info/logo.png"
+                         class="w-12 h-12 mr-5 group-hover:scale-110 transition-transform" alt="BNB" />
+                    <div class="flex-1 min-w-0">
+                         <h3 class="text-lg font-bold text-[#e0af68] mb-1">BNB</h3>
+                         <p id="bnb"
+                              class="text-xs md:text-sm text-[#565f89] font-mono break-all hover:text-[#a9b1d6] transition-colors">
+                              0xe8c0e9ce40741da1967089ea3456bb687f8952cb
+                         </p>
+                    </div>
+                    <button onclick="copyText('bnb')"
+                         class="ml-4 bg-[#e0af68]/10 hover:bg-[#e0af68]/20 text-[#e0af68] px-4 py-2 rounded-xl font-bold text-sm transition-all border border-[#e0af68]/20 hover:border-[#e0af68]/50 active:scale-95">
+                         Copy
+                    </button>
+               </div>
           </div>
 
           <!-- Chart Section -->
@@ -206,6 +224,20 @@
                          </tbody>
                     </table>
                </div>
+          </div>
+
+          <!-- Pungutan Table (Sementara)-->
+          <div class="bg-[#24283b]/80 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-[#73daca]/20">
+               <h2 class="text-xl font-bold text-[#73daca] mb-6 flex items-center gap-2">
+                    <span class="text-2xl">📝</span> Backup Drama Umum Sekolah
+               </h2>
+
+               <div id="pungutan-loading" class="text-center py-8 text-[#a9b1d6]">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#73daca]"></div>
+                    <p class="mt-2">Memuat data...</p>
+               </div>
+
+               <div id="pungutan-content" class="overflow-x-auto"></div>
           </div>
 
           <!-- Pengeluaran Table -->
